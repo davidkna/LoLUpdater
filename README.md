@@ -1,4 +1,5 @@
 LoLUpdater
 ==========
+Compile with QuickBFC
 
-https://www.youtube.com/watch?v=dAUvNd4PPag
+Extract to LoL Folder and run
