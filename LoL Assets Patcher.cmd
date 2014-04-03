@@ -19,7 +19,7 @@ for /f "delims=" %%A in ('dir "<*>" /AD /O-D /B') do (
     set air=%%A
 )
 chdir /d %LoL%\
-Powershell -executionpolicy Bypass -File -Verb RunAs "sources.ps1"
+Powershell -executionpolicy Bypass -File "sources.ps1"
 for /f "tokens=4-5 delims=. " %%i in ('ver') do set VERSION=%%i.%%j
 if "%version%" == "6.*" COPY "dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\%sln%\deploy\*" /y
 if "%version%" == "5.*" COPY "dbghelpxp.dll" "RADS\solutions\lol_game_client_sln\releases\%sln%\deploy\dbghelp.dll" /y
