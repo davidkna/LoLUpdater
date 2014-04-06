@@ -1,8 +1,9 @@
 LoLUpdater
 ==========
-Compile with QuickBFC
 
-Extract to LoL Folder and run
+Right click zip file -> properties -> unblock
+
+Extract to LoL Folder and run as admin
 
 https://www.youtube.com/user/LogganSWE
 
