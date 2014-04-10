@@ -20,7 +20,7 @@ Start-BitsTransfer http://download.microsoft.com/download/1/7/1/1718CCC4-6315-4D
 Start-BitsTransfer http://labsdownload.adobe.com/pub/labs/flashruntimes/air/air13_win.exe
 Start-BitsTransfer https://www.bugsplatsoftware.com/files/BugSplatNative.zip
 start-process Cg-3.1_April2012_Setup.exe /silent -Wait
-start-process dxwebsetup.exe /q -Wait
+start-process dxwebsetup.exe -Wait
 start-process air13_win.exe -Wait
 Start-Process 7z.exe -ArgumentList "x BugSplatNative.zip -y" -Wait -Nonewwindow
 Copy-Item "BugSplat\bin\BsSndRpt.exe"
@@ -62,11 +62,12 @@ Copy-Item "NPSWF32.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\
 Copy-Item "cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 Copy-Item "cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 Copy-Item "cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUWTqVLas8r5vS19EuIUbHq+Kt
-# K7egggbUMIICOTCCAaagAwIBAgIQi5HS4/r9cYZI2kfVf0NMHzAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUzzjvJ+s+Q1qDUq1leDDLBGes
+# PVagggbUMIICOTCCAaagAwIBAgIQi5HS4/r9cYZI2kfVf0NMHzAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTAxNzM5NTFaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAt9JDD/TYQeMS
@@ -106,21 +107,21 @@ Copy-Item "cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQi5HS4/r9cYZI
 # 2kfVf0NMHzAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUfNJKe7H7qTU+5Xs+VWPKHGQ/y8gwDQYJ
-# KoZIhvcNAQEBBQAEgYAM+hfHJwDECzu8pQGLrHgii7QBzj0dIu8kOuR5uE1Jjdxs
-# wT3/lANGMR+51bogPipB381/Bpvv+59pgHh8XpkGOsgoe/p6k01WesL4t5nXhnsV
-# wvhWZOcC3ta9xdhugxCQla9Pr5wibHedMVP2HbsUiDXXvktRNVJLlXr1JF8jkKGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUhlmHbcI4ACqF83JsF84rc1j2IbQwDQYJ
+# KoZIhvcNAQEBBQAEgYCHLX/CA5pqL7KylWTEG9+Y3C8e78uIcsb0zSR/e3wvj30W
+# VOtYgpaMC8UCarO4ZOEcw+bQw708Ra9KULatUL0p/Fx2RDJ4macWKtGl3UHnITdY
+# LF56DUN8l6qMRq4swVmlJkrbnraElXCrkDj/w4e2IlVQ+r+EC5GClh13DZaHOqGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTAxODAwMTBaMCMGCSqGSIb3DQEJBDEWBBS5
-# 4kFy0+voAkr8YReeTP6aoC5G1DANBgkqhkiG9w0BAQEFAASCAQAaLCzvxzbvB7p4
-# 3MxJabQQmx809dgqVTQJJGQQqCKkL12LzWHpHk4GCr2i2ODYGoS5E0mxoRiWMdSh
-# AfzFNeeQs4sPKZBNHSs6iU3U1/Te++xkLXxxgDXJa87766RctQcz0BGjXEj9T/6o
-# N/WKPwdKt1CpI6HMWI4iJ4JC4mRsxuq4bEZltioQc4c2s2rzH9/158w27HQpsDSV
-# WEO93v7st2FiHsH5qQRRPPO33EnTVYtg5CdSdNbxA3ILKIDBSJCTuNtoy7u6jZRh
-# uCU+6132niREDwxUVPjt5e3FzyyhHWrv/7oAPSkeaSqGHfcTVHRrdF+d5WcAfHTz
-# X81CsHED
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTAxODIyNDdaMCMGCSqGSIb3DQEJBDEWBBT2
+# 1Xkiu6YMqa8aUrZQVMLlHHRiuDANBgkqhkiG9w0BAQEFAASCAQC5dkFBmA+xIFvt
+# ul88vKSuYr74gtB2WlnE//ISVE6SaQACNemUhfMQp/j4Fv9T8Re+znoAo0eF+aUA
+# LyXM38Aay1I2kofiyM10h212VEZDI/DIItoju62G//gA/Fs3jtgSsPp/u7h7/L1E
+# XCKf1usnP72XZ5CpVFG3yHiuEuIHqEl+2+wBDlCjeoJf/NIojUrsCP0/MVGxe5y+
+# LEpfxhjCr4+RYbIXeSmEdQdtm5O3KW192RSDbzrVkkWUiETrmvtj8hSj4M+Q7e4q
+# ZgEaZ4q71nTYTN0ZBqnUKEHgixI1X1XqKCPHpex9nhgmn7SHBoa9YYPRRc+ZDPpX
+# xDWdE36i
 # SIG # End signature block
