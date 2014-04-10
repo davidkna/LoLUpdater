@@ -3,7 +3,7 @@ LoLUpdater
 
 Right click zip file -> properties -> unblock
 
-Extract to LoL Folder and run as admin
+Extract to LoL Folder, check the image, then add the certificate the run the updater.
 
 https://www.youtube.com/user/LogganSWE
 
