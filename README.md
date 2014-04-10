@@ -9,6 +9,8 @@ https://www.youtube.com/user/LogganSWE
 
 More videos about LoLupdater coming
 
+Everytime LoL updates the patch dissapears so...
+
 
 Quick fix for OSX:
 
