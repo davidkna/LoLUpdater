@@ -3,14 +3,11 @@ LoLUpdater
 
 Right click zip file -> properties -> unblock
 
-Extract to LoL Folder, check the image, then add the certificate the run the updater.
+Extract to LoL Folder, check the image, then add the certificate then run the updater.
 
 https://www.youtube.com/user/LogganSWE
 
-More videos about LoLupdater coming
-
-Everytime LoL updates the patch dissapears so...
-
+Everytime LoL updates the patch dissapears so you can just run it again.
 Quick fix for OSX:
 
 Download Adobe Air:
