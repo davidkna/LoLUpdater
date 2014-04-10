@@ -3,9 +3,13 @@ LoLUpdater
 
 Right click zip file -> properties -> unblock
 
-Extract to LoL Folder, check the image, then add the certificate then run the updater.
+Extract to LoL Folder, check the image, then add the certificate.
 
-https://www.youtube.com/user/LogganSWE
+Then open a powershell prompt and write
+
+"Set-ExecutionPolicy RemoteSigned"
+
+then run the patcher
 
 Everytime LoL updates the patch dissapears so you can just run it again.
 Quick fix for OSX:
