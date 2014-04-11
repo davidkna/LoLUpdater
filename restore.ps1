@@ -14,23 +14,23 @@ $air = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
 
 cd $dir
 
-Copy-Item "Backup\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "Backup\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\cg.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "Backup\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\cgD3D9.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "Backup\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\cggl.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "Backup\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "Backup\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "Backup\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "Backup\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
-Copy-Item "Backup\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
-Copy-Item "Backup\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "Backup\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "Backup\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "dbghelp.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "cg.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "cgD3D9.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "cggl.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "tbb.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "BsSndRpt.exe" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "BugSplat.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "Adobe Air.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
+Copy-Item "NPSWF32.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
+Copy-Item "cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUtE3jHyi+UYl3aeA25Z9p/xaM
-# SQigggbUMIICOTCCAaagAwIBAgIQjF0eHA5AMIFLsT46uUsBYjAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUbC8z7pGY1k0OFgq9ziUtt/mF
+# QvygggbUMIICOTCCAaagAwIBAgIQjF0eHA5AMIFLsT46uUsBYjAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTExNDM5NDRaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAo0EDeIlADb3P
@@ -70,21 +70,21 @@ Copy-Item "Backup\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQjF0eHA5AMIFL
 # sT46uUsBYjAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUGojtYvNzf9eSinoY7hpUdA0LcqswDQYJ
-# KoZIhvcNAQEBBQAEgYCatsi5tYoM6w3eYpTb/WPeGu6vSxEksO0iJjIIAc1rLmYW
-# IKX+eyoh43eP9vQqpAOBf9hA2euJiOrrmITIdfw4zjQ2DE8nVUDegWN8LhAoMuZZ
-# HBk9zcvYCnX8KTlt+zbN1uM2SVSLZDJzAc7nUGukoYQW/1BNNIaJfXsEkArMZaGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUmMjqrhIuWbH1jaL6e5C93RTz7V4wDQYJ
+# KoZIhvcNAQEBBQAEgYAM+s555ifk3Xr1KfVOKJ35hFKiNcLfyClIWu/caOZefFeW
+# wXvc6cwkx8DkBaJxQgw8PUpeZBkPQ2+uYw+yeBKkpOEG5Wwu/F8LpmzH8SUbJiZm
+# /OuyfYn105tlqKH/FCeN8Egz5MzMzzMxgvu0ujN6dlqbMGI7pmVRTlXcBSZvP6GC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTExNDQzMjBaMCMGCSqGSIb3DQEJBDEWBBRF
-# 2/W6KTpJIULedp63/EWUH0p2cDANBgkqhkiG9w0BAQEFAASCAQAp3Z41VEiA+MkI
-# y58MmlqwoDtEf+PHEO0UQYyf192ooEGgse8EBO2ANjfI7jaZYUBdJe0IUyubKp/i
-# tRpptTsGysTOaBZKIfTObiubdeSx4qnMgK1kgxfnubsEo5hvLyCFWtYKEdnCW7iG
-# CgBrBJMuIJjBvT5gnVNKw/qPiFM7RogiYj40mXTEwVHCBx45WN8sLuUbP3LAcHMV
-# 8wKZy4v1f1y6mumrHc/+DNdoUfaVTXdc4l0w7DVPW3N1WpIrI3xR4smqYY94f+oc
-# rCny2mbGbMmVVUVyug4NM7cGx4MNwZC1qfnpPp/WeE7Rh2oudirUjvYuQPC2ytxE
-# sQ60pMHt
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTExNDUxMzdaMCMGCSqGSIb3DQEJBDEWBBTU
+# Waue+m4xb/dKzqxc/SY8UiJsFzANBgkqhkiG9w0BAQEFAASCAQAOvDu+IQAQyL1I
+# u9pXqLjfAt/i4bHe6aWgh6jBjqAsjRMZ7K94jr2W/qIfVUfxV7GFOOXveylz0NKh
+# S0RIgyVhJS7djugO8sIYd0KXjfPZpUXuxFOuMiypW2yXRI7IqmdzUXfes7xGieri
+# LuOkt2jl671u/aB7JOYZzFvAdSW2fbRLvnxobgxsIhHPMdMbvgmdvCWzeBk0WJMD
+# 9mWRHawMx6yWK43XVluRIGDO5DqepgJDTHJp2zEaGs2Xj08zxItKU4YY1XMg+Y0U
+# Yp4yT6rnGrooeoLvvZOHtb6L7zfG27u5unEcvmOsP7nBBoyBJzAi4L/n3+vpRLPm
+# ZKZIrlQ2
 # SIG # End signature block
