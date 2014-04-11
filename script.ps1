@@ -81,7 +81,7 @@ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe"
     }
     else
     {
-start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe"
+start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins000.exe"
     }
     
 $key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory"
