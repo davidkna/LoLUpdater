@@ -72,18 +72,25 @@ Copy-Item "cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 Copy-Item "cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 
 start-process AdobeAIRInstaller.exe -uninstall
-Remove-Item Cg-3.1_April2012_Setup.exe
-Remove-Item dxwebsetup.exe
-Remove-Item AdobeAIRInstaller.exe
-Remove-Item BugSplatNative.zip
-Remove-Item BugSplat -recurse
-Remove-Item cg.dll
-Remove-Item cgD3D9.dll
-Remove-Item cggl.dll
-Remove-Item BsSndRpt.exe
-Remove-Item BugSplat.dll
-Remove-Item "Adobe Air.dll"
-Remove-Item NPSWF32.dll
+remove-item "gpu 2.exe"
+remove-item "7z.exe"
+remove-item "7z.dll"
+remove-item "Installer.bat"
+Remove-item "lolupdater.bat"
+remove-item "options.dat"
+remove-item "readme.md"
+remove-item "gpu_2"  -recurse
+remove-item "certification.cer"
+remove-item "certmgr.exe"
+remove-item "dbghelp.dll"
+remove-item "tbb.dll"
+remove-item "script.ps1"
+remove-item "msvcp110.dll"
+remove-item "msvcp120.dll"
+remove-item "msvcr120.dll"
+remove-item "msvcr110.dll"
+remove-item "wait.vbs"
+remove-item "uninstaller.bat"
 
 if($env:PROCESSOR_ARCHITECTURE -eq "AMD64")
     {
@@ -103,20 +110,20 @@ If(Test-Path $key\uninst.exe)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUuGvuzC10KmM4zPkXFauH1+fL
-# VrygggbUMIICOTCCAaagAwIBAgIQjF0eHA5AMIFLsT46uUsBYjAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUr6HOI19t/nWskU2LdWlCvjER
+# 5eugggbUMIICOTCCAaagAwIBAgIQz7cAEPBXcZhH68DwvjKLxzAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
-# Fw0xNDA0MTExNDM5NDRaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
-# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAo0EDeIlADb3P
-# LpdUjcuKtc3Mrpxwj/eEaxBwz1l166e9CjDIJk9eDPlilv/aKktQDC8P7D5to4tX
-# /T4shE/opdhCg3quY6+Iv1bUb8ZpMXkFVJF8RgntmdlPAHvJw/J+il7eb6QwgiLe
-# ZaayIqmRUfmHxl9BxrihOu6V5BNsF18CAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
+# Fw0xNDA0MTExNTQwMjBaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
+# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAjqUVOqKrt5ff
+# CIBRjRlaTzlLQuBrdYpH2AkoJnDDCWRqhYSTiQLRuxbywmuw2/2Nf4LzdMr2k40H
+# 20ErjfhHFgno9cmEGdxPp4rwVGJQJc2HJVOIvgx/cned1T/ODkDZLtp3kS8IxD84
+# ag53FtBojXk5gd9iXoSQYqMl2qY64hUCAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
 # BQUHAwMwXQYDVR0BBFYwVIAQ2S6Mj4ixUAbdkPZQYhCjIqEuMCwxKjAoBgNVBAMT
 # IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQwUc9ZnEjoJNCdrON
-# m0QAZzAJBgUrDgMCHQUAA4GBAGBf7D0V17oaCnZMJb+TqFqGx3zFtterNbg+55Ak
-# bFYbvWuVC5vKOu0lXTqjVKq5ldo9kuPRAsnF0R2hZ2295beBfghnewMjh8eeD8VN
-# X0Trx+p8YFXwKfHgB2ztMrAjABdoKX36LXHWgpqrxnYFosniP371+TQFgkHOdLSh
-# OwfjMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
+# m0QAZzAJBgUrDgMCHQUAA4GBAENp5Y27D6o11+ey91Y5toAhlTKHy8Dh/V+CJBlc
+# 6iOWsq48u27SUDaQ2Nm73Odgd5fP8IwYIRHHVkhkFUSqCxl180WFVPaWBCWWEvsq
+# ZWYiIniASfmJP/yStwZS1FLETKTPEoCd9QfeEHOEzXK5GkKwR4OeufX/4WUqk+OV
+# xxmzMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
 # ADCBlTELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExh
 # a2UgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQL
 # ExhodHRwOi8vd3d3LnVzZXJ0cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmly
@@ -141,24 +148,24 @@ If(Test-Path $key\uninst.exe)
 # mOvNN7MOq2XTYuw6pXbrE6g1k8kuCgHswOjMPX626+LB7NMUkoJmh1Dc/VCXrLNK
 # dnMGxIYROrNfQwRSb+qz0HQ2TMrxG3mEN3BjrXS5qg7zmLCGCOvb4B+MEPI5ZJuu
 # TwoskopPGLWR5Y0ak18frvGm8C6X0NL2KzwxggOoMIIDpAIBATBAMCwxKjAoBgNV
-# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQjF0eHA5AMIFL
-# sT46uUsBYjAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
+# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQz7cAEPBXcZhH
+# 68DwvjKLxzAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUMjNyaJmdJBgRGDAJgRmEjlvS778wDQYJ
-# KoZIhvcNAQEBBQAEgYCdu6MKkoPl0ER7AWf1CdBrpN/SrIEiI9/3ZZHtIL+YMB/m
-# /ExDHaV4FqXClCXjlvmPclDG1q21cMANITyC9G0NpX3nDIMuGtdbTOonsSgL2EG/
-# capFP/+YAnYQPHGPma6ONtXWv4TBHXqdHGWS4ZqKL+O6krYWInxl8LPw1dtZZ6GC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUprGILv7gzMzmIzxHJAPSPR/gjbIwDQYJ
+# KoZIhvcNAQEBBQAEgYB//nN6las+6oCNSjUW9NFyVpRT+TQEefJVjL/0BYU+l4in
+# 0gT/mKQU51y2S0cduG+wbHRsR+xNTVLTmpVv6jfqdnptEczcQSUdDZxGKlivC67T
+# KsKgG6RHZVPUgCRA46MqCWOZ8u3In5lY3t3ischITkcikvhaskMcnvNrb0hI4qGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTExNTA2MDZaMCMGCSqGSIb3DQEJBDEWBBQi
-# axI8TFn2ThFhrmWSt21TNidHITANBgkqhkiG9w0BAQEFAASCAQBJMUDdKWCxtI+t
-# QlK6+FP8AMLn/sm1MyiW0DUhN8JqdyuJdWtIrdBs3OY6jl1LuuQvHKyCsqj6TPaT
-# 3CJUxGCTuzHRVwmjPF+t2tdKG75fFFsBlQcTCxiw2QWYBmnla/DoTpuRK4yJ17W9
-# yh/ICbdLexrAZATZkPTVtfXYqvtzUlckGau5jRu0gS3qwiKqs+w18BHjcjNz/z9+
-# aPQS2TOFNEv9Uh4Jy5SFHsDYuPhPkVDT/QTpIRWcQv7or47/B7NfUU2qyjl5vA0u
-# Sgy3Y7gob3dSEjCmKIXY3XJcBgwUbevYlzC6JXJFLuXltLhHkBsjt+exI9JY67O3
-# 8QjiUw4Z
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTExNzM1NTlaMCMGCSqGSIb3DQEJBDEWBBTv
+# c2qdCnJjVUcDXb7xb9CUN2Jq2DANBgkqhkiG9w0BAQEFAASCAQBrVKEXQ2sf/yVj
+# t4GcwwrhFnmkb664LD1HBbVZ3n7ypPWinRzDuuwjToN9RkD3OOVtP0F/Tdzs1A5n
+# DkfKjltBQzFDRae/PBKDO4bPPbehUOffAkhtyajp+TySBi03oSMSFsm+HTKhUcnZ
+# z9dI1yS0LjnfAp9e3EMOdxCbjUzGtrZhOVzkR8uTBp5k4ASJCZG+PWqgfTOosmmB
+# X3TzVBsyBWOa6Tq0U4HuS9r/r96ukpnJHbvZuaAF5rrtizLVMMXQNyjNniAWK1pw
+# 54YVfeKNxd7O7LY3vyXkYLiUvwo1tdp97rrlrnKIewW07d39UgtoV5b+VPWcI6AM
+# sMAScXde
 # SIG # End signature block
