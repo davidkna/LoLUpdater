@@ -3,13 +3,13 @@ LoLUpdater
 
 Right click zip file -> properties -> unblock
 
-Extract to LoL Folder, check the image, then add the certificate.
+Extract to LoL Folder
 
-Then open a powershell prompt and write
+Run LoLUpdater as admin
 
-"Set-ExecutionPolicy RemoteSigned"
+Wati
 
-then run the patcher
+Enjoy
 
 https://www.youtube.com/user/LogganSWE
 
