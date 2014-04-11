@@ -3,15 +3,7 @@ LoLUpdater
 
 Right click zip file -> properties -> unblock
 
-Extract to LoL Folder
-
-Run LoLUpdater as admin
-
-Wait
-
-Enjoy
-
-Everytime LoL updates the patch dissapears so you can just run it again.
+check the youtube video for installation instructions
 
 https://www.youtube.com/user/LogganSWE
 
