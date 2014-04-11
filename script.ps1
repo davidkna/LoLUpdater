@@ -21,7 +21,7 @@ Start-BitsTransfer http://airdownload.adobe.com/air/win/download/13.0/AdobeAIRIn
 Start-BitsTransfer https://www.bugsplatsoftware.com/files/BugSplatNative.zip
 start-process Cg-3.1_April2012_Setup.exe /silent -Wait
 start-process dxwebsetup.exe /q -Wait
-start-process AdobeAIRInstaller.exe -Wait
+start-process AdobeAIRInstaller.exe -silent -Wait
 Start-Process 7z.exe -ArgumentList "x BugSplatNative.zip -y" -Wait -Nonewwindow
 Copy-Item "BugSplat\bin\BsSndRpt.exe"
 Copy-Item "BugSplat\bin\BugSplat.dll"
@@ -49,9 +49,6 @@ stop-process -processname LoLLauncher
 stop-process -processname LoLClient
 
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" Backup
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\cg.dll" Backup
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\cgD3D9.dll" Backup
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\cggl.dll" Backup
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" Backup
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" Backup
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" Backup
@@ -106,8 +103,8 @@ If(Test-Path $key\uninst.exe)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU0SY36jKnUxSH3dwqEg6EVeZx
-# mNmgggbUMIICOTCCAaagAwIBAgIQjF0eHA5AMIFLsT46uUsBYjAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUuGvuzC10KmM4zPkXFauH1+fL
+# VrygggbUMIICOTCCAaagAwIBAgIQjF0eHA5AMIFLsT46uUsBYjAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTExNDM5NDRaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAo0EDeIlADb3P
@@ -147,21 +144,21 @@ If(Test-Path $key\uninst.exe)
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQjF0eHA5AMIFL
 # sT46uUsBYjAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUkcgfekc8PkrFiIiyJ3Hj60mmP4MwDQYJ
-# KoZIhvcNAQEBBQAEgYAyHbDerKZ+n74iI6hvJwDud7ekJTiSsHziKMn29Ee8WkJU
-# QitUb4zh2IF/SCM/GFG8EEZT6s6pyec+xM09oMR4PbUdXgeJHAjR82p1RbO43FWq
-# s8h2shFr55qLgyNu+tWGfx4dfXFuJbq8VRNJsX8YjKCDEdgLKNyXXNTGBM8tAqGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUMjNyaJmdJBgRGDAJgRmEjlvS778wDQYJ
+# KoZIhvcNAQEBBQAEgYCdu6MKkoPl0ER7AWf1CdBrpN/SrIEiI9/3ZZHtIL+YMB/m
+# /ExDHaV4FqXClCXjlvmPclDG1q21cMANITyC9G0NpX3nDIMuGtdbTOonsSgL2EG/
+# capFP/+YAnYQPHGPma6ONtXWv4TBHXqdHGWS4ZqKL+O6krYWInxl8LPw1dtZZ6GC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTExNDQzMDhaMCMGCSqGSIb3DQEJBDEWBBRl
-# Jk2I4lTfKRw2e/iXyCTo0KiJrDANBgkqhkiG9w0BAQEFAASCAQBEv4vJ9BsoyHYv
-# 7kgA8u3rYreukJsWnDSP7KcOAspQlRXYMxrHkIZT8Gy+Y6mrJexFEeI2ETKlMQJh
-# XjQeXmaXglxKi/lDdpfkKeoQjAdbiWBoXgKfc7qbMfq22p33UXQnXBd3nHO9CVx8
-# L0NMXaNyjSTpeMpgnSXu40VM4fib0gZiUHokganGKGHt7i+LMRVyjmxsZQWTP/dF
-# LDL0Tx0kClDV8OkNlUBqgrWprccMBoBWUkwEqwyaB0POjTEZublVe8nH0WVqLGp/
-# R5cX+4pd2n1EACj31gNRfC3xjZ+qkakNMUfl52mIPYBM7RXOOljyTS9RqqMmuAzx
-# koujD56a
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTExNTA2MDZaMCMGCSqGSIb3DQEJBDEWBBQi
+# axI8TFn2ThFhrmWSt21TNidHITANBgkqhkiG9w0BAQEFAASCAQBJMUDdKWCxtI+t
+# QlK6+FP8AMLn/sm1MyiW0DUhN8JqdyuJdWtIrdBs3OY6jl1LuuQvHKyCsqj6TPaT
+# 3CJUxGCTuzHRVwmjPF+t2tdKG75fFFsBlQcTCxiw2QWYBmnla/DoTpuRK4yJ17W9
+# yh/ICbdLexrAZATZkPTVtfXYqvtzUlckGau5jRu0gS3qwiKqs+w18BHjcjNz/z9+
+# aPQS2TOFNEv9Uh4Jy5SFHsDYuPhPkVDT/QTpIRWcQv7or47/B7NfUU2qyjl5vA0u
+# Sgy3Y7gob3dSEjCmKIXY3XJcBgwUbevYlzC6JXJFLuXltLhHkBsjt+exI9JY67O3
+# 8QjiUw4Z
 # SIG # End signature block
