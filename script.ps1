@@ -61,6 +61,8 @@ Copy-Item "cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 Copy-Item "cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 Copy-Item "cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 
+$key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory"
+
 start-process AdobeAIRInstaller.exe -uninstall
 Remove-Item Cg-3.1_April2012_Setup.exe
 Remove-Item dxwebsetup.exe
@@ -83,11 +85,16 @@ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe"
     {
 start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe"
     }
+    
+if(Test-Path -path $key\uninst.exe) 
+    {
+start-process $key\uninst.exe
+    }
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUmTIiuUTjhZL+sYp4eV1TeHmx
-# +V6gggbUMIICOTCCAaagAwIBAgIQ6d72z6XZs7NDQ2kZL8jnYjAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUDEXykO9zZIomqJScAbDPmpg8
+# m32gggbUMIICOTCCAaagAwIBAgIQ6d72z6XZs7NDQ2kZL8jnYjAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTEwMjM3MzhaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAxbuOkxQXOeD9
@@ -127,21 +134,21 @@ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe"
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQ6d72z6XZs7ND
 # Q2kZL8jnYjAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUcqWF5XdfNPa2UglYOoxqFBEsvBMwDQYJ
-# KoZIhvcNAQEBBQAEgYBNnV3p/syc+GBoEbvDcmHQ3ChJM3OMUPEwxlcR6PCCj6F8
-# YbUl8LBN82NaUXr4ZcCg9I8uRPmlnFsrB2T39IAUdGm+E2oXRu4bkeAqZE3tZvcL
-# 9Rv5+BfHr9GMymDuViTF0lOYO7F4BoGXZgQdrkFwfIrYIq8tzFsv8fvHav5Y0KGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUAi8KOySAL+A7XNgpLuqXBEw2+D4wDQYJ
+# KoZIhvcNAQEBBQAEgYBXNWC6u/xJJLJ72ISS1S+XgPgFQ/gNjs4RbtjaIaPvcjOJ
+# KDbFytG3+jcmPrQu8z8mAtqLi/Aj6hUJrQ+aHLCxjKo4HfTPk/6HDQPmzoYUjwRT
+# pR8ePUsPJzlMbPRdI9UiQMB2cIucYqA7c8p3n+/UidKk1e3PmgM87pKhZL9TdqGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTEwMjQ3MzhaMCMGCSqGSIb3DQEJBDEWBBTl
-# 4pPNrwCLh6XNgb4uU9CFRhQR8jANBgkqhkiG9w0BAQEFAASCAQA9sZZJBzvtIZX+
-# ZK0+FE9kDbiVBjrFdw4EIdlva1jLE2Te5BUzROu03mh0NCCS+PanVMFqmnHVxhnu
-# W0tJ8+12hClxd1KAYbLxzyCxuoV+zjxF4vixAbDFf2Ygegvw0w38UfSSxazUrmAh
-# z8vekMNlEEgqQgHP6XcZwl8PvLkpQRpN4/8VpW6xE6nd9OTduBlZecePguynSMwK
-# h10FcuRIRKMYhu2Dydmlo0RO+/pSApTfib+9E5T1HRJv9g/66POfzRnFXxj7J8MD
-# XPzOipyFUW/Oo+hV/O7Ek5Su5vpMlv1BoXD8RxrFpuO/O3ICzecdFDr0MafqrjzT
-# pwPxPI/f
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTExMDMyMDRaMCMGCSqGSIb3DQEJBDEWBBRV
+# e8o1mMisLo7V8VHYROEq1AGeXDANBgkqhkiG9w0BAQEFAASCAQCWh53VJhlapPdx
+# WDzyP2PRQpnRx4O8HvDlu1pM7ZRtjgaMR2Nx3gJCuVZdATfpDLz8xYe9Euk8J/hQ
+# ybpYf5QcEGQ7B/wlLDMw8EL62YGt79MCHHypNcyCVm4s0BAQDmtaWluwDKaqt+h7
+# C5qKwjKDn/ef71/b+QTtgYnnv+ZI5eirGJermyhyWMA3+Vn4bfWGRuGqbDfUG9W3
+# gEa+RgF7q12BQ9FUucKe3yrCyzW28n4y6dCaonP0QqVQW1tkViHag6OtvWKpiEZa
+# 3upjB8m0RI7X66Me7A2LhTLHzZPXeTaEq6jLi1fJ+CsZF/9VRmshyPT1w9Y89qbH
+# MfOn4FzN
 # SIG # End signature block
