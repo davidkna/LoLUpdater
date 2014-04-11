@@ -7,11 +7,13 @@ Extract to LoL Folder
 
 Run LoLUpdater as admin
 
-Wati
+Wait
 
 Enjoy
 
 Everytime LoL updates the patch dissapears so you can just run it again.
+
+
 Quick fix for OSX:
 
 Download Adobe Air:
