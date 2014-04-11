@@ -1,5 +1,5 @@
 ﻿$dir = Split-Path -parent $MyInvocation.MyCommand.Definition
-
+New-Item -ItemType directory -Path $dir\Backup
 pop-location
 push-location "$dir\RADS\solutions\lol_game_client_sln\releases"
 $sln = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
@@ -48,6 +48,19 @@ Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll"
 stop-process -processname LoLLauncher
 stop-process -processname LoLClient
 
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" Backup
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\cg.dll" Backup
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\cgD3D9.dll" Backup
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\cggl.dll" Backup
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" Backup
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" Backup
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" Backup
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" Backup
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" Backup
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" Backup
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" Backup
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" Backup
+
 Copy-Item "dbghelp.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "cg.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "cgD3D9.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
@@ -93,20 +106,20 @@ If(Test-Path $key\uninst.exe)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUY5FQSjKAXseUmfEEJTGLqlNH
-# ZtqgggbUMIICOTCCAaagAwIBAgIQ6d72z6XZs7NDQ2kZL8jnYjAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU0SY36jKnUxSH3dwqEg6EVeZx
+# mNmgggbUMIICOTCCAaagAwIBAgIQjF0eHA5AMIFLsT46uUsBYjAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
-# Fw0xNDA0MTEwMjM3MzhaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
-# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAxbuOkxQXOeD9
-# WnAhHS41VR4HOcmmqqj209a+QJh/N6oNUUilKUPYI/PJQlAb9rF2pDuK3AKQkyP2
-# 0A0bk0C9N7yfKuFwYaquZGyFxiA1QDHCAnre/jWqgyPfkn87gz3yj2RAPNLfqxaK
-# O2QqgbOskLmzyTVuPT2J82UjdLfhW50CAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
-# BQUHAwMwXQYDVR0BBFYwVIAQxRcid0o2sSP9A3O3YnxK6qEuMCwxKjAoBgNVBAMT
-# IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQm8kAAWu+ibdKxPGn
-# 389EwjAJBgUrDgMCHQUAA4GBABU7BPGHAlGlWXjM/o3LB73IW3uqnE+J534ogN2O
-# M2hL/kQtpYPKs/LDznkNBHzs5ht4AJeW/tfq3OSnny+vY34QrCEyyxmmdoouFNeM
-# ycGxvIt7AymMu+J8t43GAzTKbvovB38QE9POf+aKtumanHm6DrMafy7pB8n+MZm4
-# HY78MIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
+# Fw0xNDA0MTExNDM5NDRaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
+# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAo0EDeIlADb3P
+# LpdUjcuKtc3Mrpxwj/eEaxBwz1l166e9CjDIJk9eDPlilv/aKktQDC8P7D5to4tX
+# /T4shE/opdhCg3quY6+Iv1bUb8ZpMXkFVJF8RgntmdlPAHvJw/J+il7eb6QwgiLe
+# ZaayIqmRUfmHxl9BxrihOu6V5BNsF18CAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
+# BQUHAwMwXQYDVR0BBFYwVIAQ2S6Mj4ixUAbdkPZQYhCjIqEuMCwxKjAoBgNVBAMT
+# IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQwUc9ZnEjoJNCdrON
+# m0QAZzAJBgUrDgMCHQUAA4GBAGBf7D0V17oaCnZMJb+TqFqGx3zFtterNbg+55Ak
+# bFYbvWuVC5vKOu0lXTqjVKq5ldo9kuPRAsnF0R2hZ2295beBfghnewMjh8eeD8VN
+# X0Trx+p8YFXwKfHgB2ztMrAjABdoKX36LXHWgpqrxnYFosniP371+TQFgkHOdLSh
+# OwfjMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
 # ADCBlTELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExh
 # a2UgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQL
 # ExhodHRwOi8vd3d3LnVzZXJ0cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmly
@@ -131,24 +144,24 @@ If(Test-Path $key\uninst.exe)
 # mOvNN7MOq2XTYuw6pXbrE6g1k8kuCgHswOjMPX626+LB7NMUkoJmh1Dc/VCXrLNK
 # dnMGxIYROrNfQwRSb+qz0HQ2TMrxG3mEN3BjrXS5qg7zmLCGCOvb4B+MEPI5ZJuu
 # TwoskopPGLWR5Y0ak18frvGm8C6X0NL2KzwxggOoMIIDpAIBATBAMCwxKjAoBgNV
-# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQ6d72z6XZs7ND
-# Q2kZL8jnYjAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
+# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQjF0eHA5AMIFL
+# sT46uUsBYjAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUz9OoCE3HfJgrBnozxKIQrlng4qAwDQYJ
-# KoZIhvcNAQEBBQAEgYChcMvq8/P7W1Q67tbIX+FMj8B7kgetnkNBGyog9oiddN7t
-# 5B9kKBH2CTo6l6Zi90+CefiZM28Jm2eKkxWjODD3ZROVO5Qs7WTe7/xL60xGE//O
-# 8neNGNZXuxmlkHe1EsLYa87y5jjMByUSsCdoEZjR5tA3scY+euAW/ec/Z+SnaqGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUkcgfekc8PkrFiIiyJ3Hj60mmP4MwDQYJ
+# KoZIhvcNAQEBBQAEgYAyHbDerKZ+n74iI6hvJwDud7ekJTiSsHziKMn29Ee8WkJU
+# QitUb4zh2IF/SCM/GFG8EEZT6s6pyec+xM09oMR4PbUdXgeJHAjR82p1RbO43FWq
+# s8h2shFr55qLgyNu+tWGfx4dfXFuJbq8VRNJsX8YjKCDEdgLKNyXXNTGBM8tAqGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTExMjI2MTRaMCMGCSqGSIb3DQEJBDEWBBTv
-# 6FG9y4tdNt2LXiBgOhCpNXX3uDANBgkqhkiG9w0BAQEFAASCAQAaBIPpxfnT0Yie
-# JxHJP/696ZvYSzfGPfxtidflYFn5tAtQjHazkfVTUbwuLnZmXPaF9KKGhIip78or
-# 738+qlqt9imsk88HvEfDy3bxaT/KssuUcJg3YiiGqtxE7D9RydOq/zcusFFwi90k
-# Et0ZuuaueeRuH1xa5Gfi2u1XBXSpVJZJRwOFLQARhqs3NIguYsbEOeEvod9b+xH7
-# jDIB8JPd154WHZBkUIdlV6HYofxAl1PnLh3YigLAf75wyVfsqTM4SAJs1NHfZ85T
-# y3go2bVPxpPeA/v73BbQzVNTXwfNxpuuM1pDMevgAt7iFhb3YRVtkF3Af9mdb/d3
-# x5pADvqB
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTExNDQzMDhaMCMGCSqGSIb3DQEJBDEWBBRl
+# Jk2I4lTfKRw2e/iXyCTo0KiJrDANBgkqhkiG9w0BAQEFAASCAQBEv4vJ9BsoyHYv
+# 7kgA8u3rYreukJsWnDSP7KcOAspQlRXYMxrHkIZT8Gy+Y6mrJexFEeI2ETKlMQJh
+# XjQeXmaXglxKi/lDdpfkKeoQjAdbiWBoXgKfc7qbMfq22p33UXQnXBd3nHO9CVx8
+# L0NMXaNyjSTpeMpgnSXu40VM4fib0gZiUHokganGKGHt7i+LMRVyjmxsZQWTP/dF
+# LDL0Tx0kClDV8OkNlUBqgrWprccMBoBWUkwEqwyaB0POjTEZublVe8nH0WVqLGp/
+# R5cX+4pd2n1EACj31gNRfC3xjZ+qkakNMUfl52mIPYBM7RXOOljyTS9RqqMmuAzx
+# koujD56a
 # SIG # End signature block
