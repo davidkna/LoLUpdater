@@ -13,6 +13,7 @@ Enjoy
 
 Everytime LoL updates the patch dissapears so you can just run it again.
 
+https://www.youtube.com/user/LogganSWE
 
 Quick fix for OSX:
 
