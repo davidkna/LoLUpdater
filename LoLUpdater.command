@@ -83,6 +83,6 @@ hdiutil detach "/Volumes/MyCocoaCrasher/"
 
 
 ebold "Cleaning up..."
-rm air.dmg cg.dmg bugsplat.dmg tmp
+rm  -rvf air.dmg cg.dmg bugsplat.dmg tmp
 
 ebold "Finished! Now your LoL client is updated. You will need to rerun as soon as the client gets updated again."
