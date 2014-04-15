@@ -1,5 +1,4 @@
 # LoLUpdater v1.0 for OS X
-___
 ## How to use
 Download and run LoLUpdater.command. Close LoL before starting the patch. The script will require your password.
 ## If you haven't installed LoL at default location...
