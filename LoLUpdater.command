@@ -1,15 +1,12 @@
 #!/bin/bash
-# LoL Updater
-# Ported to OS X
-# Original https://github.com/Loggan08/LoLUpdater
+# LoL Updater for OS X
+# Ported by David Knaack
+# Original for Windows: https://github.com/Loggan08/LoLUpdater
+# License: GPL-3 http://www.gnu.org/licenses/gpl-3.0.html
 
-function ebold { # bold echo for messages from script
-  echo -e "\033[1m$1\033[0m"
-}
-
-
-ebold "Password is required to run this script"
-sudo cd $1 || .
+echo "LoLUpdater for OS X"
+echo "Password is required to run this script"
+sudo cd .
 CURRENTDIR=${PWD##*/}
 
 if [ $CURRENTDIR != "League of Legends.app" ]; then
@@ -17,72 +14,65 @@ if [ $CURRENTDIR != "League of Legends.app" ]; then
 fi
 
 
+
+
+FRAMEWORKS=/Library/Frameworks
 SLN=Contents/LoL/RADS/solutions/lol_game_client_sln/releases/
 AIR=Contents/LoL/RADS/projects/lol_air_client/releases/
 LAUNCHER=Contents/LoL/RADS/projects/lol_launcher/releases/
 
-SLN="Contents/LoL/RADS/solutions/lol_game_client_sln/releases/$(ls -lrt Contents/LoL/RADS/solutions/lol_game_client_sln/releases/ | tail -1 | awk '{ print $9 }')/deploy/League of Legends.app/Contents/Frameworks"
-AIR="$AIR$(ls -lrt $AIR | tail -1 | awk '{ print $9 }')/deploy/Frameworks"
-LAUNCHER="$LAUNCHER$(ls -lrt  -t $LAUNCHER   | tail -1 | awk '{ print $9 }')/deploy/LoL Launcher.app/Contents/Frameworks"
-PLAY="Contents/LoL/Play League of Legends.app/Contents/Frameworks"
+SLN=$SLN$(ls -lrt $SLN | tail -1 | awk '{ print $9 }')/deploy/LeagueOfLegends.app/Contents/Frameworks
+AIR=$AIR$(ls -lrt $AIR | tail -1 | awk '{ print $9 }')/deploy/Frameworks
+LAUNCHER=$LAUNCHER$(ls -lrt  -t $LAUNCHER | tail -1 | awk '{ print $9 }')/deploy/LoLLauncher.app/Contents/Frameworks
+PLAY=Contents/LoL/Play\ League\ of\ Legends.app/Contents/Frameworks
+
+function detect_framework() {
+  [[ -e $FRAMEWORKS/$1.framework ]] && echo YES || echo NO
+}
 
 
-
-ebold "Creating Backups..."
+echo "Creating Backups..."
 mkdir backups
-no | cp -aRi "$AIR/Adobe Air.framework" backups/
-no | cp -aRi "$LAUNCHER/Cg.framework" backups/
-no | cp -aRi "$PLAY/BugSplat.framework" backups/
+cp -R -n -a $AIR/Adobe\ Air.framework backups/
+cp -R -n -a $LAUNCHER/Cg.framework backups/
+cp -R -n -a $PLAY/BugSplat.framework backups/
 
+if [ $(detect_framework "Adobe Air") = YES ]
+then
+  echo "Updating Adobe AIR"
+  echo "Removing old files..."
+  sudo rm -fR $AIR/Adobe\ Air.framework
+  echo "Symlinking new files..."
+  ln -s $FRAMEWORKS/Adobe\ Air.framework $AIR
+else
+  echo -e "\033[1mDid not detect Adobe Air. Not Updated.\033[0m"
+fi
 
-ebold "Downloading depencies..."
-curl \
-  -o air.dmg      http://airdownload.adobe.com/air/mac/download/13.0/AdobeAIR.dmg \
-  -o cg.dmg       http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg \
-  -o bugsplat.dmg http://www.bugsplatsoftware.com/files/MyCocoaCrasher.dmg
+if [ $(detect_framework Cg) = YES ]
+then
+  echo "Updating NVIDIA Cg"
+  echo "Removing old files..."
+  sudo rm -fR $SLN/Cg.framework
+  sudo rm -fR $LAUNCHER/Cg.framework
+  echo "Symlinking new files..."
+  ln -s $FRAMEWORKS/Cg.framework $SLN
+  ln -s $FRAMEWORKS/Cg.framework $LAUNCHER
+else
+  echo -e "\033[1mDid not detect NVIDIA Cg. Not Updated.\033[0m"
+fi
 
+if [ $(detect_framework Bugsplat) = YES ]
+then
+  echo "Updating Bugsplat"
+  echo "Removing old files..."
+  sudo rm -fR $SLN/Bugsplat.framework
+  sudo rm -fR $LAUNCHER/Bugsplat.framework
+  echo "Symlinking new files..."
+  ln -s $FRAMEWORKS/Bugsplat.framework $PLAY
+  ln -s $FRAMEWORKS/Bugsplat.framework $SLN
+  ln -s $FRAMEWORKS/Bugsplat.framework $LAUNCHER
+else
+  echo -e "\033[1mDid not detect Bugsplat. Not Updated.\033[0m"
+fi
 
-ebold "Mounting Adobe Air disk image..."
-hdiutil attach -nobrowse air.dmg
-
-ebold "Copying files..."
-sudo cp -aRf \
-  "/Volumes/Adobe Air/Adobe Air Installer.app/Contents/Frameworks/Adobe Air.framework" \
-  "$AIR/"
-
-ebold "Unmounting Adobe Air disk Image..."
-hdiutil detach "/Volumes/Adobe Air/"
-
-
-ebold "Mounting Nvidia Cg disk image..."
-hdiutil attach -nobrowse cg.dmg
-
-ebold "Copying files..."
-mkdir tmp
-cp "/Volumes/cg-3.1.0013/Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz" tmp/
-cd tmp
-tar -zxvf "NVIDIA_Cg.tgz"
-cd ..
-sudo cp -aRf "tmp/Library/Frameworks/Cg.framework" "$LAUNCHER/"
-sudo cp -aRf "tmp/Library/Frameworks/Cg.framework" "$SLN/"
-
-ebold "Unmounting Nvidia Cg disk Image..."
-hdiutil detach "/Volumes/cg-3.1.0013"
-
-
-ebold "Mounting Bugsplat disk image..."
-hdiutil attach -nobrowse bugsplat.dmg
-
-ebold "Copying files..."
-sudo cp -aRf "/Volumes/MyCocoaCrasher/MyCocoaCrasher/BugSplat.framework" "$PLAY/"
-sudo cp -aRf "/Volumes/MyCocoaCrasher/MyCocoaCrasher/BugSplat.framework" "$SLN/"
-sudo cp -aRf "/Volumes/MyCocoaCrasher/MyCocoaCrasher/BugSplat.framework" "$LAUNCHER/"
-
-ebold "Unmounting Bugsplat disk image..."
-hdiutil detach "/Volumes/MyCocoaCrasher/"
-
-
-ebold "Cleaning up..."
-rm  -rvf air.dmg cg.dmg bugsplat.dmg tmp
-
-ebold "Finished! Now your LoL client is updated. You will need to rerun as soon as the client gets updated again."
+echo "Finished! Now your LoL client is updated. You will need to rerun the script as soon as the client gets updated again."
