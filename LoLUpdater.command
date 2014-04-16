@@ -59,7 +59,7 @@ ebold "Updating LoL Adobe AIR"
 ebold "Removing old files..."
 sudo rm -fR $AIR/Adobe\ Air.framework
 ebold "Symlinking new files..."
-ln -s $FRAMEWORKS/Adobe\ Air.framework $AIR
+ln -s $LFRAMEWORKS/Adobe\ Air.framework $AIR
 
 
 if [ $(detect_framework Cg) = NO ]
