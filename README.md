@@ -1,4 +1,4 @@
-# LoLUpdater v1.0 for OS X
+# LoLUpdater v1.0.1 for OS X
 ___
 ## How to use
 Download and run LoLUpdater.command. The script will require your password.
