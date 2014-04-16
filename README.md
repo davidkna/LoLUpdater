@@ -6,4 +6,4 @@ If you haven't installed LoL at /Applications/League of Legends.app, place it in
 ## What does it do?
 LoLUpdater will update some (3) internal depencies of LoL. This will improve performance for you and in case you want to revert the changes the script creates backups of the old files.
 ## License
-GPL-v3 http://www.gnu.org/licenses/gpl-3.0.html
+[GPL-v3](http://www.gnu.org/licenses/gpl-3.0.html)
