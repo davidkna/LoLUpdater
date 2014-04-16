@@ -59,7 +59,7 @@ ebold "Updating LoL Adobe AIR"
 ebold "Removing old files..."
 sudo rm -fR $AIR/Adobe\ Air.framework
 ebold "Symlinking new files..."
-ln -s $LFRAMEWORKS/Adobe\ Air.framework $AIR
+ln -Fs "${PWD}/$LFRAMEWORKS/Adobe Air.framework" $AIR
 
 
 if [ $(detect_framework Cg) = NO ]
@@ -87,8 +87,8 @@ ebold "Removing old files..."
 sudo rm -fR $SLN/Cg.framework
 sudo rm -fR $LAUNCHER/Cg.framework
 ebold "Symlinking new files..."
-ln -s $LFRAMEWORKS/Cg.framework $SLN
-ln -s $LFRAMEWORKS/Cg.framework $LAUNCHER
+ln -Fs "${PWD}/$LFRAMEWORKS/Cg.framework" $SLN
+ln -Fs "${PWD}/$LFRAMEWORKS/Cg.framework" $LAUNCHER
 
 
 if [ $(detect_framework Bugsplat) = NO ]
@@ -115,10 +115,10 @@ sudo rm -fR $LAUNCHER/Bugsplat.framework
 sudo rm -fR Contents/LoL/Play\ League\ of\ Legends.app/Contents/Frameworks/Bugsplat.framework
 sudo rm -fR Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks/Bugsplat.framework
 ebold "Symlinking new files..."
-ln -s $LFRAMEWORKS/Bugsplat.framework $SLN
-ln -s $LFRAMEWORKS/Bugsplat.framework $LAUNCHER
-ln -s $LFRAMEWORKS/Bugsplat.framework Contents/LoL/Play\ League\ of\ Legends.app/Contents/Frameworks
-ln -s $LFRAMEWORKS/Bugsplat.framework Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks
+ln -Fs "${PWD}/$LFRAMEWORKS/Bugsplat.framework" $SLN
+ln -Fs "${PWD}/$LFRAMEWORKS/Bugsplat.framework" $LAUNCHER
+ln -Fs "${PWD}/$LFRAMEWORKS/Bugsplat.framework" Contents/LoL/Play\ League\ of\ Legends.app/Contents/Frameworks
+ln -Fs "${PWD}/$LFRAMEWORKS/Bugsplat.framework" Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks
 
 
 ebold "Finished! Now your LoL client is updated. You will need to rerun the script as soon as the client gets updated again."
