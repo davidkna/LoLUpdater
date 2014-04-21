@@ -27,7 +27,7 @@ AIR=$AIR$(ls -lrt $AIR | tail -1 | awk '{ print $9 }')/deploy/Frameworks
 LAUNCHER=$LAUNCHER$(ls -lrt  -t $LAUNCHER | tail -1 | awk '{ print $9 }')/deploy/LoLLauncher.app/Contents/Frameworks
 
 function detect_framework() {
-  [[ -e $GFRAMEWORKS/$1.framework ]] && echo YES || ebold NO
+  [[ -e $GFRAMEWORKS/$1.framework ]] && echo YES || echo NO
 }
 
 ebold "Creating Backups..."
