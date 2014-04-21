@@ -26,55 +26,55 @@ AIR="$AIR$(ls -lrt "$AIR" | tail -1 | awk '{ print $9 }')/deploy/Frameworks"
 LAUNCHER="$LAUNCHER$(ls -lrt  -t "$LAUNCHER" | tail -1 | awk '{ print $9 }')/deploy/LoLLauncher.app/Contents/Frameworks"
 
 function detect_framework() {
-  [[ -e $1/$2.framework ]] && echo "YES" || echo "NO"
+  [[ -e "$1/$2.framework" ]] && echo "YES" || echo "NO"
 }
 
 function backup() {
   ebold "Creating Backups..."
-  mkdir -p LoLUpdater/Backups/$(date +%F)
-  mkdir -p LoLupdater/Frameworks
-  cp -R -n -a $AIR/Adobe\ Air.framework LoLUpdater/Backups/$(date +%F)
-  cp -R -n -a $LAUNCHER/Cg.framework LoLUpdater/Backups/$(date +%F)
-  cp -R -n -a $SLN/BugSplat.framework LoLUpdater/Backups/$(date +%F)
+  mkdir -p "LoLUpdater/Backups/$(date +%F)"
+  mkdir -p "LoLupdater/Frameworks"
+  cp -R -n -a "$AIR/Adobe Air.framework LoLUpdater/Backups/$(date +%F)"
+  cp -R -n -a "$LAUNCHER/Cg.framework LoLUpdater/Backups/$(date +%F)"
+  cp -R -n -a "$SLN/BugSplat.framework LoLUpdater/Backups/$(date +%F)"
 }
 
 function download_air() {
   ebold "Downloading depency Adobe Air..."
-  curl -o air.dmg http://airdownload.adobe.com/air/mac/download/13.0/AdobeAIR.dmg
+  curl -o air.dmg "http://airdownload.adobe.com/air/mac/download/13.0/AdobeAIR.dmg"
   ebold "Mounting Adobe Air disk image..."
-  hdiutil attach -nobrowse air.dmg
+  hdiutil attach -nobrowse "air.dmg"
   ebold "Copying files..."
   sudo cp -R"/Volumes/Adobe Air/Adobe Air Installer.app/Contents/Frameworks/Adobe Air.framework" $LFRAMEWORKS/
   ebold "Unmounting Adobe Air disk Image and Cleaning up..."
   hdiutil detach "/Volumes/Adobe Air/"
-  rm -fR air.dmg
+  rm -fR "air.dmg"
 }
 
 function download_cg() {
   ebold "Downloading depency Nvidia Cg..."
-  curl -o cg.dmg http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg
+  curl -o "cg.dmg" "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg"
   ebold "Mounting Nvidia Cg disk image..."
-  hdiutil attach -nobrowse cg.dmg
+  hdiutil attach -nobrowse "cg.dmg"
   ebold "Copying files..."
-  mkdir -p LoLUpdater/tmp
+  mkdir -p "LoLUpdater/tmp"
   cp "/Volumes/cg-3.1.0013/Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz" tmp/
-  (cd LoLUpdater/tmp && tar -zxf "NVIDIA_Cg.tgz")
+  (cd "LoLUpdater/tmp" && tar -zxf "NVIDIA_Cg.tgz")
   sudo cp -R "LoLUpdater/tmp/Library/Frameworks/Cg.framework" "$LFRAMEWORKS"
   ebold "Unmounting Nvidia Cg disk Image and Cleaning Up..."
   hdiutil detach "/Volumes/cg-3.1.0013"
-  sudo rm -fR tmp cg.dmg
+  sudo rm -fR tmp "cg.dmg"
 }
 
 function download_bugsplat() {
   ebold "Downloading depency Bugsplat..."
-  curl -o bugsplat.dmg http://www.bugsplatsoftware.com/files/MyCocoaCrasher.dmg
+  curl -o "bugsplat.dmg" "http://www.bugsplatsoftware.com/files/MyCocoaCrasher.dmg"
   ebold "Mounting Bugsplat disk image..."
-  hdiutil attach -nobrowse bugsplat.dmg
+  hdiutil attach -nobrowse "bugsplat.dmg"
   ebold "Copying files..."
   sudo cp -R "/Volumes/MyCocoaCrasher/MyCocoaCrasher/BugSplat.framework" "$LFRAMEWORKS/"
   ebold "Unmounting Bugsplat disk image and Cleanign Up..."
   hdiutil detach "/Volumes/MyCocoaCrasher/"
-  rm -fR bugsplat.dmg
+  rm -fR "bugsplat.dmg"
 }
 
 function update_it() {
@@ -106,8 +106,8 @@ if [ $(detect_framework $GFRAMEWORKS "Adobe Air") = NO ]
   download_air
 else
   ebold "Using local Adobe Air..."
-  sudo rm -fR $LFRAMEWORKS/Adobe\ Air.framework
-  cp -R -f $GFRAMEWORKS/Adobe\ Air.framework $LFRAMEWORKS/Adobe\ Air.framework
+  sudo rm -fR "$LFRAMEWORKS/Adobe Air.framework"
+  cp -R -f $"GFRAMEWORKS/Adobe Air.framework" "$LFRAMEWORKS/Adobe Air.framework"
   if [ "$?" != "0" ]; then
       echo "[Error] Copy failed! Will download instead..." 1>&2
       download_air
@@ -123,8 +123,8 @@ then
   download_cg
 else
   ebold "Using local Nvidia Cg..."
-  sudo rm -fR $LFRAMEWORKS/Cg.Framework
-  cp -R -f $GFRAMEWORKS/Cg.Framework $LFRAMEWORKS/Cg.Framework
+  sudo rm -fR "$LFRAMEWORKS/Cg.Framework"
+  cp -R -f $"GFRAMEWORKS/Cg.Framework" "$LFRAMEWORKS/Cg.Framework"
   if [ "$?" != "0" ]; then
       echo "[Error] copy failed! Will download instead..." 1>&2
       download_cg
@@ -139,8 +139,8 @@ then
   download_bugsplat
 else
   ebold "Using local Bugsplat..."
-  sudo rm -fR $LFRAMEWORKS/Bugsplat.Framework
-  cp -R -f $GFRAMEWORKS/Bugsplat.Framework $LFRAMEWORKS/Bugsplat.Framework
+  sudo rm -fR "$LFRAMEWORKS/Bugsplat.Framework"
+  cp -R -f "$GFRAMEWORKS/Bugsplat.Framework" "$LFRAMEWORKS/Bugsplat.Framework"
   if [ "$?" != "0" ]; then
       echo "[Error] Copy failed! Will download instead..." 1>&2
       download_bugsplat
