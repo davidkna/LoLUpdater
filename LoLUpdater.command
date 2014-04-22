@@ -33,9 +33,9 @@ function backup() {
   ebold "Creating Backups..."
   mkdir -p "LoLUpdater/Backups/$(date +%F)"
   mkdir -p "LoLupdater/Frameworks"
-  cp -R -n -a "$AIR/Adobe Air.framework LoLUpdater/Backups/$(date +%F)"
-  cp -R -n -a "$LAUNCHER/Cg.framework LoLUpdater/Backups/$(date +%F)"
-  cp -R -n -a "$SLN/BugSplat.framework LoLUpdater/Backups/$(date +%F)"
+  cp -R -n -a "$AIR/Adobe Air.framework" "LoLUpdater/Backups/$(date +%F)"
+  cp -R -n -a "$LAUNCHER/Cg.framework" "LoLUpdater/Backups/$(date +%F)"
+  cp -R -n -a "$SLN/BugSplat.framework" "LoLUpdater/Backups/$(date +%F)"
 }
 
 function download_air() {
@@ -100,14 +100,14 @@ function update_it() {
 
 backup
 
-if [ $(detect_framework $GFRAMEWORKS "Adobe Air") = NO ]
+if [ $(detect_framework "$GFRAMEWORKS" "Adobe Air") = NO ]
   then
   ebold "Did not detect Adobe Air."
   download_air
 else
   ebold "Using local Adobe Air..."
   sudo rm -fR "$LFRAMEWORKS/Adobe Air.framework"
-  cp -R -f $"GFRAMEWORKS/Adobe Air.framework" "$LFRAMEWORKS/Adobe Air.framework"
+  cp -R -f "$GFRAMEWORKS/Adobe Air.framework" "$LFRAMEWORKS/Adobe Air.framework"
   if [ "$?" != "0" ]; then
       echo "[Error] Copy failed! Will download instead..." 1>&2
       download_air
@@ -124,7 +124,7 @@ then
 else
   ebold "Using local Nvidia Cg..."
   sudo rm -fR "$LFRAMEWORKS/Cg.Framework"
-  cp -R -f $"GFRAMEWORKS/Cg.Framework" "$LFRAMEWORKS/Cg.Framework"
+  cp -R -f "$GFRAMEWORKS/Cg.Framework" "$LFRAMEWORKS/Cg.Framework"
   if [ "$?" != "0" ]; then
       echo "[Error] copy failed! Will download instead..." 1>&2
       download_cg
@@ -133,7 +133,7 @@ fi
 update_it "Cg" "$SLN" "$LAUNCHER"
 
 
-if [ $(detect_framework $GFRAMEWORKS Bugsplat) = NO ]
+if [ "$(detect_framework "$GFRAMEWORKS" "Bugsplat")" = NO ]
 then
   ebold "Did not detect Bugsplat."
   download_bugsplat
