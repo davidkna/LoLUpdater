@@ -64,7 +64,7 @@ function download_cg() {
   sudo cp -R "LoLUpdater/tmp/Library/Frameworks/Cg.framework" "$LFRAMEWORKS"
   ebold "Unmounting Nvidia Cg disk Image and Cleaning Up..."
   hdiutil detach "/Volumes/cg-3.1.0013"
-  sudo rm -fR LoLUpdater/tmp "cg.dmg"
+  sudo rm -fR "LoLUpdater/tmp" "cg.dmg"
 }
 
 function download_bugsplat() {
