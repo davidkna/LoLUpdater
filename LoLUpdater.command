@@ -92,7 +92,7 @@ function update_it() {
     ebold "Symlinking new files..."
     for i in "$@:2"
       do
-      ln -Fs "${PWD}/$LFRAMEWORKS/$1" "$i"
+      ln -Fs "${PWD}/$LFRAMEWORKS/$1.framework" "$i"
     done
   else
       ebold "[ERROR] Couldn't find $1."
