@@ -57,14 +57,14 @@ function download_cg() {
   ebold "Mounting Nvidia Cg disk image..."
   hdiutil attach -nobrowse "cg.dmg"
   ebold "Copying files..."
-  (cd "LoLUpdater" && mkdir "tmp")
-  cp "/Volumes/cg-3.1.0013/Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz" tmp/
+  mkdir -p "LoLUpdater/tmp"
+  cp "/Volumes/cg-3.1.0013/Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz" "LoLUpdater/tmp/"
   (cd "LoLUpdater/tmp" && tar -zxf "NVIDIA_Cg.tgz")
   rm -fR "$LFRAMEWORKS/Cg.framework"
   sudo cp -R "LoLUpdater/tmp/Library/Frameworks/Cg.framework" "$LFRAMEWORKS"
   ebold "Unmounting Nvidia Cg disk Image and Cleaning Up..."
   hdiutil detach "/Volumes/cg-3.1.0013"
-  sudo rm -fR tmp "cg.dmg"
+  sudo rm -fR LoLUpdater/tmp "cg.dmg"
 }
 
 function download_bugsplat() {
