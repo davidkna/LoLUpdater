@@ -44,6 +44,7 @@ function download_air() {
   ebold "Mounting Adobe Air disk image..."
   hdiutil attach -nobrowse "air.dmg"
   ebold "Copying files..."
+  rm -fR "$LFRAMEWORKS/Adobe Air.framework"
   sudo cp -R"/Volumes/Adobe Air/Adobe Air Installer.app/Contents/Frameworks/Adobe Air.framework" $LFRAMEWORKS/
   ebold "Unmounting Adobe Air disk Image and Cleaning up..."
   hdiutil detach "/Volumes/Adobe Air/"
@@ -59,6 +60,7 @@ function download_cg() {
   (cd "LoLUpdater" && mkdir "tmp")
   cp "/Volumes/cg-3.1.0013/Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz" tmp/
   (cd "LoLUpdater/tmp" && tar -zxf "NVIDIA_Cg.tgz")
+  rm -fR "$LFRAMEWORKS/Cg.framework"
   sudo cp -R "LoLUpdater/tmp/Library/Frameworks/Cg.framework" "$LFRAMEWORKS"
   ebold "Unmounting Nvidia Cg disk Image and Cleaning Up..."
   hdiutil detach "/Volumes/cg-3.1.0013"
@@ -71,6 +73,7 @@ function download_bugsplat() {
   ebold "Mounting Bugsplat disk image..."
   hdiutil attach -nobrowse "bugsplat.dmg"
   ebold "Copying files..."
+  rm -fR "$LFRAMEWORKS/Bugsplat.framework"
   sudo cp -R "/Volumes/MyCocoaCrasher/MyCocoaCrasher/BugSplat.framework" "$LFRAMEWORKS/"
   ebold "Unmounting Bugsplat disk image and Cleanign Up..."
   hdiutil detach "/Volumes/MyCocoaCrasher/"
