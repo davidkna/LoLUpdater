@@ -100,7 +100,7 @@ function update_it() {
 
 backup
 
-if [ $(detect_framework "$GFRAMEWORKS" "Adobe Air") = NO ]
+if [ "$(detect_framework "$GFRAMEWORKS" "Adobe Air")" = "NO" ]
   then
   ebold "Did not detect Adobe Air."
   download_air
@@ -117,7 +117,7 @@ update_it "Adobe Air" "$AIR"
 
 
 
-if [ $(detect_framework $GFRAMEWORKS Cg) = NO ]
+if [ "$(detect_framework "$GFRAMEWORKS" "Cg")" = "NO" ]
 then
   ebold "Did not detect Nvidia Cg."
   download_cg
@@ -133,7 +133,7 @@ fi
 update_it "Cg" "$SLN" "$LAUNCHER"
 
 
-if [ "$(detect_framework "$GFRAMEWORKS" "Bugsplat")" = NO ]
+if [ "$(detect_framework "$GFRAMEWORKS" "Bugsplat")" = "NO" ]
 then
   ebold "Did not detect Bugsplat."
   download_bugsplat
