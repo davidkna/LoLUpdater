@@ -56,7 +56,7 @@ function download_cg() {
   ebold "Mounting Nvidia Cg disk image..."
   hdiutil attach -nobrowse "cg.dmg"
   ebold "Copying files..."
-  mkdir -p "LoLUpdater/tmp"
+  (cd "LoLUpdater" && mkdir "tmp")
   cp "/Volumes/cg-3.1.0013/Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz" tmp/
   (cd "LoLUpdater/tmp" && tar -zxf "NVIDIA_Cg.tgz")
   sudo cp -R "LoLUpdater/tmp/Library/Frameworks/Cg.framework" "$LFRAMEWORKS"
