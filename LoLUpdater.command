@@ -25,8 +25,8 @@ SLN="$SLN$(ls -lrt "$SLN" | tail -1 | awk '{ print $9 }')/deploy/LeagueOfLegends
 AIR="$AIR$(ls -lrt "$AIR" | tail -1 | awk '{ print $9 }')/deploy/Frameworks"
 LAUNCHER="$LAUNCHER$(ls -lrt  -t "$LAUNCHER" | tail -1 | awk '{ print $9 }')/deploy/LoLLauncher.app/Contents/Frameworks"
 
-function detect_framework() {
-  [[ -e "$1/$2.framework" ]] && printf "YES" || printf "NO"
+function detect() {
+  [[ -e "$1" ]] && printf "YES" || printf "NO"
 }
 
 function backup() {
@@ -47,7 +47,7 @@ function download_air() {
   sudo rm -fR "$LFRAMEWORKS/Adobe Air.framework"
   sudo cp -R"/Volumes/Adobe Air/Adobe Air Installer.app/Contents/Frameworks/Adobe Air.framework" $LFRAMEWORKS/
   ebold "Unmounting Adobe Air disk Image and Cleaning up..."
-  hdiutil detach "/Volumes/Adobe Air/"
+  hdiutil detach -quiet "/Volumes/Adobe Air/"
   rm -fR "air.dmg"
 }
 
@@ -63,7 +63,7 @@ function download_cg() {
   sudo rm -fR "$LFRAMEWORKS/Cg.framework"
   sudo cp -R "LoLUpdater/tmp/Library/Frameworks/Cg.framework" "$LFRAMEWORKS"
   ebold "Unmounting Nvidia Cg disk Image and Cleaning Up..."
-  hdiutil detach "/Volumes/cg-3.1.0013"
+  hdiutil detach -quiet "/Volumes/cg-3.1.0013"
   sudo rm -fR "LoLUpdater/tmp" "cg.dmg"
 }
 
@@ -75,24 +75,24 @@ function download_bugsplat() {
   ebold "Copying files..."
   sudo rm -fR "$LFRAMEWORKS/Bugsplat.framework"
   sudo cp -R "/Volumes/MyCocoaCrasher/MyCocoaCrasher/BugSplat.framework" "$LFRAMEWORKS/"
-  ebold "Unmounting Bugsplat disk image and Cleanign Up..."
-  hdiutil detach "/Volumes/MyCocoaCrasher/"
+  ebold "Unmounting Bugsplat disk image and Cleaning Up..."
+  hdiutil detach -quiet "/Volumes/MyCocoaCrasher/"
   rm -fR "bugsplat.dmg"
 }
 
 function update_it() {
-  if [ "$(detect_framework "$LFRAMEWORKS" "$1")" = "YES" ]
+  if [ "$(detect "$LFRAMEWORKS/$1")" = "YES" ]
     then
     ebold "Updating $1"
     ebold "Removing old files..."
     for i in "${@:2}"
       do
-        sudo rm -fR "$i/$1.framework"
+        sudo rm -fR "$i/$1"
     done
     ebold "Symlinking new files..."
     for i in "${@:2}"
       do
-      ln -Fs "${PWD}/$LFRAMEWORKS/$1.framework" "$i"
+      ln -Fs "${PWD}/$LFRAMEWORKS/$1" "$i"
     done
   else
       ebold "[ERROR] Couldn't find $1."
@@ -103,7 +103,7 @@ function update_it() {
 
 backup
 
-if [ "$(detect_framework "$GFRAMEWORKS" "Adobe Air")" = "NO" ]
+if [ "$(detect "$GFRAMEWORKS/Adobe Air.framework")" = "NO" ]
   then
   ebold "Did not detect Adobe Air."
   download_air
@@ -116,11 +116,11 @@ else
       download_air
   fi
 fi
-update_it "Adobe Air" "$AIR"
+update_it "Adobe Air.framework" "$AIR"
 
 
 
-if [ "$(detect_framework "$GFRAMEWORKS" "Cg")" = "NO" ]
+if [ "$(detect "$GFRAMEWORKS/Cg.framework")" = "NO" ]
 then
   ebold "Did not detect Nvidia Cg."
   download_cg
@@ -133,10 +133,10 @@ else
       download_cg
   fi
 fi
-update_it "Cg" "$SLN" "$LAUNCHER"
+update_it "Cg.framework" "$SLN" "$LAUNCHER"
 
 
-if [ "$(detect_framework "$GFRAMEWORKS" "Bugsplat")" = "NO" ]
+if [ "$(detect "$GFRAMEWORKS/Bugsplat.framework")" = "NO" ]
 then
   ebold "Did not detect Bugsplat."
   download_bugsplat
@@ -149,7 +149,7 @@ else
       download_bugsplat
   fi
 fi
-update_it "Bugsplat" "$SLN" "$LAUNCHER" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
+update_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
 
 
 
