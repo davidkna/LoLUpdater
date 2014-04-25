@@ -40,7 +40,7 @@ function backup() {
 
 function download_air() {
   ebold "Downloading depency Adobe Air..."
-  curl -o air.dmg "http://airdownload.adobe.com/air/mac/download/13.0/AdobeAIR.dmg"
+  curl -#o air.dmg "http://airdownload.adobe.com/air/mac/download/13.0/AdobeAIR.dmg"
   ebold "Mounting Adobe Air disk image..."
   hdiutil attach -nobrowse -quiet "air.dmg"
   ebold "Copying files..."
@@ -53,7 +53,7 @@ function download_air() {
 
 function download_cg() {
   ebold "Downloading depency Nvidia Cg..."
-  curl -o "cg.dmg" "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg"
+  curl -#o "cg.dmg" "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg"
   ebold "Mounting Nvidia Cg disk image..."
   hdiutil attach -nobrowse -quiet "cg.dmg"
   ebold "Copying files..."
@@ -69,7 +69,7 @@ function download_cg() {
 
 function download_bugsplat() {
   ebold "Downloading depency Bugsplat..."
-  curl -o "bugsplat.dmg" "http://www.bugsplatsoftware.com/files/MyCocoaCrasher.dmg"
+  curl -#o "bugsplat.dmg" "http://www.bugsplatsoftware.com/files/MyCocoaCrasher.dmg"
   ebold "Mounting Bugsplat disk image..."
   hdiutil attach -nobrowse -quiet "bugsplat.dmg"
   ebold "Copying files..."
