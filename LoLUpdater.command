@@ -1,5 +1,5 @@
 #!/bin/bash
-# LoL Updater for OS X v1.1.1
+# LoL Updater for OS X v1.1.2
 # Ported by David Knaack
 # Original for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPL-3 http://www.gnu.org/licenses/gpl-3.0.html
@@ -26,25 +26,25 @@ AIR="$AIR$(ls -lrt "$AIR" | tail -1 | awk '{ print $9 }')/deploy/Frameworks"
 LAUNCHER="$LAUNCHER$(ls -lrt  -t "$LAUNCHER" | tail -1 | awk '{ print $9 }')/deploy/LoLLauncher.app/Contents/Frameworks"
 
 function detect_framework() {
-  [[ -e "$1/$2.framework" ]] && echo "YES" || echo "NO"
+  [[ -e "$1/$2.framework" ]] && printf "YES" || printf "NO"
 }
 
 function backup() {
   ebold "Creating Backups..."
-  mkdir -p "LoLUpdater/Backups/$(date +%F)"
+  mkdir -p "LoLUpdater/Backups/$(date +%X-%x)"
   mkdir -p "LoLupdater/Frameworks"
-  cp -R -n -a "$AIR/Adobe Air.framework" "LoLUpdater/Backups/$(date +%F)"
-  cp -R -n -a "$LAUNCHER/Cg.framework" "LoLUpdater/Backups/$(date +%F)"
-  cp -R -n -a "$SLN/BugSplat.framework" "LoLUpdater/Backups/$(date +%F)"
+  cp -R -n -a "$AIR/Adobe Air.framework" "LoLUpdater/Backups/$(date +%X-%x)"
+  cp -R -n -a "$LAUNCHER/Cg.framework" "LoLUpdater/Backups/$(date +%X-%x)"
+  cp -R -n -a "$SLN/BugSplat.framework" "LoLUpdater/Backups/$(date +%X-%x)"
 }
 
 function download_air() {
   ebold "Downloading depency Adobe Air..."
   curl -o air.dmg "http://airdownload.adobe.com/air/mac/download/13.0/AdobeAIR.dmg"
   ebold "Mounting Adobe Air disk image..."
-  hdiutil attach -nobrowse "air.dmg"
+  hdiutil attach -nobrowse -quiet "air.dmg"
   ebold "Copying files..."
-  rm -fR "$LFRAMEWORKS/Adobe Air.framework"
+  sudo rm -fR "$LFRAMEWORKS/Adobe Air.framework"
   sudo cp -R"/Volumes/Adobe Air/Adobe Air Installer.app/Contents/Frameworks/Adobe Air.framework" $LFRAMEWORKS/
   ebold "Unmounting Adobe Air disk Image and Cleaning up..."
   hdiutil detach "/Volumes/Adobe Air/"
@@ -55,12 +55,12 @@ function download_cg() {
   ebold "Downloading depency Nvidia Cg..."
   curl -o "cg.dmg" "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg"
   ebold "Mounting Nvidia Cg disk image..."
-  hdiutil attach -nobrowse "cg.dmg"
+  hdiutil attach -nobrowse -quiet "cg.dmg"
   ebold "Copying files..."
   mkdir -p "LoLUpdater/tmp"
   cp "/Volumes/cg-3.1.0013/Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz" "LoLUpdater/tmp/"
   (cd "LoLUpdater/tmp" && tar -zxf "NVIDIA_Cg.tgz")
-  rm -fR "$LFRAMEWORKS/Cg.framework"
+  sudo rm -fR "$LFRAMEWORKS/Cg.framework"
   sudo cp -R "LoLUpdater/tmp/Library/Frameworks/Cg.framework" "$LFRAMEWORKS"
   ebold "Unmounting Nvidia Cg disk Image and Cleaning Up..."
   hdiutil detach "/Volumes/cg-3.1.0013"
@@ -71,9 +71,9 @@ function download_bugsplat() {
   ebold "Downloading depency Bugsplat..."
   curl -o "bugsplat.dmg" "http://www.bugsplatsoftware.com/files/MyCocoaCrasher.dmg"
   ebold "Mounting Bugsplat disk image..."
-  hdiutil attach -nobrowse "bugsplat.dmg"
+  hdiutil attach -nobrowse -quiet "bugsplat.dmg"
   ebold "Copying files..."
-  rm -fR "$LFRAMEWORKS/Bugsplat.framework"
+  sudo rm -fR "$LFRAMEWORKS/Bugsplat.framework"
   sudo cp -R "/Volumes/MyCocoaCrasher/MyCocoaCrasher/BugSplat.framework" "$LFRAMEWORKS/"
   ebold "Unmounting Bugsplat disk image and Cleanign Up..."
   hdiutil detach "/Volumes/MyCocoaCrasher/"
@@ -85,12 +85,12 @@ function update_it() {
     then
     ebold "Updating $1"
     ebold "Removing old files..."
-    for i in "$@:2"
+    for i in "${@:2}"
       do
         sudo rm -fR "$i/$1.framework"
     done
     ebold "Symlinking new files..."
-    for i in "$@:2"
+    for i in "${@:2}"
       do
       ln -Fs "${PWD}/$LFRAMEWORKS/$1.framework" "$i"
     done

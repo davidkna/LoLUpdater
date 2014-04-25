@@ -1,4 +1,4 @@
-# LoLUpdater v1.1.1 for OS X
+# LoLUpdater v1.1.2 for OS X
 ## How to use
 [Download](https://github.com/davidkna/LoLUpdater/archive/master.zip) and run `LoLUpdater.command`, if you want to revert the changes run `Restore.command`. I suggest to close LoL before starting the patch. The script will require your password.
 ## If you haven't installed LoL at default location...
