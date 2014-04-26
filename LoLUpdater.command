@@ -36,6 +36,7 @@ function backup() {
   cp -R -n -a "$SLN/BugSplat.framework" "LoLUpdater/Backups/$(date +%X-%x)"
 }
 
+
 function download_air() {
   echo "Downloading depency Adobe Air..."
   curl -#o air.dmg "http://airdownload.adobe.com/air/mac/download/13.0/AdobeAIR.dmg"
@@ -108,9 +109,8 @@ function update_it() {
   fi
 
 }
-if [ ! -h "$AIR/Adobe Air.framework" ]; then
-  backup
-fi
+
+backup
 
 if [ "$(detect "$GFRAMEWORKS/Adobe Air.framework")" = "NO" ]
   then
