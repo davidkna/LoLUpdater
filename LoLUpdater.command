@@ -100,8 +100,9 @@ function update_it() {
   fi
 
 }
-
-backup
+if [ ! -h "$AIR/Adobe Air.framework" ]; then
+  backup
+fi
 
 if [ "$(detect "$GFRAMEWORKS/Adobe Air.framework")" = "NO" ]
   then
