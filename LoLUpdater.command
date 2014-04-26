@@ -29,7 +29,7 @@ function detect() {
 
 function backup() {
   echo "Creating Backups..."
-  mkdir -p "LoLUpdater/Backups/$(date +%x-%X)"
+  mkdir -p "LoLUpdater/Backups/$(date +%X-%x)"
   mkdir -p "LoLupdater/Frameworks"
   cp -R -n -a "$AIR/Adobe Air.framework" "LoLUpdater/Backups/$(date +%X-%x)"
   cp -R -n -a "$LAUNCHER/Cg.framework" "LoLUpdater/Backups/$(date +%X-%x)"
