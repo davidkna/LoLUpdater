@@ -17,11 +17,11 @@ LFRAMEWORKS="LoLUpdater/Frameworks"
 SLN="Contents/LoL/RADS/solutions/lol_game_client_sln/releases/"
 AIR="Contents/LoL/RADS/projects/lol_air_client/releases/"
 LAUNCHER="Contents/LoL/RADS/projects/lol_launcher/releases/"
-GAMEC="Contents/LoL/RADS/projects/lol_game_client/releases/"
+GAMECL="Contents/LoL/RADS/projects/lol_game_client/releases/"
 SLN="$SLN$(ls -lrt "$SLN" | tail -1 | awk '{ print $9 }')/deploy/LeagueOfLegends.app/Contents/Frameworks"
 AIR="$AIR$(ls -lrt "$AIR" | tail -1 | awk '{ print $9 }')/deploy/Frameworks"
 LAUNCHER="$LAUNCHER$(ls -lrt  -t "$LAUNCHER" | tail -1 | awk '{ print $9 }')/deploy/LoLLauncher.app/Contents/Frameworks"
-GAMEC="$GAMEC$(ls -lrt "$GAMEC" | tail -1 | awk '{ print $9 }')/deploy/LeagueOfLegends.app/Contents/Frameworks"
+GAMECL="$GAMECL$(ls -lrt "$GAMECL" | tail -1 | awk '{ print $9 }')/deploy/LeagueOfLegends.app/Contents/Frameworks"
 
 function detect() {
   [[ -e "$1" ]] && printf "YES" || printf "NO"
@@ -144,7 +144,7 @@ else
       download_cg
   fi
 fi
-update_it "Cg.framework" "$SLN" "$LAUNCHER" "$GAMEC"
+update_it "Cg.framework" "$SLN" "$LAUNCHER" "$GAMECL"
 
 
 if [ "$(detect "$GFRAMEWORKS/Bugsplat.framework")" = "NO" ]
@@ -160,7 +160,7 @@ else
       download_bugsplat
   fi
 fi
-update_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "$GAMEC" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
+update_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "$GAMECL" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
 
 echo "Using local libc++ and libc++abi..."
 sudo rm -f "$LFRAMEWORKS/libc++.1.dylib" "$LFRAMEWORKS/libc++abi.dylib"
@@ -169,8 +169,8 @@ if [ "$?" != "0" ]; then
     echo "[Error] Copy failed! Will download instead..." 1>&2
     download_cxx
 fi
-update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMEC/../MacOS"
-update_it "libc++abi.dylib" "$SLN/../MacOS" "$GAMEC/../MacOS"
+update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
+update_it "libc++abi.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
 
 
 
