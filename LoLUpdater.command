@@ -34,6 +34,8 @@ function backup() {
   cp -R -n -a "$AIR/Adobe Air.framework" "LoLUpdater/Backups/$(date +%X-%x)"
   cp -R -n -a "$LAUNCHER/Cg.framework" "LoLUpdater/Backups/$(date +%X-%x)"
   cp -R -n -a "$SLN/BugSplat.framework" "LoLUpdater/Backups/$(date +%X-%x)"
+  cp -R -n -a "$SLN/../MacOS/libc++.1.dylib" "LoLUpdater/Backups/$(date +%X-%x)"
+  cp -R -n -a "$SLN/../MacOS/libc++abi.dylib" "LoLUpdater/Backups/$(date +%X-%x)"
 }
 
 
