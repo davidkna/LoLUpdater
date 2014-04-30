@@ -1,5 +1,5 @@
 #!/bin/bash
-# LoL Updater for OS X v1.2.0
+# LoL Updater for OS X v1.3.0
 # Ported by David Knaack
 # Original for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPL-3 http://www.gnu.org/licenses/gpl-3.0.html
@@ -100,10 +100,10 @@ function update_it() {
       do
         sudo rm -fR "$i/$1"
     done
-    echo "Symlinking new files..."
+    echo "Copying new files..."
     for i in "${@:2}"
       do
-      ln -Fs "${PWD}/$LFRAMEWORKS/$1" "$i"
+      sudo cp -R -f  "${PWD}/$LFRAMEWORKS/$1" "$i"
     done
   else
       echo "[ERROR] Couldn't find $1."
