@@ -28,14 +28,15 @@ function detect() {
 }
 
 function backup() {
+  datetime="$(date +%X-%x)"
   echo "Creating Backups..."
-  mkdir -p "LoLUpdater/Backups/$(date +%X-%x)"
+  mkdir -p "LoLUpdater/Backups/$datetime"
   mkdir -p "LoLupdater/Frameworks"
-  cp -R -n -a "$AIR/Adobe Air.framework" "LoLUpdater/Backups/$(date +%X-%x)"
-  cp -R -n -a "$LAUNCHER/Cg.framework" "LoLUpdater/Backups/$(date +%X-%x)"
-  cp -R -n -a "$SLN/BugSplat.framework" "LoLUpdater/Backups/$(date +%X-%x)"
-  cp -R -n -a "$SLN/../MacOS/libc++.1.dylib" "LoLUpdater/Backups/$(date +%X-%x)"
-  cp -R -n -a "$SLN/../MacOS/libc++abi.dylib" "LoLUpdater/Backups/$(date +%X-%x)"
+  cp -R -n -a "$AIR/Adobe Air.framework" "LoLUpdater/Backups/$datetime"
+  cp -R -n -a "$LAUNCHER/Cg.framework" "LoLUpdater/Backups/$datetime"
+  cp -R -n -a "$SLN/BugSplat.framework" "LoLUpdater/Backups/$datetime"
+  cp -R -n -a "$SLN/../MacOS/libc++.1.dylib" "LoLUpdater/Backups/$datetime"
+  cp -R -n -a "$SLN/../MacOS/libc++abi.dylib" "LoLUpdater/Backups/$datetime"
 }
 
 
