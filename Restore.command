@@ -32,7 +32,7 @@ function restore_it() {
   if [ "$(detect "$1")" = "YES" ]
   then
     sudo rm -fR "$2"
-    cp -R -f "$1" "$2/.."
+    sudo cp -R -f "$1" "$2/.."
   else
     echo "[ERROR] Did not find $1 in Backup!"
   fi
