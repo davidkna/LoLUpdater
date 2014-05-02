@@ -28,7 +28,7 @@ function detect() {
 }
 
 function backup() {
-  datetime="$(date +%X-%x)"
+  datetime="$(date +%x\ %X)"
   echo "Creating Backups…"
   mkdir -p "LoLUpdater/Backups/$datetime"
   mkdir -p "LoLupdater/Frameworks"
