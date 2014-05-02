@@ -31,8 +31,8 @@ function detect() {
 function restore_it() {
   if [ "$(detect "$1")" = "YES" ]
   then
-    sudo rm -fR "$2"
-    sudo cp -R -f "$1" "$2/.."
+    sudo rm -fR "$3/$2"
+    sudo cp -R -f "$1/$2" "$3"
   else
     echo "[ERROR] Did not find $1 in Backup!"
   fi
@@ -40,24 +40,26 @@ function restore_it() {
 
 
 function restore() {
+  cd "../.."
   echo "Restoring..."
-  restore_it "LoLUpdater/Backups/$1/Adobe Air.framework" "$AIR/Adobe Air.framework"
-  restore_it "LoLUpdater/Backups/$1/Cg.framework" "$SLN/Cg.framework"
-  restore_it "LoLUpdater/Backups/$1/Cg.framework" "$LAUNCHER/Cg.framework"
-  restore_it "LoLUpdater/Backups/$1/Cg.framework" "$GAMECL/Cg.framework"
-  restore_it "LoLUpdater/Backups/$1/Bugsplat.framework" "$SLN/Bugsplat.framework"
-  restore_it "LoLUpdater/Backups/$1/Bugsplat.framework" "$LAUNCHER/Bugsplat.framework"
-  restore_it "LoLUpdater/Backups/$1/Bugsplat.framework" "$GAMECL/Bugsplat.framework"
-  restore_it "LoLUpdater/Backups/$1/Bugsplat.framework" "Contents/LoL/Play League of Legends.app/Contents/Frameworks/Bugsplat.framework"
-  restore_it "LoLUpdater/Backups/$1/Bugsplat.framework" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks/Bugsplat.framework"
-  restore_it "LoLUpdater/Backups/$1/libc++.1.dylib" "$SLN/../MacOS/libc++.1.dylib"
-  restore_it "LoLUpdater/Backups/$1/libc++.1.dylib" "$GAMECL/../MacOS/libc++.1.dylib"
-  restore_it "LoLUpdater/Backups/$1/libc++abi.dylib" "$SLN/../MacOS/libc++.1.dylib"
-  restore_it "LoLUpdater/Backups/$1/libc++abi.dylib" "$GAMECL/../MacOS/libc++.1.dylib"
+  restore_it "$1" "Adobe Air.framework" "$AIR"
+  restore_it "$1" "Cg.framework" "$SLN"
+  restore_it "$1" "Cg.framework" "$LAUNCHER"
+  restore_it "$1" "Cg.framework" "$GAMECL"
+  restore_it "$1" "Bugsplat.framework" "$SLN"
+  restore_it "$1" "Bugsplat.framework" "$LAUNCHER"
+  restore_it "$1" "Bugsplat.framework" "$GAMECL"
+  restore_it "$1" "Bugsplat.framework" "Contents/LoL/Play League of Legends.app/Contents/Frameworks/"
+  restore_it "$1" "Bugsplat.framework" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks/"
+  restore_it "$1" "libc++.1.dylib" "$SLN/../MacOS/"
+  restore_it "$1" "libc++.1.dylib" "$GAMECL/../MacOS/"
+  restore_it "$1" "libc++abi.dylib" "$SLN/../MacOS/"
+  restore_it "$1" "libc++abi.dylib" "$GAMECL/../MacOS/"
 }
 
 echo "Which backup do you want to use?"
 
-
-(cd "LoLUpdater/Backups" && select MYBACKUP in *; do test -n "$d" && break; echo ">>> Invalid Selection"; done)
-restore "$MYBACKUP"
+MYBACKUP=""
+cd "LoLUpdater/Backups"
+select MYBACKUP in *; do test -n "$MYBACKUP" && break; echo ">>> Invalid Selection"; done
+restore "$(pwd)/$MYBACKUP"
