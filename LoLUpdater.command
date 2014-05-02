@@ -8,9 +8,9 @@ echo "Password is required to run this script"
 sudo cd .
 
 CURRENTDIR=${PWD##*/}
-if [ $CURRENTDIR != "League of Legends.app" ]; then
-  cd "/Applications/League of Legends.app"
-fi
+#if [ $CURRENTDIR != "League of Legends.app" ]; then
+#  cd "/Applications/League of Legends.app"
+#fi
 
 GFRAMEWORKS="/Library/Frameworks"
 LFRAMEWORKS="LoLUpdater/Frameworks"
@@ -80,16 +80,6 @@ function download_bugsplat() {
   echo "Unmounting Bugsplat disk image and Cleaning Up…"
   hdiutil detach -quiet "/Volumes/MyCocoaCrasher/"
   rm -fR "bugsplat.dmg"
-}
-
-function download_cxx() {
-  echo "Downloading depencies libc++ and libc++abi…"
-  git clone https://github.com/Loggan08/LoLUpdaterOSX.git
-  echo "Copying files…"
-  cp -f "LoLUpdaterOSX/libc++.1.dylib" "$LFRAMEWORKS"
-  cp -f "LoLUpdaterOSX/libc++abi.dylib" "$LFRAMEWORKS"
-  echo "Cleaning Up…"
-  rm -fR "LoLUpdaterOSX"
 }
 
 function update_it() {
@@ -167,8 +157,7 @@ echo "Using local libc++ and libc++abi…"
 sudo rm -f "$LFRAMEWORKS/libc++.1.dylib" "$LFRAMEWORKS/libc++abi.dylib"
 cp -f "/usr/lib/libc++"{"abi.dylib",".1.dylib"} "$LFRAMEWORKS"
 if [ "$?" != "0" ]; then
-    echo "[Error] Copy failed! Will download instead…" 1>&2
-    download_cxx
+    echo "[Error] Copy failed!" 1>&2
 fi
 update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
 update_it "libc++abi.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
