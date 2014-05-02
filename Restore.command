@@ -18,12 +18,6 @@ AIR="$AIR$(ls -lrt "$AIR" | tail -1 | awk '{ print $9 }')/deploy/Frameworks"
 LAUNCHER="$LAUNCHER$(ls -lrt  -t "$LAUNCHER" | tail -1 | awk '{ print $9 }')/deploy/LoLLauncher.app/Contents/Frameworks"
 GAMECL="$GAMECL$(ls -lrt "$GAMECL" | tail -1 | awk '{ print $9 }')/deploy/LeagueOfLegends.app/Contents/Frameworks"
 
-cd LoLUpdater/Backups
-shopt -s nullglob
-BACKUPS=(*/)
-shopt -u nullglob
-cd ../..
-
 function detect() {
   [[ -e "$1" ]] && printf "YES" || printf "NO"
 }
@@ -59,7 +53,6 @@ function restore() {
 
 echo "Which backup do you want to use?"
 
-MYBACKUP=""
 cd "LoLUpdater/Backups"
 select MYBACKUP in *; do test -n "$MYBACKUP" && break; echo ">>> Invalid Selection"; done
 restore "$(pwd)/$MYBACKUP"
