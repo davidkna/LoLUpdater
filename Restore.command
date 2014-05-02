@@ -41,7 +41,7 @@ function restore_it() {
 
 function restore() {
   cd "../.."
-  echo "Restoring..."
+  echo "Restoring…"
   restore_it "$1" "Adobe Air.framework" "$AIR"
   restore_it "$1" "Cg.framework" "$SLN"
   restore_it "$1" "Cg.framework" "$LAUNCHER"

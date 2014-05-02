@@ -29,7 +29,7 @@ function detect() {
 
 function backup() {
   datetime="$(date +%X-%x)"
-  echo "Creating Backups..."
+  echo "Creating Backups…"
   mkdir -p "LoLUpdater/Backups/$datetime"
   mkdir -p "LoLupdater/Frameworks"
   cp -R -n -a "$AIR/Adobe Air.framework" "LoLUpdater/Backups/$datetime"
@@ -41,54 +41,54 @@ function backup() {
 
 
 function download_air() {
-  echo "Downloading depency Adobe Air..."
+  echo "Downloading depency Adobe Air…"
   curl -#o air.dmg "http://airdownload.adobe.com/air/mac/download/13.0/AdobeAIR.dmg"
-  echo "Mounting Adobe Air disk image..."
+  echo "Mounting Adobe Air disk image…"
   hdiutil attach -nobrowse -quiet "air.dmg"
-  echo "Copying files..."
+  echo "Copying files…"
   sudo rm -fR "$LFRAMEWORKS/Adobe Air.framework"
   sudo cp -R"/Volumes/Adobe Air/Adobe Air Installer.app/Contents/Frameworks/Adobe Air.framework" $LFRAMEWORKS/
-  echo "Unmounting Adobe Air disk Image and Cleaning up..."
+  echo "Unmounting Adobe Air disk Image and Cleaning up…"
   hdiutil detach -quiet "/Volumes/Adobe Air/"
   rm -fR "air.dmg"
 }
 
 function download_cg() {
-  echo "Downloading depency Nvidia Cg..."
+  echo "Downloading depency Nvidia Cg…"
   curl -#o "cg.dmg" "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg"
-  echo "Mounting Nvidia Cg disk image..."
+  echo "Mounting Nvidia Cg disk image…"
   hdiutil attach -nobrowse -quiet "cg.dmg"
-  echo "Copying files..."
+  echo "Copying files…"
   mkdir -p "LoLUpdater/tmp"
   cp "/Volumes/cg-3.1.0013/Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz" "LoLUpdater/tmp/"
   (cd "LoLUpdater/tmp" && tar -zxf "NVIDIA_Cg.tgz")
   sudo rm -fR "$LFRAMEWORKS/Cg.framework"
   sudo cp -R "LoLUpdater/tmp/Library/Frameworks/Cg.framework" "$LFRAMEWORKS"
-  echo "Unmounting Nvidia Cg disk Image and Cleaning Up..."
+  echo "Unmounting Nvidia Cg disk Image and Cleaning Up…"
   hdiutil detach -quiet "/Volumes/cg-3.1.0013"
   sudo rm -fR "LoLUpdater/tmp" "cg.dmg"
 }
 
 function download_bugsplat() {
-  echo "Downloading depency Bugsplat..."
+  echo "Downloading depency Bugsplat…"
   curl -#o "bugsplat.dmg" "http://www.bugsplatsoftware.com/files/MyCocoaCrasher.dmg"
-  echo "Mounting Bugsplat disk image..."
+  echo "Mounting Bugsplat disk image…"
   hdiutil attach -nobrowse -quiet "bugsplat.dmg"
-  echo "Copying files..."
+  echo "Copying files…"
   sudo rm -fR "$LFRAMEWORKS/Bugsplat.framework"
   sudo cp -R "/Volumes/MyCocoaCrasher/MyCocoaCrasher/BugSplat.framework" "$LFRAMEWORKS/"
-  echo "Unmounting Bugsplat disk image and Cleaning Up..."
+  echo "Unmounting Bugsplat disk image and Cleaning Up…"
   hdiutil detach -quiet "/Volumes/MyCocoaCrasher/"
   rm -fR "bugsplat.dmg"
 }
 
 function download_cxx() {
-  echo "Downloading depencies libc++ and libc++abi..."
+  echo "Downloading depencies libc++ and libc++abi…"
   git clone https://github.com/Loggan08/LoLUpdaterOSX.git
-  echo "Copying files..."
+  echo "Copying files…"
   cp -f "LoLUpdaterOSX/libc++.1.dylib" "$LFRAMEWORKS"
   cp -f "LoLUpdaterOSX/libc++abi.dylib" "$LFRAMEWORKS"
-  echo "Cleaning Up..."
+  echo "Cleaning Up…"
   rm -fR "LoLUpdaterOSX"
 }
 
@@ -96,12 +96,12 @@ function update_it() {
   if [ "$(detect "$LFRAMEWORKS/$1")" = "YES" ]
     then
     echo "Updating $1"
-    echo "Removing old files..."
+    echo "Removing old files…"
     for i in "${@:2}"
       do
         sudo rm -fR "$i/$1"
     done
-    echo "Copying new files..."
+    echo "Copying new files…"
     for i in "${@:2}"
       do
       sudo cp -R -f  "${PWD}/$LFRAMEWORKS/$1" "$i"
@@ -120,11 +120,11 @@ if [ "$(detect "$GFRAMEWORKS/Adobe Air.framework")" = "NO" ]
   echo "Did not detect Adobe Air."
   download_air
 else
-  echo "Using local Adobe Air..."
+  echo "Using local Adobe Air…"
   sudo rm -fR "$LFRAMEWORKS/Adobe Air.framework"
   cp -R -f "$GFRAMEWORKS/Adobe Air.framework" "$LFRAMEWORKS/Adobe Air.framework"
   if [ "$?" != "0" ]; then
-      echo "[Error] Copy failed! Will download instead..." 1>&2
+      echo "[Error] Copy failed! Will download instead…" 1>&2
       download_air
   fi
 fi
@@ -137,11 +137,11 @@ then
   echo "Did not detect Nvidia Cg."
   download_cg
 else
-  echo "Using local Nvidia Cg..."
+  echo "Using local Nvidia Cg…"
   sudo rm -fR "$LFRAMEWORKS/Cg.Framework"
   cp -R -f "$GFRAMEWORKS/Cg.Framework" "$LFRAMEWORKS/Cg.Framework"
   if [ "$?" != "0" ]; then
-      echo "[Error] copy failed! Will download instead..." 1>&2
+      echo "[Error] copy failed! Will download instead…" 1>&2
       download_cg
   fi
 fi
@@ -153,21 +153,21 @@ then
   echo "Did not detect Bugsplat."
   download_bugsplat
 else
-  echo "Using local Bugsplat..."
+  echo "Using local Bugsplat…"
   sudo rm -fR "$LFRAMEWORKS/Bugsplat.Framework"
   cp -R -f "$GFRAMEWORKS/Bugsplat.Framework" "$LFRAMEWORKS/Bugsplat.Framework"
   if [ "$?" != "0" ]; then
-      echo "[Error] Copy failed! Will download instead..." 1>&2
+      echo "[Error] Copy failed! Will download instead…" 1>&2
       download_bugsplat
   fi
 fi
 update_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "$GAMECL" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
 
-echo "Using local libc++ and libc++abi..."
+echo "Using local libc++ and libc++abi…"
 sudo rm -f "$LFRAMEWORKS/libc++.1.dylib" "$LFRAMEWORKS/libc++abi.dylib"
 cp -f "/usr/lib/libc++"{"abi.dylib",".1.dylib"} "$LFRAMEWORKS"
 if [ "$?" != "0" ]; then
-    echo "[Error] Copy failed! Will download instead..." 1>&2
+    echo "[Error] Copy failed! Will download instead…" 1>&2
     download_cxx
 fi
 update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
