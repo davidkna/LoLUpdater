@@ -8,9 +8,9 @@ echo "Password is required to run this script"
 sudo cd .
 
 CURRENTDIR=${PWD##*/}
-#if [ $CURRENTDIR != "League of Legends.app" ]; then
-#  cd "/Applications/League of Legends.app"
-#fi
+if [ $CURRENTDIR != "League of Legends.app" ]; then
+  cd "/Applications/League of Legends.app"
+fi
 
 GFRAMEWORKS="/Library/Frameworks"
 LFRAMEWORKS="LoLUpdater/Frameworks"
