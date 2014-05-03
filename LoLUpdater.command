@@ -137,20 +137,7 @@ else
 fi
 update_it "Cg.framework" "$SLN" "$LAUNCHER" "$GAMECL"
 
-
-if [ "$(detect "$GFRAMEWORKS/Bugsplat.framework")" = "NO" ]
-then
-  echo "Did not detect Bugsplat."
-  download_bugsplat
-else
-  echo "Using local Bugsplat…"
-  sudo rm -fR "$LFRAMEWORKS/Bugsplat.Framework"
-  cp -R -f "$GFRAMEWORKS/Bugsplat.Framework" "$LFRAMEWORKS/Bugsplat.Framework"
-  if [ "$?" != "0" ]; then
-      echo "[Error] Copy failed! Will download instead…" 1>&2
-      download_bugsplat
-  fi
-fi
+download_bugsplat
 update_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "$GAMECL" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
 
 echo "Using local libc++ and libc++abi…"
