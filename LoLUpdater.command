@@ -140,14 +140,14 @@ update_it "Cg.framework" "$SLN" "$LAUNCHER" "$GAMECL"
 download_bugsplat
 update_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "$GAMECL" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
 
-echo "Using local libc++ and libc++abi…"
-sudo rm -f "$LFRAMEWORKS/libc++.1.dylib" "$LFRAMEWORKS/libc++abi.dylib"
-cp -f "/usr/lib/libc++"{"abi.dylib",".1.dylib"} "$LFRAMEWORKS"
-if [ "$?" != "0" ]; then
-    echo "[Error] Copy failed!" 1>&2
-fi
-update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
-update_it "libc++abi.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
+# echo "Using local libc++ and libc++abi…"
+# sudo rm -f "$LFRAMEWORKS/libc++.1.dylib" "$LFRAMEWORKS/libc++abi.dylib"
+# cp -f "/usr/lib/libc++"{"abi.dylib",".1.dylib"} "$LFRAMEWORKS"
+# if [ "$?" != "0" ]; then
+#     echo "[Error] Copy failed!" 1>&2
+# fi
+# update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
+# update_it "libc++abi.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
 
 
 
