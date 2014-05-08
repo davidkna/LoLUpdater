@@ -6,7 +6,7 @@ If you haven't installed LoL at `/Applications/League of Legends.app`, place it 
 ## Updates
 You may have to restore for updates to work correctly.
 ## What does it do?
-LoLUpdater will update the internal depencies Nvidia Cg, Adobe Air, Bugsplat (bug reporter), libc++ and libc++abi. This will improve performance for you and in case you want to revert the changes the script creates backups of the old files.
+LoLUpdater will update the internal depencies Nvidia Cg, Adobe Air and Bugsplat (bug reporter). This will improve performance for you and in case you want to revert the changes the script creates backups of the old files.
 ## Other recommendations
 Download a Windows font pack. Your eyes will thank you.
 ## License
