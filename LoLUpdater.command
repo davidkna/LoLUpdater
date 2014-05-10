@@ -182,10 +182,10 @@ update_it "Cg.framework" "$SLN" "$LAUNCHER" "$GAMECL"
 download_bugsplat
 update_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "$GAMECL" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
 
-download_cxx()
+download_cxx
 update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
 
-download_cxxabi()
+download_cxxabi
 update_it "libc++abi.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
 
 echo "Finished! Now your LoL client is updated. You will need to rerun the script as soon as the client gets updated again."
