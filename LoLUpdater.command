@@ -82,7 +82,7 @@ function download_bugsplat() {
   rm -fR "bugsplat.dmg"
 }
 
-function downlaod_cxx() {
+function download_cxx() {
   currpath=$(pwd)
   echo "Downloading libc++…"
   mkdir -p "LoLUpdater/tmp"
@@ -182,7 +182,7 @@ update_it "Cg.framework" "$SLN" "$LAUNCHER" "$GAMECL"
 download_bugsplat
 update_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "$GAMECL" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
 
-downlaod_cxx()
+download_cxx()
 update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
 
 download_cxxabi()
