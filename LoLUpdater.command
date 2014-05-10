@@ -110,7 +110,7 @@ function download_cxxabi() {
   mkdir -p "LoLUpdater/tmp"
   cd "LoLUpdater/tmp"
   echo "Unzipping libc++abi…"
-  unzip -qq "libcxx.zip"
+  unzip -qq "libcxxabi.zip"
   cd "libcxxabi-master/lib"
   echo "Compiling libc++abi…"
   export TRIPLE=-apple-
@@ -118,7 +118,7 @@ function download_cxxabi() {
   echo "Copying files…"
   cd "$currpath"
   sudo rm -f "$LFRAMEWORKS/libc++abi.dylib"
-  cp "LolUpdater/tmp/libcxx-master/lib/libc++abi.dylib" "$LFRAMEWORKS/"
+  cp "LolUpdater/tmp/libcxxabi-master/lib/libc++abi.dylib" "$LFRAMEWORKS/"
   echo "Cleaning Up…"
   sudo rm -fR "LolUpdater/tmp"
 }
