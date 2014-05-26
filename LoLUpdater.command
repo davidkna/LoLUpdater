@@ -95,7 +95,7 @@ function update_it() {
     for i in "${@:2}"
       do
       sudo cp -R -f  "${PWD}/$LFRAMEWORKS/$1" "$i"
-      chmod -R 777 "$i/$1"
+      sudo chmod -R 777 "$i/$1"
     done
   else
       echo "[ERROR] Couldn't find $1."
