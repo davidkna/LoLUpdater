@@ -76,7 +76,7 @@ function download_bugsplat() {
   hdiutil attach -nobrowse -quiet "bugsplat.dmg"
   echo "Copying files…"
   sudo rm -fR "$LFRAMEWORKS/Bugsplat.framework"
-  sudo cp -R "/Volumes/MyCocoaCrasher/MyCocoaCrasher/BugSplat.framework" "$LFRAMEWORKS/"
+  sudo cp -R "/Volumes/MyCocoaCrasher/BugSplat.framework" "$LFRAMEWORKS/"
   echo "Unmounting Bugsplat disk image and Cleaning Up…"
   hdiutil detach -quiet "/Volumes/MyCocoaCrasher/"
   rm -fR "bugsplat.dmg"
