@@ -82,6 +82,48 @@ function download_bugsplat() {
   rm -fR "bugsplat.dmg"
 }
 
+function download_cxx() {
+  currpath=$(pwd)
+  echo "Downloading libc++…"
+  mkdir -p "LoLUpdater/tmp"
+  cd "LoLUpdater/tmp"
+  curl -#o "libcxx.zip" "https://codeload.github.com/llvm-mirror/libcxx/zip/master"
+  echo "Unzipping libc++…"
+  unzip -qq "libcxx.zip"
+  cd "libcxx-master/lib"
+  echo "Compiling libc++…"
+  export TRIPLE=-apple-
+  ./buildit "&>/dev/null"
+  ln -sf "libc++.1.dylib" "libc++.dylib"
+  echo "Copying files…"
+  cd "$currpath"
+  sudo rm -f "$LFRAMEWORKS/libc++abi.dylib"
+  cp "LolUpdater/tmp/libcxx-master/lib/libc++.1.dylib" "$LFRAMEWORKS/"
+  echo "Cleaning Up…"
+  sudo rm -fR "LolUpdater/tmp"
+}
+
+function download_cxxabi() {
+  currpath=$(pwd)
+  echo "Downloading libc++abi…"
+  curl -#o "libcxxabi.zip" "https://codeload.github.com/llvm-mirror/libcxxabi/zip/master"
+  mkdir -p "LoLUpdater/tmp"
+  cd "LoLUpdater/tmp"
+  echo "Unzipping libc++abi…"
+  unzip -qq "libcxxabi.zip"
+  cd "libcxxabi-master/lib"
+  echo "Compiling libc++abi…"
+  export TRIPLE=-apple-
+  ./buildit "&>/dev/null"
+  echo "Copying files…"
+  cd "$currpath"
+  sudo rm -f "$LFRAMEWORKS/libc++abi.dylib"
+  cp "LolUpdater/tmp/libcxxabi-master/lib/libc++abi.dylib" "$LFRAMEWORKS/"
+  echo "Cleaning Up…"
+  sudo rm -fR "LolUpdater/tmp"
+}
+
+
 function update_it() {
   if [ "$(detect "$LFRAMEWORKS/$1")" = "YES" ]
     then
@@ -141,16 +183,11 @@ update_it "Cg.framework" "$SLN" "$LAUNCHER" "$GAMECL"
 download_bugsplat
 update_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "$GAMECL" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
 
-# echo "Using local libc++ and libc++abi…"
-# sudo rm -f "$LFRAMEWORKS/libc++.1.dylib" "$LFRAMEWORKS/libc++abi.dylib"
-# cp -f "/usr/lib/libc++"{"abi.dylib",".1.dylib"} "$LFRAMEWORKS"
-# if [ "$?" != "0" ]; then
-#     echo "[Error] Copy failed!" 1>&2
-# fi
-# update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
-# update_it "libc++abi.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
+download_cxx
+update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
 
-
+download_cxxabi
+update_it "libc++abi.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
 
 echo "Finished! Now your LoL client is updated. You will need to rerun the script as soon as the client gets updated again."
 echo "Report errors, feature requests or any issues at https://github.com/davidkna/LoLUpdater/issues and not anywhere else."
