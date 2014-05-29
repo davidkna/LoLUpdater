@@ -1,5 +1,5 @@
 #!/bin/bash
-# LoL Updater for OS X v1.3.0
+# LoL Updater for OS X v1.3.1
 # Ported by David Knaack
 # Original for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPL-3 http://www.gnu.org/licenses/gpl-3.0.html
