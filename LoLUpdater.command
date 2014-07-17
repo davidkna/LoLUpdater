@@ -95,7 +95,7 @@ function update_it() {
     for i in "${@:2}"
       do
       sudo cp -R -f  "${PWD}/$LFRAMEWORKS/$1" "$i"
-      sudo chmod -R 755"$i/$1" # make files writable by launcher
+      sudo chmod -R 755 "$i/$1" # make files writable by launcher
     done
   else
       echo "[ERROR] Couldn't find $1."
