@@ -1,9 +1,9 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.4.2
+# LoLUpdater for OS X v1.4.3
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
-echo "LoLUpdater for OS X 1.4.2"
+echo "LoLUpdater for OS X 1.4.3"
 echo "------------------------------------------------------------------------"
 echo "Password is required to run this script"
 sudo -v
@@ -34,7 +34,7 @@ function detect() {
 
 function backup() {
   echo "Creating Backups (ignore failed overwrite errors)..."
-  mkdir  "Backups"
+  mkdir "Backups"
   cp -R -n -a "$AIR/Adobe Air.framework" "Backups/"
   cp -R -n -a "$LAUNCHER/Cg.framework" "Backups/"
   cp -R -n -a "$SLN/BugSplat.framework" "Backups/"
@@ -60,10 +60,10 @@ function download_cg() {
   echo "Mounting Nvidia Cg disk image..."
   hdiutil attach -nobrowse -quiet "$TEMP/cg.dmg"
   echo "Copying files..."
-  mkdir "NVIDIA_Cg"
+  mkdir "$TEMP/NVIDIA_Cg"
   cp "/Volumes/cg-3.1.0013/Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz" "$TEMP/NVIDIA_Cg/"
   (cd "$TEMP/NVIDIA_Cg/" && tar -zxf "NVIDIA_Cg.tgz")
-  ln -sf "$TEMP/NVIDIA_Cg/Library/Frameworks/Cg.framework" "$TEMP/Cg.framework"
+  mv "$TEMP/NVIDIA_Cg/Library/Frameworks/Cg.framework" "$TEMP/Cg.framework"
   echo "Unmounting Nvidia Cg disk Image..."
   hdiutil detach -quiet "/Volumes/cg-3.1.0013"
 }
@@ -92,7 +92,7 @@ function update_it() {
     echo "Copying new files..."
     for i in "${@:2}"
       do
-      sudo cp -R -f  "$TEMP/$1" "$i"
+      sudo cp -R -f "$TEMP/$1" "$i"
       sudo chmod -R 777 "$i/$1" # make files writable by launcher
       sudo chown -R "$(whoami)" "$i/$1" # own files
     done
@@ -100,7 +100,6 @@ function update_it() {
       echo "[ERROR] Couldn't find $1."
       echo "$1 will be skipped."
   fi
-
 }
 
 backup
@@ -114,8 +113,8 @@ else
   sudo rm -fR "$TEMP/Adobe Air.framework"
   cp -R -f "$GFRAMEWORKS/Adobe Air.framework" "$TEMP/Adobe Air.framework"
   if [ "$?" != "0" ]; then
-      echo "[Error] Copy failed! Will download instead..." 1>&2
-      download_air
+    echo "[Error] Copy failed! Will download instead..." 1>&2
+    download_air
   fi
 fi
 update_it "Adobe Air.framework" "$AIR"
@@ -132,7 +131,7 @@ echo "Using local libc++ and libc++abi..."
 sudo rm -f "$TEMP/libc++.1.dylib" "$TEMP/libc++abi.dylib"
 cp -f "/usr/lib/libc++"{"abi.dylib",".1.dylib"} "$TEMP"
 if [ "$?" != "0" ]; then
-     echo "[Error] Copy failed!" 1>&2
+  echo "[Error] Copy failed!" 1>&2
 fi
 update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
 update_it "libc++abi.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"

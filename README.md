@@ -1,1 +1,1 @@
-# LoLUpdater v1.4.2 for OS X
+# LoLUpdater v1.4.3 for OS X

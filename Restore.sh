@@ -1,9 +1,9 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.4.2
+# LoLUpdater for OS X v1.4.3
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
-echo "LoLUpdater for OS X - Restore for 1.4.2"
+echo "LoLUpdater for OS X - Restore for 1.4.3"
 echo "------------------------------------------------------------------------"
 echo "Password is required to run this script"
 sudo -v
