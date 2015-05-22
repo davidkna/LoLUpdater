@@ -49,7 +49,7 @@ function download_air() {
   echo "Mounting Adobe Air disk image..."
   hdiutil attach -nobrowse -quiet "$TEMP/air.dmg"
   echo "Copying files..."
-  sudo cp -R"/Volumes/Adobe Air/Adobe Air Installer.app/Contents/Frameworks/Adobe Air.framework" "$TEMP"
+  sudo cp -R "/Volumes/Adobe Air/Adobe Air Installer.app/Contents/Frameworks/Adobe Air.framework" "$TEMP"
   echo "Unmounting Adobe Air disk Image..."
   hdiutil detach -quiet "/Volumes/Adobe Air/"
 }
@@ -63,7 +63,7 @@ function download_cg() {
   mkdir "$TEMP/NVIDIA_Cg"
   cp "/Volumes/cg-3.1.0013/Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz" "$TEMP/NVIDIA_Cg/"
   (cd "$TEMP/NVIDIA_Cg/" && tar -zxf "NVIDIA_Cg.tgz")
-  mv "$TEMP/NVIDIA_Cg/Library/Frameworks/Cg.framework" "$TEMP/Cg.framework"
+  sudo mv "$TEMP/NVIDIA_Cg/Library/Frameworks/Cg.framework" "$TEMP/Cg.framework"
   echo "Unmounting Nvidia Cg disk Image..."
   hdiutil detach -quiet "/Volumes/cg-3.1.0013"
 }
