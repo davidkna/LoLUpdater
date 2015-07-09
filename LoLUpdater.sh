@@ -1,9 +1,9 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.4.4
+# LoLUpdater for OS X v1.4.5
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
-echo "LoLUpdater for OS X 1.4.4"
+echo "LoLUpdater for OS X 1.4.5"
 echo "------------------------------------------------------------------------"
 echo "Password is required to run this script"
 sudo -v
@@ -45,7 +45,7 @@ function backup() {
 
 function download_air() {
   echo "Downloading the Adobe Air dependency..."
-  curl -#o "$TEMP/air.dmg" "http://airdownload.adobe.com/air/mac/download/17.0/AdobeAIR.dmg"
+  curl -#o "$TEMP/air.dmg" "http://airdownload.adobe.com/air/mac/download/18.0/AdobeAIR.dmg"
   echo "Mounting Adobe Air disk image..."
   hdiutil attach -nobrowse -quiet "$TEMP/air.dmg"
   echo "Copying files..."
