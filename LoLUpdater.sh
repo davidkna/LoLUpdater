@@ -1,19 +1,22 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.4.5
+# LoLUpdater for OS X v1.4.6
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
-echo "LoLUpdater for OS X 1.4.5"
+echo "LoLUpdater for OS X 1.4.6"
 echo "------------------------------------------------------------------------"
 echo "Password is required to run this script"
 sudo -v
 
+# Keep sudo alive
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
 # Edit this line if you installed LoL somewhere else
-# For example brew-cask symlinks League of Legends.app to ~/Applications/
+# For example brew-cask symlinks League of Legends.app to ~/Applications/ by default
 cd "/Applications/League of Legends.app"
 
 GFRAMEWORKS="/Library/Frameworks"
-TEMP="$(mktemp -dt LoLUpdater)"
+TEMP="$(mktemp -dt LoLUpdaterXXXXXXX)"
 SLN="Contents/LoL/RADS/solutions/lol_game_client_sln/releases/"
 AIR="Contents/LoL/RADS/projects/lol_air_client/releases/"
 LAUNCHER="Contents/LoL/RADS/projects/lol_launcher/releases/"
@@ -38,8 +41,8 @@ function backup() {
   cp -R -n -a "$AIR/Adobe Air.framework" "Backups/"
   cp -R -n -a "$LAUNCHER/Cg.framework" "Backups/"
   cp -R -n -a "$SLN/BugSplat.framework" "Backups/"
-  cp -R -n -a "$SLN/../MacOS/libc++.1.dylib" "Backups/"
-  cp -R -n -a "$SLN/../MacOS/libc++abi.dylib" "Backups/"
+  cp -n -a "$SLN/../MacOS/libc++.1.dylib" "Backups/"
+  cp -n -a "$SLN/../MacOS/libc++abi.dylib" "Backups/"
 }
 
 

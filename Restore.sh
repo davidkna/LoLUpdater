@@ -1,12 +1,15 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.4.5
+# LoLUpdater for OS X v1.4.6
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
-echo "LoLUpdater for OS X - Restore for 1.4.5"
+echo "LoLUpdater for OS X - Restore for 1.4.6"
 echo "------------------------------------------------------------------------"
 echo "Password is required to run this script"
 sudo -v
+
+# Keep sudo alive
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 # Edit this line if you installed LoL somewhere else
 # For example brew-cask symlinks League of Legends.app to ~/Applications/
