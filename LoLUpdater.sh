@@ -1,9 +1,9 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.4.6
+# LoLUpdater for OS X v1.5.0
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
-echo "LoLUpdater for OS X 1.4.6"
+echo "LoLUpdater for OS X 1.5.0"
 echo "------------------------------------------------------------------------"
 echo "Password is required to run this script"
 sudo -v
@@ -41,8 +41,6 @@ function backup() {
   cp -R -n -a "$AIR/Adobe Air.framework" "Backups/"
   cp -R -n -a "$LAUNCHER/Cg.framework" "Backups/"
   cp -R -n -a "$SLN/BugSplat.framework" "Backups/"
-  cp -n -a "$SLN/../MacOS/libc++.1.dylib" "Backups/"
-  cp -n -a "$SLN/../MacOS/libc++abi.dylib" "Backups/"
 }
 
 
@@ -122,24 +120,13 @@ else
 fi
 update_it "Adobe Air.framework" "$AIR"
 
-
-
 download_cg
 update_it "Cg.framework" "$SLN" "$LAUNCHER" "$GAMECL"
 
 download_bugsplat
 update_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "$GAMECL" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
 
-echo "Using local libc++ and libc++abi..."
-sudo rm -f "$TEMP/libc++.1.dylib" "$TEMP/libc++abi.dylib"
-cp -f "/usr/lib/libc++"{"abi.dylib",".1.dylib"} "$TEMP"
-if [ "$?" != "0" ]; then
-  echo "[Error] Copy failed!" 1>&2
-fi
-update_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
-update_it "libc++abi.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
-
 echo "Cleaning up..."
 sudo rm -fR "$TEMP"
 echo "Finished! Your League of Legends is now updated. You will need to rerun the script as soon as the client gets updated again."
-echo "Report errors, feature requests or any issues at https://github.com/LoLUpdater/LoLUpdater-OSX/issues and not anywhere else."
+echo "Report errors, feature requests or any issues at https://github.com/LoLUpdater/LoLUpdater-OSX/issues."

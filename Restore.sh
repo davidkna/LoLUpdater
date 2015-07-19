@@ -1,9 +1,9 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.4.6
+# LoLUpdater for OS X v1.5.0
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
-echo "LoLUpdater for OS X - Restore for 1.4.6"
+echo "LoLUpdater for OS X - Restore for 1.5.0"
 echo "------------------------------------------------------------------------"
 echo "Password is required to run this script"
 sudo -v
@@ -57,5 +57,3 @@ function restore_it() {
 restore_it "Adobe Air.framework" "$AIR"
 restore_it "Cg.framework" "$SLN" "$LAUNCHER" "$GAMECL"
 restore_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "$GAMECL" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
-restore_it "libc++.1.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
-restore_it "libc++abi.dylib" "$SLN/../MacOS" "$GAMECL/../MacOS"
