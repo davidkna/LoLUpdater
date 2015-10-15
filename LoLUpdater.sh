@@ -166,7 +166,7 @@ function checksum_test() {
     local FILECHECKSUM
     FILECHECKSUM="$(openssl sha1 $FILE)"
 
-    [[ "$?" = "0" ]] && [[ "SHA1($FILE)= $CHECKSUM" = "$FILECHECKSUM" ]]
+    [[ "$?" == "0" ]] && [[ "SHA1($FILE)= $CHECKSUM" == "$FILECHECKSUM" ]]
 }
 
 function main() {
