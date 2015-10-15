@@ -1,10 +1,10 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.6.1
+# LoLUpdater for OS X v1.6.2
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
 {
-echo "LoLUpdater for OS X - Restore for 1.6.0"
+echo "LoLUpdater for OS X - Restore for 1.6.2"
 echo "------------------------------------------------------------------------"
 echo "[Help] Please supply a command line argument if you haven't installed LoL at \"/Applications/League of Legends.app\"."
 echo "Password is required to run this script"
@@ -23,7 +23,7 @@ fi
 function get_full_path() {
     local versionNumber
     versionNumber=$(ls -lrt "$1" | tail -1 | awk '{ print $9 }')
-    if [ "$?" != "0" ] || [ -z "$versionNumber" ]; then
+    if [ "$?" != "0" ] || [ -z "$versionNumber" ] || ! detect "$1/$versionNumber/$2"; then
       echo "[Error] Could not find a path for LoL..." 1>&2
       exit 1
     fi
