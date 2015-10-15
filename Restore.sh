@@ -1,59 +1,64 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.5.0
+# LoLUpdater for OS X v1.6.0
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
-echo "LoLUpdater for OS X - Restore for 1.5.0"
+{
+echo "LoLUpdater for OS X - Restore for 1.6.0"
 echo "------------------------------------------------------------------------"
 echo "Password is required to run this script"
-sudo -v
+sudo -p "Password for %u: " -v
 
 # Keep sudo alive
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 # Edit this line if you installed LoL somewhere else
 # For example brew-cask symlinks League of Legends.app to ~/Applications/
+# shellcheck disable=SC2164
 cd "/Applications/League of Legends.app"
+if [ "$?" != "0" ]; then
+    echo "[Error] Could not find LoL. Please enter path manually in this file..." 1>&2
+    exit 1
+fi
 
-SLN="Contents/LoL/RADS/solutions/lol_game_client_sln/releases/"
-AIR="Contents/LoL/RADS/projects/lol_air_client/releases/"
-LAUNCHER="Contents/LoL/RADS/projects/lol_launcher/releases/"
-GAMECL="Contents/LoL/RADS/projects/lol_game_client/releases/"
-SLN="$SLN$(ls -lrt "$SLN" | tail -1 | awk '{ print $9 }')/deploy/LeagueOfLegends.app/Contents/Frameworks"
-AIR="$AIR$(ls -lrt "$AIR" | tail -1 | awk '{ print $9 }')/deploy/Frameworks"
-LAUNCHER="$LAUNCHER$(ls -lrt  -t "$LAUNCHER" | tail -1 | awk '{ print $9 }')/deploy/LoLLauncher.app/Contents/Frameworks"
-GAMECL="$GAMECL$(ls -lrt "$GAMECL" | tail -1 | awk '{ print $9 }')/deploy/LeagueOfLegends.app/Contents/Frameworks"
+function get_full_path() {
+    local versionNumber
+    versionNumber=$(ls -lrt "$1" | tail -1 | awk '{ print $9 }')
+    if [ "$?" != "0" ] || [ -z "$versionNumber" ]; then
+      echo "[Error] Could not find a path for LoL..." 1>&2
+      exit 1
+    fi
+
+    echo "$1/$versionNumber/$2"
+}
+
+SLN="$(get_full_path Contents/LoL/RADS/solutions/lol_game_client_sln/releases deploy/LeagueOfLegends.app/Contents/Frameworks)"
+AIR="$(get_full_path Contents/LoL/RADS/projects/lol_air_client/releases deploy/Frameworks)"
+LAUNCHER="$(get_full_path Contents/LoL/RADS/projects/lol_launcher/releases deploy/LoLLauncher.app/Contents/Frameworks)"
+GAMECL="$(get_full_path Contents/LoL/RADS/projects/lol_game_client/releases deploy/LeagueOfLegends.app/Contents/Frameworks)"
 
 function detect() {
-  if [ -e "$1" ]
-  then
-    printf "YES"
-  else
-    printf "NO"
-  fi
+    [[ -e "$1" ]]
 }
 
 function restore_it() {
-  if [ "$(detect "Backups/$1")" = "YES" ]
-    then
-    echo "Updating $1"
-    echo "Removing old files..."
-    for i in "${@:2}"
-      do
-        sudo rm -fR "$i/$1"
-    done
-    echo "Copying new files..."
-    for i in "${@:2}"
-      do
-      sudo cp -R -f -a  "Backups/$1" "$i"
-    done
-  else
-      echo "[ERROR] Couldn't find $1."
-      echo "$1 will be skipped."
-  fi
-
+    if detect "Backups/$1"; then
+        echo "Updating $1"
+        echo "Removing old files..."
+        for i in "${@:2}"; do
+            sudo rm -fR "$i/$1"
+        done
+        echo "Copying new files..."
+        for i in "${@:2}"; do
+            sudo cp -R -f -a  "Backups/$1" "$i"
+        done
+    else
+        echo "[ERROR] Couldn't find $1 in Backups."
+        echo "$1 will be skipped."
+    fi
 }
 
 restore_it "Adobe Air.framework" "$AIR"
 restore_it "Cg.framework" "$SLN" "$LAUNCHER" "$GAMECL"
 restore_it "Bugsplat.framework" "$SLN" "$LAUNCHER" "$GAMECL" "Contents/LoL/Play League of Legends.app/Contents/Frameworks" "Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks"
+}
