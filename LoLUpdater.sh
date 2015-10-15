@@ -1,28 +1,25 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.6.0
+# LoLUpdater for OS X v1.6.1
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
 {
-echo "LoLUpdater for OS X 1.6.0"
+echo "LoLUpdater for OS X 1.6.1"
 echo "------------------------------------------------------------------------"
+echo "[Help] Please supply a command line argument if you haven't installed LoL at \"/Applications/League of Legends.app\"."
 echo "Password is required to run this script"
 sudo -p "Password for %u: " -v
 
 # Keep sudo alive
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-# Edit this line if you installed LoL somewhere else
-# For example brew-cask symlinks League of Legends.app to ~/Applications/ by default
 # shellcheck disable=SC2164
-cd "/Applications/League of Legends.app"
+cd ${1:-"/Applications/League of Legends.app"}
 if [ "$?" != "0" ]; then
-    echo "[Error] Could not find LoL. Please enter path manually in this file..." 1>&2
+    echo "[Error] Could not find LoL. Please supply a command line argument specifying where you installed it!" 1>&2
     exit 1
 fi
 
-# Global Variables
-GFRAMEWORKS="/Library/Frameworks"
 TEMP="$(mktemp -dt LoLUpdaterXXXXXXX)"
 if [ "$?" != "0" ]; then
     echo "[Error] Failed to create temporary direcory..." 1>&2
@@ -39,11 +36,6 @@ function get_full_path() {
 
     echo "$1/$versionNumber/$2"
 }
-
-SLN="$(get_full_path Contents/LoL/RADS/solutions/lol_game_client_sln/releases deploy/LeagueOfLegends.app/Contents/Frameworks)"
-AIR="$(get_full_path Contents/LoL/RADS/projects/lol_air_client/releases deploy/Frameworks)"
-LAUNCHER="$(get_full_path Contents/LoL/RADS/projects/lol_launcher/releases deploy/LoLLauncher.app/Contents/Frameworks)"
-GAMECL="$(get_full_path Contents/LoL/RADS/projects/lol_game_client/releases deploy/LeagueOfLegends.app/Contents/Frameworks)"
 
 function detect() {
     [[ -e $1 ]]
@@ -178,6 +170,18 @@ function checksum_test() {
 }
 
 function main() {
+    local SLN
+    local AIR
+    local LAUNCHER
+    local GAMECL
+
+    SLN="$(get_full_path Contents/LoL/RADS/solutions/lol_game_client_sln/releases deploy/LeagueOfLegends.app/Contents/Frameworks)"
+    AIR="$(get_full_path Contents/LoL/RADS/projects/lol_air_client/releases deploy/Frameworks)"
+    LAUNCHER="$(get_full_path Contents/LoL/RADS/projects/lol_launcher/releases deploy/LoLLauncher.app/Contents/Frameworks)"
+    GAMECL="$(get_full_path Contents/LoL/RADS/projects/lol_game_client/releases deploy/LeagueOfLegends.app/Contents/Frameworks)"
+
+    local GFRAMEWORKS="/Library/Frameworks"
+
     if ! detect "$GFRAMEWORKS/Adobe Air.framework"; then
         echo "[Notice] Unable to find locally installed Adobe Air. Downloading instead!"
         download_air
