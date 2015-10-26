@@ -86,7 +86,7 @@ function download_air() {
 }
 
 function download_cg() {
-    local CHECKSUM="106adb0926bc491012adc9cba1847b19a701c087"
+    local CHECKSUM="85c7a0de82252b703191fee5fe7b29f60d357924dc7b8ca59c2badeac7af407d"
     local FILECHECKSUM
     local MOUNTPOINT="$TEMP/CgMount"
     local CGTEMP="$TEMP/CgArchive"
@@ -117,7 +117,7 @@ function download_cg() {
 
 function download_bugsplat() {
     local MOUNTPOINT="$TEMP/bugsplatMount"
-    local CHECKSUM="49a61886ad3928856e23d742615e6f4206ac1039"
+    local CHECKSUM="09f9d5d54a90cb93b01844f31f8d7fcb3c216d25b4fbdff5d7058b49b4671c7c"
 
     echo "Downloading the Bugsplat dependency..."
     curl -L -# -o "$TEMP/bugsplat.dmg" "https://www.bugsplatsoftware.com/files/MyCocoaCrasher.dmg"
@@ -164,9 +164,9 @@ function checksum_test() {
     local CHECKSUM="$1"
     local FILE="$2"
     local FILECHECKSUM
-    FILECHECKSUM="$(openssl sha1 $FILE)"
+    FILECHECKSUM="$(shasum -a 256 $FILE)"
 
-    [[ "$?" == "0" ]] && [[ "SHA1($FILE)= $CHECKSUM" == "$FILECHECKSUM" ]]
+    [[ "$?" == "0" ]] && [[ "$CHECKSUM  $FILE" == "$FILECHECKSUM" ]]
 }
 
 function main() {
