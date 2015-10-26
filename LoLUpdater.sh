@@ -62,7 +62,7 @@ function backup_it() {
                 exit 1
             fi
         else
-            echo "Backup for $FILENAME already exists."
+            echo "[Notice] Backup for $FILENAME already exists. Skipping!"
     fi
 }
 
