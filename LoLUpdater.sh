@@ -1,10 +1,10 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.6.4
+# LoLUpdater for OS X v1.6.5
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
 {
-echo "LoLUpdater for OS X 1.6.4"
+echo "LoLUpdater for OS X 1.6.5"
 echo "------------------------------------------------------------------------"
 echo "[Help] Please supply a command line argument if you haven't installed LoL at \"/Applications/League of Legends.app\"."
 echo "Password is required to run this script"
@@ -39,16 +39,6 @@ function get_full_path() {
 
 function detect() {
     [[ -e $1 ]]
-}
-
-function backup() {
-    echo "Creating Backups..."
-    ! detect Backups \
-        && mkdir "Backups"
-
-    backup_it "Adobe Air.framework" "$AIR/Adobe Air.framework"
-    backup_it "BugSplat.framework" "$SLN/BugSplat.framework"
-    backup_it "Cg.framework" "$LAUNCHER/Cg.framework"
 }
 
 function backup_it() {
@@ -181,6 +171,14 @@ function main() {
     GAMECL="$(get_full_path Contents/LoL/RADS/projects/lol_game_client/releases deploy/LeagueOfLegends.app/Contents/Frameworks)"
 
     local GFRAMEWORKS="/Library/Frameworks"
+
+    echo "Creating Backups..."
+    ! detect Backups \
+        && mkdir "Backups"
+
+    backup_it "Adobe Air.framework" "$AIR/Adobe Air.framework"
+    backup_it "BugSplat.framework" "$SLN/BugSplat.framework"
+    backup_it "Cg.framework" "$LAUNCHER/Cg.framework"
 
     if ! detect "$GFRAMEWORKS/Adobe Air.framework"; then
         echo "[Notice] Unable to find locally installed Adobe Air. Downloading instead!"
