@@ -1,4 +1,4 @@
-# LoLUpdater v1.6.5 for Mac OSX
+# LoLUpdater v1.6.6 for Mac OSX
 
 
 [Website](https://LoLUpdater.com)

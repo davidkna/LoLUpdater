@@ -1,10 +1,10 @@
 #!/bin/bash
-# LoLUpdater for OS X v1.6.5
+# LoLUpdater for OS X v1.6.6
 # Ported by David Knaack
 # LoLUpdater for Windows: https://github.com/Loggan08/LoLUpdater
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
 {
-echo "LoLUpdater for OS X 1.6.5"
+echo "LoLUpdater for OS X 1.6.6"
 echo "------------------------------------------------------------------------"
 echo "[Help] Please supply a command line argument if you haven't installed LoL at \"/Applications/League of Legends.app\"."
 echo "Password is required to run this script"
@@ -206,5 +206,5 @@ function main() {
     echo "Report errors, feature requests or any issues at https://github.com/LoLUpdater/LoLUpdater-OSX/issues."
 }
 
-backup && main
+main
 }
