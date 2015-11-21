@@ -12,5 +12,4 @@ Runs LoLUpdater with LoL installed at `<path>`.
 
 `./lolupdater.py uninstall <path>`
 
-Updates LoL installed at `<path>`.
-Removes with LoL installed at `<path>`.
+Removes LoLupdater for LoL installed at `<path>`.
