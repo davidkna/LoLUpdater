@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# LoLUpdater for OS X v2.0.0
+# LoLUpdater for OS X v2.0.1
 # Ported by David Knaack
 # LoLUpdater for Windows: https://lolupdater.com
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
@@ -14,7 +14,6 @@ import shutil
 import sys
 import tarfile
 import tempfile
-
 from os.path import join
 from subprocess import call
 
@@ -23,7 +22,7 @@ try:
 except ImportError:
     from urllib2 import urlopen
 
-__version__ = '2.0.0'
+__version__ = '2.0.1'
 
 
 def main():
@@ -77,12 +76,11 @@ class LoLUpdater:
 
         bugsplat_framework = get_bugsplat(temp_dir)
         patch_all('BugSplat', bugsplat_framework,
-                  {self.update_paths['game_client'], self.update_paths['solution'],
-                   'Contents/LoL/Play League of Legends.app/Contents/Frameworks',
-                   'Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks'})
+                  {self.update_paths['game_client'], self.update_paths['play'], self.update_paths['solution'],
+                   self.update_paths['user_kernel']})
 
         cg_framework = get_cg(temp_dir)
-        patch_all('Nvidia Cg', cg_framework,
+        patch_all('Cg', cg_framework,
                   {self.update_paths['game_client'], self.update_paths['solution']})
 
         cleanup(temp_dir)
@@ -95,9 +93,8 @@ class LoLUpdater:
 
         bugsplat_framework = join(backups, 'BugSplat.framework')
         patch_all('BugSplat', bugsplat_framework,
-                  {self.update_paths['game_client'], self.update_paths['solution'],
-                   'Contents/LoL/Play League of Legends.app/Contents/Frameworks',
-                   'Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks'})
+                  {self.update_paths['game_client'], self.update_paths['play'], self.update_paths['solution'],
+                   self.update_paths['user_kernel']})
 
         cg_framework = join(backups, 'Cg.framework')
         patch_all('Cg', cg_framework,
@@ -206,9 +203,11 @@ def get_paths(lol_path):
         'game_client': find_path(lol_path,
                                  'Contents/LoL/RADS/solutions/lol_game_client_sln/releases',
                                  'deploy/LeagueOfLegends.app/Contents/Frameworks'),
+        'play':        join(lol_path, 'Contents/LoL/RADS/system/UserKernel.app/Contents/Frameworks'),
         'solution':    find_path(lol_path,
                                  'Contents/LoL/RADS/projects/lol_game_client/releases',
-                                 'deploy/LeagueOfLegends.app/Contents/Frameworks')
+                                 'deploy/LeagueOfLegends.app/Contents/Frameworks'),
+        'user_kernel': join(lol_path, 'Contents/LoL/Play League of Legends.app/Contents/Frameworks')
 
     }
 
@@ -237,18 +236,22 @@ def patch_tree(source, destination):
         destination_name = join(destination, name)
 
         if os.path.isdir(source_name):
+            if not os.path.isdir(destination_name):
+                os.mkdir(destination_name)
             patch_tree(source_name, destination_name)
-        elif os.path.isfile(destination_name) and not os.path.islink(destination_name):
+        elif os.path.isfile(source_name) and not os.path.islink(destination_name):
+            if os.path.isdir(destination_name):
+                shutil.rmtree(destination_name)
             copyfile(source_name, destination_name)
 
 
-def download(url, destination, hash = None):
+def download(url, destination, file_hash=None):
     request = urlopen(url)
     with open(destination, 'wb') as file_pointer:
-        copy_download(request, file_pointer, hash)
+        copy_download(request, file_pointer, file_hash)
 
 
-def copy_download(fp_src, fp_dst, file_hash = None):
+def copy_download(fp_src, fp_dst, file_hash=None):
     global m
     if file_hash is not None:
         m = hashlib.sha256()
@@ -265,6 +268,7 @@ def copy_download(fp_src, fp_dst, file_hash = None):
 
 def extract_cg(members, path):
     print('Extracting Cg…')
+    os.mkdir(path)
     for tarinfo in members:
         if tarinfo.name.startswith('Library/Frameworks/Cg.framework/'):
             name = tarinfo.name.replace('Library/Frameworks/Cg.framework/', '', 1)
@@ -273,13 +277,10 @@ def extract_cg(members, path):
             elif tarinfo.isfile():
                 members.extract(tarinfo, join(path, name))
 
-        elif tarinfo.name == 'Library/Frameworks/Cg.framework':
-            os.mkdir(path)
-
 
 def copyfile(src, dst):
     with open(src, 'rb') as fp_src:
-        with open(dst, 'wb') as fp_dst:
+        with open(dst, 'wb+') as fp_dst:
             shutil.copyfileobj(fp_src, fp_dst)
 
 
