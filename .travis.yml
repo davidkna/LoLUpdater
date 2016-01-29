@@ -4,6 +4,6 @@ before_install:
 install:
   - pip3 install -U nuitka
 script:
-  - nuitka --standalone LoLUpdater.py
+  - nuitka --standalone --enhanced LoLUpdater.py
 os:
   - osx
