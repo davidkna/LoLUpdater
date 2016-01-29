@@ -1,6 +1,4 @@
 before_install:
-  - brew update
-  - brew upgrade --all
   - brew install python3
 install:
   - pip3 install -U nuitka
