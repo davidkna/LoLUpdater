@@ -2,8 +2,8 @@ before_install:
   - brew update
   - brew install python3
 install:
-  - pip3 install -U nuitka
+  - pip3 install -U pyinstaller
 script:
-  - nuitka --standalone --enhanced LoLUpdater.py
+  - pyinstaller --strip --onefile LoLUpdater.py
 os:
   - osx
