@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# LoLUpdater for OS X v2.0.4
+# LoLUpdater for OS X v2.0.5
 # Ported by David Knaack
 # LoLUpdater for Windows: https://lolupdater.com
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
@@ -22,7 +22,7 @@ try:
 except ImportError:
     from urllib2 import urlopen
 
-__version__ = '2.0.3'
+__version__ = '2.0.5'
 
 
 def main():
@@ -112,7 +112,7 @@ class LoLUpdater:
 
 def get_air(temp_dir):
     print('Downloading Adobe Air (this might take a while)…')
-    download_url = 'https://airdownload.adobe.com/air/mac/download/22.0/AdobeAIR.dmg'
+    download_url = 'https://airdownload.adobe.com/air/mac/download/23.0/AdobeAIR.dmg'
     download_destination = join(temp_dir, 'air.dmg')
     download(download_url, download_destination)
 
