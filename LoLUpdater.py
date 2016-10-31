@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# LoLUpdater for OS X v2.0.5
+# LoLUpdater for OS X v2.0.6
 # Ported by David Knaack
 # LoLUpdater for Windows: https://lolupdater.com
 # License: GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
