@@ -164,10 +164,10 @@ lazy_static! {
 
         // Parses version a.b.c.d
         let regex = format!(r"(?x) # Comments!
-            (?P<a>{0})             # a
+            ^(?P<a>{0})            # a
             (?:\.(?P<b>{0}))       # b
             (?:\.(?P<c>{0}))       # c
-            (?:\.(?P<d>{0}))       # d
+            (?:\.(?P<d>{0}))$      # d
             ",
             number);
         Regex::new(&regex).unwrap()
