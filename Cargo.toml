@@ -1,0 +1,18 @@
+[package]
+name = "lolupdater"
+version = "3.0.0"
+authors = ["David Knaack <davidkna@users.noreply.github.com>"]
+
+[profile.release]
+lto = true
+
+[dependencies]
+clippy = "*"
+flate2 = "0.2"
+hyper = { version = "0.9", default-features = false, features = ["security-framework"] }
+lazy_static = "0.2"
+regex = "0.1"
+ring = "0.5"
+tar = "0.4"
+tempdir = "0.3"
+walkdir = "1"

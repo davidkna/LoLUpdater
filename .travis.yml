@@ -1,9 +1,0 @@
-before_install:
-  - brew update
-  - brew install python3
-install:
-  - pip3 install -U pyinstaller
-script:
-  - pyinstaller --strip --onefile LoLUpdater.py
-os:
-  - osx

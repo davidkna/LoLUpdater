@@ -1,10 +1,10 @@
-# LoLUpdater v3.0.0 for Mac OSX
+# LoLUpdater v2.0.6 for Mac OSX
 [Website](https://LoLUpdater.com)
 ## Usage
 ### With no arguments
-Equivalent to `./lolupdater install "/Applications/League Of Legends.app"`.
+Equivalent to `./lolupdater.py install "/Applications/League Of Legends.app"`.
 ### With one argument
-Equivalent to `./lolupdater <argument> "/Applications/League Of Legends.app"`.
+Equivalent to `./lolupdater.py <argument> "/Applications/League Of Legends.app"`.
 ### With three arguments
 `./lolupdater.py install <path>`
 
