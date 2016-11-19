@@ -45,7 +45,8 @@ const LOL_SLN_PATH: [&'static str; 2] = ["Contents/LoL/RADS/projects/lol_game_cl
 
 fn main() {
     println!("LoLUpdater 3.0.0");
-    println!("Report errors, feature requests or any issues at https://github.com/LoLUpdater/LoLUpdater-OSX/issues.");
+    println!("Report errors, feature requests or any issues at \
+              https://github.com/LoLUpdater/LoLUpdater-OSX/issues.");
 
     let mode = env::args().nth(1).unwrap_or("install".to_string());
     let lol_dir = env::args().nth(2).unwrap_or("/Applications/League of Legends.app".to_string());
