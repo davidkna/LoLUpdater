@@ -39,17 +39,38 @@ const LOL_AIR_PATH: [&'static str; 2] = ["Contents/LoL/RADS/projects/lol_air_cli
 const LOL_CL_PATH: [&'static str; 2] = ["Contents/LoL/RADS/solutions/lol_game_client_sln/releases",
                                         "deploy/LeagueOfLegends.app/Contents/Frameworks"];
 
+const LOL_SLN_PATH: [&'static str; 2] = ["Contents/LoL/RADS/projects/lol_game_client/releases",
+                                         "deploy/LeagueOfLegends.app/Contents/Frameworks"];
+
+
 fn main() {
-    let lol_dir = env::args().nth(1).unwrap_or("/Applications/League of Legends.app".to_string());
+    let mode = env::args().nth(1).unwrap_or("install".to_string());
+    let lol_dir = env::args().nth(2).unwrap_or("/Applications/League of Legends.app".to_string());
     env::set_current_dir(lol_dir).expect("Failed to set CWD to LoL location");
 
-    let result = join_version(&PathBuf::from(LOL_AIR_PATH[0]),
-                              &PathBuf::from(LOL_AIR_PATH[1]));
-    print!("{:?}", result.unwrap());
+    match mode.as_ref() {
+        "install" => install(),
+        "uninstall" => uninstall(),
+        _ => panic!("Unkown mode!"),
+    }
+}
+
+
+fn install() {
+    let air_update = thread::spawn(|| {
+        air_main();
+    });
 
     let cg_update = thread::spawn(|| {
         cg_main();
     });
+
+    let air_result = air_update.join();
+    if air_result.is_err() {
+        println!("Failed to update Adobe Air!");
+    } else {
+        println!("Adobe Air was updated!");
+    }
 
     let cg_result = cg_update.join();
     if cg_result.is_err() {
@@ -57,56 +78,118 @@ fn main() {
     } else {
         println!("Cg was updated!");
     }
+}
+
+fn uninstall() {
+    let air_backup_path = Path::new("Backups/Adobe Air.framework");
+    update_air(air_backup_path).expect("Failed to uninstall Adobe Air");
+
+    let cg_backup_path = Path::new("Backups/Adobe Air.framework");
+    update_cg(cg_backup_path).expect("Failed to uninstall Cg");;
 
 }
 
 
 
+fn air_main() {
+    let download_dir = TempDir::new("lolupdater-air-dl")
+        .expect("Failed to create temp dir for Adobe Air download");
+    let url: &str = "https://airdownload.adobe.com/air/mac/download/23.0/AdobeAIR.dmg";
+    let image_file = download_dir.path().join("air.dmg");
+    println!("Downloading Adobe Air…");
+    download(&image_file, url, None).expect("Downloading Adobe Air failed!");
+
+    println!("Mounting Adobe Air…");
+    let mount_dir = mount(&image_file).expect("Failed to mount Adobe Air image");
+
+    println!("Backing up Adobe Air…");
+    backup_air().expect("Failed to back up Adobe Air");
+
+    println!("Updating Adobe Air…");
+    let air_framework = mount_dir.path()
+        .join("Adobe Air Installer.app/Contents/Frameworks/Adobe Air.framework");
+    update_air(&air_framework).expect("Failed to update Adobe Air");
+
+    println!("Unmounting Adobe Air…");
+    unmount(mount_dir.path()).expect("Failed to unmount Adobe Air");
+}
+
+fn backup_air() -> io::Result<()> {
+    let lol_cl_path = join_version(&PathBuf::from(LOL_AIR_PATH[0]),
+                                   &PathBuf::from(LOL_AIR_PATH[1]))
+        ?
+        .join("Adobe Air.framework");
+
+    let air_backup = Path::new("Backups/Adobe Air.framework");
+    if air_backup.exists() {
+        println!("Skipping backup!");
+    } else {
+        update_dir(&lol_cl_path, air_backup)?;
+    }
+    Ok(())
+}
+
+fn update_air(air_dir: &Path) -> io::Result<()> {
+    let lol_air_path = join_version(&PathBuf::from(LOL_AIR_PATH[0]),
+                                    &PathBuf::from(LOL_AIR_PATH[1]))
+        ?
+        .join("Adobe Air.framework");
+    update_dir(air_dir, &lol_air_path)?;
+    Ok(())
+}
+
 fn cg_main() {
     let download_dir = TempDir::new("lolupdater-cg-dl")
-        .expect("Failed to create temp dir for Cg download");
+        .expect("Failed to create temp dir for Nvidia Cg download");
     let url: &str = "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg";
     let image_file = download_dir.path().join("cg.dmg");
-    println!("Downloading Cg…");
-    let cg_hash = "56abcc26d2774b1a33adf286c09e83b6f878c270d4dd5bff5952b83c21af8fa69e3d3706f08b6869a9a40a0907be3dacc2ee2ef1c28916069400ed867b83925";
+    println!("Downloading Nvidia Cg…");
+    let cg_hash = "56abcc26d2774b1a33adf286c09e83b6f878c270d4dd5bff5952b83c21af8fa69e3d37060f08b6869a9a40a0907be3dacc2ee2ef1c28916069400ed867b83925";
     download(&image_file, url, Some(cg_hash)).expect("Downloading Nvidia Cg failed!");
 
-    println!("Mounting Cg…");
+    println!("Mounting Nvidia Cg…");
     let mount_dir = mount(&image_file).expect("Failed to mount Cg image");
 
-    println!("Extracting Cg…");
+    println!("Extracting Nvidia Cg…");
     let cg_dir = extract_cg(mount_dir.path()).expect("Failed to extract Cg!");
 
-    println!("Unmounting Cg…");
+    println!("Unmounting Nvidia Cg…");
     unmount(mount_dir.path()).expect("Failed to unmount Cg");
+    println!("Backing up Nvidia Cg…");
+    backup_cg().expect("Failed to backup Cg");
 
-    println!("Updating Cg…");
+    println!("Updating Nvidia Cg…");
     update_cg(cg_dir.path()).expect("Failed to update Cg");
 
 }
 
-fn update_cg(cg_dir: &Path) -> io::Result<()> {
-    let air_cl_path = join_version(&PathBuf::from(LOL_CL_PATH[0]),
+fn backup_cg() -> io::Result<()> {
+    let lol_cl_path = join_version(&PathBuf::from(LOL_CL_PATH[0]),
                                    &PathBuf::from(LOL_CL_PATH[1]))
         ?
         .join("Cg.framework");
-    update_dir(cg_dir, &air_cl_path)?;
+
+    let cg_backup = Path::new("Backups/Cg.framework");
+    if cg_backup.exists() {
+        println!("Skipping backup!");
+    } else {
+        update_dir(&lol_cl_path, cg_backup)?;
+    }
     Ok(())
 }
 
-fn backup_dir(from: &Path, to: &Path) -> io::Result<()> {
-    let walker = WalkDir::new(from);
-    for entry in walker {
-        let entry = entry?;
-        let stripped_entry = entry.path().strip_prefix(from).unwrap();
-        let target = to.join(stripped_entry);
-        let metadata = entry.metadata().unwrap();
-        if metadata.is_dir() {
-            fs::create_dir(target)?;
-        } else if metadata.is_file() {
-            fs::copy(entry.path(), from)?;
-        }
-    }
+fn update_cg(cg_dir: &Path) -> io::Result<()> {
+    let lol_cl_path = join_version(&PathBuf::from(LOL_CL_PATH[0]),
+                                   &PathBuf::from(LOL_CL_PATH[1]))
+        ?
+        .join("Cg.framework");
+    update_dir(cg_dir, &lol_cl_path)?;
+
+    let lol_sln_path = join_version(&PathBuf::from(LOL_SLN_PATH[0]),
+                                    &PathBuf::from(LOL_SLN_PATH[1]))
+        ?
+        .join("Cg.framework");
+    update_dir(cg_dir, &lol_sln_path)?;
     Ok(())
 }
 
@@ -117,9 +200,7 @@ fn update_dir(from: &Path, to: &Path) -> io::Result<()> {
         let metadata = entry.metadata().unwrap();
         let stripped_entry = entry.path().strip_prefix(from).unwrap();
         let target = to.join(stripped_entry);
-        println!("{}", target.display());
         if metadata.is_file() {
-            println!("{} -> {}", entry.path().display(), target.display());
             if target.is_dir() {
                 fs::remove_dir_all(&target)?;
             }
@@ -201,7 +282,7 @@ fn download(target_path: &Path,
 
 
 lazy_static! {
-    static ref REGEX: Regex = {
+    static ref VERSION_REGEX: Regex = {
         let number = r"0|[1-9][0-9]*";
 
         // Parses version a.b.c.d
@@ -217,7 +298,7 @@ lazy_static! {
 }
 
 fn to_version(input: &str) -> (u64, u64, u64, u64) {
-    let captures = REGEX.captures(input).unwrap();
+    let captures = VERSION_REGEX.captures(input).unwrap();
     // Unwrapping should always work here
     let a = captures.name("a").unwrap().parse().unwrap();
     let b = captures.name("b").unwrap().parse().unwrap();
@@ -231,7 +312,7 @@ fn join_version(head: &Path, tail: &Path) -> io::Result<PathBuf> {
     let version = dir_iter.filter_map(|s| {
             let name = s.unwrap().file_name();
             let name_str = name.into_string().unwrap();
-            if REGEX.is_match(&name_str) {
+            if VERSION_REGEX.is_match(&name_str) {
                 return Some(name_str);
             }
             None
