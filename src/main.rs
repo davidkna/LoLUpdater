@@ -44,6 +44,9 @@ const LOL_SLN_PATH: [&'static str; 2] = ["Contents/LoL/RADS/projects/lol_game_cl
 
 
 fn main() {
+    println!("LoLUpdater 3.0.0");
+    println!("Report errors, feature requests or any issues at https://github.com/LoLUpdater/LoLUpdater-OSX/issues.");
+
     let mode = env::args().nth(1).unwrap_or("install".to_string());
     let lol_dir = env::args().nth(2).unwrap_or("/Applications/League of Legends.app".to_string());
     env::set_current_dir(lol_dir).expect("Failed to set CWD to LoL location");
@@ -57,6 +60,10 @@ fn main() {
 
 
 fn install() {
+    if !Path::new("Backups").exists() {
+        fs::create_dir("Backups").expect("Create Backup dir");
+    }
+
     let air_update = thread::spawn(|| {
         air_main();
     });
@@ -78,6 +85,7 @@ fn install() {
     } else {
         println!("Cg was updated!");
     }
+    println!("Done installing!");
 }
 
 fn uninstall() {
@@ -85,8 +93,9 @@ fn uninstall() {
     update_air(air_backup_path).expect("Failed to uninstall Adobe Air");
 
     let cg_backup_path = Path::new("Backups/Adobe Air.framework");
-    update_cg(cg_backup_path).expect("Failed to uninstall Cg");;
+    update_cg(cg_backup_path).expect("Failed to uninstall Cg");
 
+    println!("Done uninstalling!");
 }
 
 
@@ -122,7 +131,7 @@ fn backup_air() -> io::Result<()> {
 
     let air_backup = Path::new("Backups/Adobe Air.framework");
     if air_backup.exists() {
-        println!("Skipping backup!");
+        println!("Skipping Adobe Air backup! (Already exists)");
     } else {
         update_dir(&lol_cl_path, air_backup)?;
     }
@@ -171,7 +180,7 @@ fn backup_cg() -> io::Result<()> {
 
     let cg_backup = Path::new("Backups/Cg.framework");
     if cg_backup.exists() {
-        println!("Skipping backup!");
+        println!("Skipping NVIDIA Cg backup! (Already exists)");
     } else {
         update_dir(&lol_cl_path, cg_backup)?;
     }
