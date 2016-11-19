@@ -6,10 +6,10 @@ Equivalent to `./lolupdater install "/Applications/League Of Legends.app"`.
 ### With one argument
 Equivalent to `./lolupdater <argument> "/Applications/League Of Legends.app"`.
 ### With three arguments
-`./lolupdater.py install <path>`
+`./lolupdater install <path>`
 
 Runs LoLUpdater with LoL installed at `<path>`.
 
-`./lolupdater.py uninstall <path>`
+`./lolupdater uninstall <path>`
 
 Removes LoLupdater for LoL installed at `<path>`.
