@@ -108,13 +108,19 @@ fn install() {
         fs::create_dir("Backups").expect("Create Backup dir");
     }
 
-    let air_update = thread::Builder::new().name("air_thread".to_string()).spawn(|| {
-        air_main();
-    }).unwrap();
+    let air_update = thread::Builder::new()
+        .name("air_thread".to_string())
+        .spawn(|| {
+            air_main();
+        })
+        .unwrap();
 
-    let cg_update = thread::Builder::new().name("cg_thread".to_string()).spawn(|| {
-        cg_main();
-    }).unwrap();;
+    let cg_update = thread::Builder::new()
+        .name("cg_thread".to_string())
+        .spawn(|| {
+            cg_main();
+        })
+        .unwrap();
 
     let air_result = air_update.join();
     if air_result.is_ok() {
@@ -334,7 +340,7 @@ fn download(target_path: &Path, url: &str, expected_hash: Option<&str>) -> Resul
 lazy_static! {
     static ref VERSION_REGEX: Regex = {
         // 0 to 255
-        let number = r"0|[1-9][0-9]|[1-2][0-5][0-9]";
+        let number = r"[0-9]|[1-9][0-9]|[1-2][0-5][0-9]";
 
         // Parses version a.b.c.d
         let regex = format!(r"(?x) # Comments!
@@ -374,7 +380,7 @@ fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
             None
         })
         .max_by_key(|k| to_version(k))
-        .unwrap();
+        .expect("Failed to get max");
     Ok(head.join(version).join(tail))
 }
 
