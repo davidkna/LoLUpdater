@@ -19,8 +19,10 @@ use std::io::{self, ErrorKind};
 use std::fs::File;
 use std::fs;
 use std::mem;
-use std::path::{Path, PathBuf};
+use std::num;
+use std::path::{self, Path, PathBuf};
 use std::process::Command;
+use std::result;
 use std::thread;
 
 use hyper::Client;
@@ -30,9 +32,9 @@ use ring::{digest, test};
 use regex::Regex;
 use tempdir::TempDir;
 use tar::Archive;
+use walkdir::WalkDir;
 
 const DEFAULT_BUF_SIZE: usize = 8 * 1024;
-use walkdir::WalkDir;
 
 const LOL_AIR_PATH: [&'static str; 2] = ["Contents/LoL/RADS/projects/lol_air_client/releases",
                                          "deploy/Frameworks"];
@@ -43,11 +45,51 @@ const LOL_CL_PATH: [&'static str; 2] = ["Contents/LoL/RADS/solutions/lol_game_cl
 const LOL_SLN_PATH: [&'static str; 2] = ["Contents/LoL/RADS/projects/lol_game_client/releases",
                                          "deploy/LeagueOfLegends.app/Contents/Frameworks"];
 
+#[derive(Debug)]
+enum LoLUpdaterError {
+    Hyper(hyper::Error),
+    Io(io::Error),
+    Parse(num::ParseIntError),
+    Prefix(path::StripPrefixError),
+    WalkDir(walkdir::Error),
+}
+
+impl From<hyper::Error> for LoLUpdaterError {
+    fn from(err: hyper::Error) -> LoLUpdaterError {
+        LoLUpdaterError::Hyper(err)
+    }
+}
+
+impl From<io::Error> for LoLUpdaterError {
+    fn from(err: io::Error) -> LoLUpdaterError {
+        LoLUpdaterError::Io(err)
+    }
+}
+
+impl From<num::ParseIntError> for LoLUpdaterError {
+    fn from(err: num::ParseIntError) -> LoLUpdaterError {
+        LoLUpdaterError::Parse(err)
+    }
+}
+
+impl From<path::StripPrefixError> for LoLUpdaterError {
+    fn from(err: path::StripPrefixError) -> LoLUpdaterError {
+        LoLUpdaterError::Prefix(err)
+    }
+}
+
+impl From<walkdir::Error> for LoLUpdaterError {
+    fn from(err: walkdir::Error) -> LoLUpdaterError {
+        LoLUpdaterError::WalkDir(err)
+    }
+}
+
+type Result<T> = result::Result<T, LoLUpdaterError>;
 
 fn main() {
-    println!("LoLUpdater 3.0.0");
+    println!("LoLUpdater for macOS 3.0.0");
     println!("Report errors, feature requests or any issues at \
-              https://github.com/LoLUpdater/LoLUpdater-OSX/issues.");
+              https://github.com/LoLUpdater/LoLUpdater-macOS/issues.");
 
     let mode = env::args().nth(1).unwrap_or("install".to_string());
     let lol_dir = env::args().nth(2).unwrap_or("/Applications/League of Legends.app".to_string());
@@ -66,35 +108,35 @@ fn install() {
         fs::create_dir("Backups").expect("Create Backup dir");
     }
 
-    let air_update = thread::spawn(|| {
+    let air_update = thread::Builder::new().name("air_thread".to_string()).spawn(|| {
         air_main();
-    });
+    }).unwrap();
 
-    let cg_update = thread::spawn(|| {
+    let cg_update = thread::Builder::new().name("cg_thread".to_string()).spawn(|| {
         cg_main();
-    });
+    }).unwrap();;
 
     let air_result = air_update.join();
-    if air_result.is_err() {
-        println!("Failed to update Adobe Air!");
-    } else {
+    if air_result.is_ok() {
         println!("Adobe Air was updated!");
+    } else {
+        println!("Failed to update Adobe Air!");
     }
 
     let cg_result = cg_update.join();
-    if cg_result.is_err() {
-        println!("Failed to update Cg!");
-    } else {
+    if cg_result.is_ok() {
         println!("Cg was updated!");
+    } else {
+        println!("Failed to update Cg!");
     }
     println!("Done installing!");
 }
 
 fn uninstall() {
-    let air_backup_path = Path::new("Backups/Adobe Air.framework");
+    let air_backup_path = Path::new("Backups/Adobe AIR.framework");
     update_air(air_backup_path).expect("Failed to uninstall Adobe Air");
 
-    let cg_backup_path = Path::new("Backups/Adobe Air.framework");
+    let cg_backup_path = Path::new("Backups/Adobe Cg.framework");
     update_cg(cg_backup_path).expect("Failed to uninstall Cg");
 
     println!("Done uninstalling!");
@@ -103,6 +145,9 @@ fn uninstall() {
 
 
 fn air_main() {
+    println!("Backing up Adobe Air…");
+    backup_air().expect("Failed to back up Adobe Air");
+
     let download_dir = TempDir::new("lolupdater-air-dl")
         .expect("Failed to create temp dir for Adobe Air download");
     let url: &str = "https://airdownload.adobe.com/air/mac/download/23.0/AdobeAIR.dmg";
@@ -113,50 +158,49 @@ fn air_main() {
     println!("Mounting Adobe Air…");
     let mount_dir = mount(&image_file).expect("Failed to mount Adobe Air image");
 
-    println!("Backing up Adobe Air…");
-    backup_air().expect("Failed to back up Adobe Air");
-
     println!("Updating Adobe Air…");
     let air_framework = mount_dir.path()
-        .join("Adobe Air Installer.app/Contents/Frameworks/Adobe Air.framework");
+        .join("Adobe Air Installer.app/Contents/Frameworks/Adobe AIR.framework");
     update_air(&air_framework).expect("Failed to update Adobe Air");
 
     println!("Unmounting Adobe Air…");
     unmount(mount_dir.path()).expect("Failed to unmount Adobe Air");
 }
 
-fn backup_air() -> io::Result<()> {
-    let lol_cl_path = join_version(&PathBuf::from(LOL_AIR_PATH[0]),
-                                   &PathBuf::from(LOL_AIR_PATH[1]))
+fn backup_air() -> Result<()> {
+    let lol_air_path = join_version(&PathBuf::from(LOL_AIR_PATH[0]),
+                                    &PathBuf::from(LOL_AIR_PATH[1]))
         ?
-        .join("Adobe Air.framework");
+        .join("Adobe AIR.framework");
 
-    let air_backup = Path::new("Backups/Adobe Air.framework");
+    let air_backup = Path::new("Backups/Adobe AIR.framework");
     if air_backup.exists() {
         println!("Skipping Adobe Air backup! (Already exists)");
     } else {
-        update_dir(&lol_cl_path, air_backup)?;
+        update_dir(&lol_air_path, air_backup)?;
     }
     Ok(())
 }
 
-fn update_air(air_dir: &Path) -> io::Result<()> {
+fn update_air(air_dir: &Path) -> Result<()> {
     let lol_air_path = join_version(&PathBuf::from(LOL_AIR_PATH[0]),
                                     &PathBuf::from(LOL_AIR_PATH[1]))
         ?
-        .join("Adobe Air.framework");
+        .join("Adobe AIR.framework");
     update_dir(air_dir, &lol_air_path)?;
     Ok(())
 }
 
 fn cg_main() {
+    println!("Backing up Nvidia Cg…");
+    backup_cg().expect("Failed to backup Cg");
+
     let download_dir = TempDir::new("lolupdater-cg-dl")
         .expect("Failed to create temp dir for Nvidia Cg download");
     let url: &str = "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg";
     let image_file = download_dir.path().join("cg.dmg");
     println!("Downloading Nvidia Cg…");
-    let cg_hash =
-        "56abcc26d2774b1a33adf286c09e83b6f878c270d4dd5bff5952b83c21af8fa69e3d37060f08b6869a9a40a0907be3dacc2ee2ef1c28916069400ed867b83925";
+    let cg_hash = "56abcc26d2774b1a33adf286c09e83b6f878c270d4dd5bff5952b83c21af8fa69e3d37060f08b6869a9a40a0907be3dacc2ee2ef1c28916069400ed867b83925";
     download(&image_file, url, Some(cg_hash)).expect("Downloading Nvidia Cg failed!");
 
     println!("Mounting Nvidia Cg…");
@@ -167,15 +211,13 @@ fn cg_main() {
 
     println!("Unmounting Nvidia Cg…");
     unmount(mount_dir.path()).expect("Failed to unmount Cg");
-    println!("Backing up Nvidia Cg…");
-    backup_cg().expect("Failed to backup Cg");
 
     println!("Updating Nvidia Cg…");
     update_cg(cg_dir.path()).expect("Failed to update Cg");
 
 }
 
-fn backup_cg() -> io::Result<()> {
+fn backup_cg() -> Result<()> {
     let lol_cl_path = join_version(&PathBuf::from(LOL_CL_PATH[0]),
                                    &PathBuf::from(LOL_CL_PATH[1]))
         ?
@@ -190,7 +232,7 @@ fn backup_cg() -> io::Result<()> {
     Ok(())
 }
 
-fn update_cg(cg_dir: &Path) -> io::Result<()> {
+fn update_cg(cg_dir: &Path) -> Result<()> {
     let lol_cl_path = join_version(&PathBuf::from(LOL_CL_PATH[0]),
                                    &PathBuf::from(LOL_CL_PATH[1]))
         ?
@@ -205,12 +247,12 @@ fn update_cg(cg_dir: &Path) -> io::Result<()> {
     Ok(())
 }
 
-fn update_dir(from: &Path, to: &Path) -> io::Result<()> {
+fn update_dir(from: &Path, to: &Path) -> Result<()> {
     let walker = WalkDir::new(from);
     for entry in walker {
         let entry = entry?;
-        let metadata = entry.metadata().unwrap();
-        let stripped_entry = entry.path().strip_prefix(from).unwrap();
+        let metadata = entry.metadata()?;
+        let stripped_entry = entry.path().strip_prefix(from)?;
         let target = to.join(stripped_entry);
         if metadata.is_file() {
             if target.is_dir() {
@@ -224,7 +266,7 @@ fn update_dir(from: &Path, to: &Path) -> io::Result<()> {
     Ok(())
 }
 
-fn update_file(from: &Path, to: &Path) -> io::Result<()> {
+fn update_file(from: &Path, to: &Path) -> Result<()> {
     let mut reader = File::open(from)?;
     let mut writer = fs::OpenOptions::new().write(true).create(true).truncate(true).open(to)?;
 
@@ -232,7 +274,7 @@ fn update_file(from: &Path, to: &Path) -> io::Result<()> {
     Ok(())
 }
 
-fn extract_cg(mount_dir: &Path) -> io::Result<tempdir::TempDir> {
+fn extract_cg(mount_dir: &Path) -> Result<tempdir::TempDir> {
     let cg_dir = TempDir::new("lolupdater-cg")?;
     let a_path = mount_dir.join("Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz");
     let a_file = File::open(a_path)?;
@@ -253,7 +295,7 @@ fn extract_cg(mount_dir: &Path) -> io::Result<tempdir::TempDir> {
     Ok(cg_dir)
 }
 
-fn mount(image_path: &Path) -> io::Result<tempdir::TempDir> {
+fn mount(image_path: &Path) -> Result<tempdir::TempDir> {
     let mountpoint = TempDir::new("lolupdater-mount")?;
     Command::new("/usr/bin/hdiutil").arg("attach")
         .arg("-nobrowse")
@@ -273,16 +315,12 @@ fn unmount(mountpoint: &Path) -> io::Result<()> {
     Ok(())
 }
 
-fn download(target_path: &Path,
-            url: &str,
-            expected_hash: Option<&str>)
-            -> Result<(), hyper::Error> {
+fn download(target_path: &Path, url: &str, expected_hash: Option<&str>) -> Result<()> {
     let client = Client::new();
 
     let mut res = client.get(url)
         .header(Connection::close())
         .send()?;
-    assert_eq!(res.status, hyper::Ok);
 
     let mut target_image_file = File::create(target_path)?;
     match expected_hash {
@@ -325,11 +363,11 @@ fn to_version(input: &str) -> u32 {
     }
 }
 
-fn join_version(head: &Path, tail: &Path) -> io::Result<PathBuf> {
+fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
     let dir_iter = head.read_dir()?;
     let version = dir_iter.filter_map(|s| {
-            let name = s.unwrap().file_name();
-            let name_str = name.into_string().unwrap();
+            let name = s.expect("Failed to unwrap DirEntry!").file_name();
+            let name_str = name.into_string().expect("Failed to filename as Unicode!");
             if VERSION_REGEX.is_match(&name_str) {
                 return Some(name_str);
             }
@@ -343,7 +381,7 @@ fn join_version(head: &Path, tail: &Path) -> io::Result<PathBuf> {
 fn copy_digest<R: ?Sized, W: ?Sized>(reader: &mut R,
                                      writer: &mut W,
                                      expected_hex: &str)
-                                     -> Result<u64, io::Error>
+                                     -> io::Result<u64>
     where R: Read,
           W: Write
 {
