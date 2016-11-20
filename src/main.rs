@@ -18,6 +18,7 @@ use std::io::prelude::*;
 use std::io::{self, ErrorKind};
 use std::fs::File;
 use std::fs;
+use std::mem;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::thread;
@@ -154,7 +155,8 @@ fn cg_main() {
     let url: &str = "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg";
     let image_file = download_dir.path().join("cg.dmg");
     println!("Downloading Nvidia Cg…");
-    let cg_hash = "56abcc26d2774b1a33adf286c09e83b6f878c270d4dd5bff5952b83c21af8fa69e3d37060f08b6869a9a40a0907be3dacc2ee2ef1c28916069400ed867b83925";
+    let cg_hash =
+        "56abcc26d2774b1a33adf286c09e83b6f878c270d4dd5bff5952b83c21af8fa69e3d37060f08b6869a9a40a0907be3dacc2ee2ef1c28916069400ed867b83925";
     download(&image_file, url, Some(cg_hash)).expect("Downloading Nvidia Cg failed!");
 
     println!("Mounting Nvidia Cg…");
@@ -293,7 +295,8 @@ fn download(target_path: &Path,
 
 lazy_static! {
     static ref VERSION_REGEX: Regex = {
-        let number = r"0|[1-9][0-9]*";
+        // 0 to 255
+        let number = r"0|[1-9][0-9]|[1-2][0-5][0-9]";
 
         // Parses version a.b.c.d
         let regex = format!(r"(?x) # Comments!
@@ -307,14 +310,19 @@ lazy_static! {
     };
 }
 
-fn to_version(input: &str) -> (u64, u64, u64, u64) {
+fn to_version(input: &str) -> u32 {
     let captures = VERSION_REGEX.captures(input).unwrap();
     // Unwrapping should always work here
-    let a = captures.name("a").unwrap().parse().unwrap();
-    let b = captures.name("b").unwrap().parse().unwrap();
-    let c = captures.name("c").unwrap().parse().unwrap();
-    let d = captures.name("d").unwrap().parse().unwrap();
-    (a, b, c, d)
+    let a: u8 = captures.name("a").unwrap().parse().unwrap();
+    let b: u8 = captures.name("b").unwrap().parse().unwrap();
+    let c: u8 = captures.name("c").unwrap().parse().unwrap();
+    let d: u8 = captures.name("d").unwrap().parse().unwrap();
+
+    // Do scary stuff to make it an u32
+    unsafe {
+        let num = [a, b, c, d];
+        mem::transmute::<[u8; 4], u32>(num)
+    }
 }
 
 fn join_version(head: &Path, tail: &Path) -> io::Result<PathBuf> {
