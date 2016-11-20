@@ -340,7 +340,7 @@ fn download(target_path: &Path, url: &str, expected_hash: Option<&str>) -> Resul
 lazy_static! {
     static ref VERSION_REGEX: Regex = {
         // 0 to 255
-        let number = r"[0-9]|[1-9][0-9]|[1-2][0-5][0-9]";
+        let number = r"[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]";
 
         // Parses version a.b.c.d
         let regex = format!(r"(?x) # Comments!
