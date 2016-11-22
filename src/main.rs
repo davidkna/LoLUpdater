@@ -13,7 +13,6 @@ extern crate walkdir;
 #[macro_use]
 extern crate lazy_static;
 
-
 use std::env;
 use std::fs;
 use std::path::Path;
@@ -24,8 +23,10 @@ mod cg;
 mod errors;
 mod help;
 
+const VERSION: &'static str = env!("CARGO_PKG_VERSION");
+
 fn main() {
-    println!("LoLUpdater for macOS 3.0.0");
+    println!("LoLUpdater for macOS {}", VERSION);
     println!("Report errors, feature requests or any issues at \
               https://github.com/LoLUpdater/LoLUpdater-macOS/issues.");
 
