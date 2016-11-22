@@ -13,6 +13,6 @@ hyper = { version = "0.9", default-features = false, features = ["security-frame
 lazy_static = "0.2"
 regex = "0.1"
 ring = "0.5"
-tar = "0.4"
+tar = { version = "0.4", default-features = false }
 tempdir = "0.3"
 walkdir = "1"
