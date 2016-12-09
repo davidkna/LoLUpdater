@@ -1,6 +1,7 @@
 use std::path::{Path, PathBuf};
 use tempdir::TempDir;
-use help::*;
+
+use util::*;
 
 const LOL_AIR_PATH: [&'static str; 2] = ["Contents/LoL/RADS/projects/lol_air_client/releases",
                                          "deploy/Frameworks"];

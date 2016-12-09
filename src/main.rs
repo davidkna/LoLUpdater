@@ -1,7 +1,3 @@
-#![feature(plugin)]
-
-#![plugin(clippy)]
-
 extern crate flate2;
 extern crate hyper;
 extern crate regex;
@@ -21,7 +17,7 @@ use std::thread;
 mod air;
 mod cg;
 mod errors;
-mod help;
+mod util;
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 

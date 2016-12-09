@@ -6,7 +6,7 @@ use flate2::read::GzDecoder;
 use tempdir::TempDir;
 use tar::Archive;
 
-use help::*;
+use util::*;
 
 const LOL_CL_PATH: [&'static str; 2] = ["Contents/LoL/RADS/solutions/lol_game_client_sln/releases",
                                         "deploy/LeagueOfLegends.app/Contents/Frameworks"];

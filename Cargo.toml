@@ -6,10 +6,14 @@ authors = ["David Knaack <davidkna@users.noreply.github.com>"]
 [profile.release]
 lto = true
 
-[dependencies]
-clippy = "*"
-flate2 = "0.2"
+[target.'cfg(macos)'.dependencies]
 hyper = { version = "0.9", default-features = false, features = ["security-framework"] }
+
+[target.'not(cfg(macos))'.dependencies]
+hyper = "0.9"
+
+[dependencies]
+flate2 = "0.2"
 lazy_static = "0.2"
 regex = "0.1"
 ring = "0.5"
