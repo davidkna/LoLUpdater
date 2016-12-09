@@ -8,6 +8,7 @@ use tar::Archive;
 
 use util::*;
 
+
 const LOL_CL_PATH: [&'static str; 2] = ["Contents/LoL/RADS/solutions/lol_game_client_sln/releases",
                                         "deploy/LeagueOfLegends.app/Contents/Frameworks"];
 

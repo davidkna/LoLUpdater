@@ -14,6 +14,7 @@ use std::fs;
 use std::path::Path;
 use std::thread;
 
+#[cfg(macos)]
 mod air;
 mod cg;
 mod errors;
