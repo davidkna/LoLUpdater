@@ -4,14 +4,16 @@ use std::fs::File;
 use std::fs;
 use std::mem;
 use std::path::{Path, PathBuf};
+#[cfg(macos)]
 use std::process::Command;
 use std::result;
 
-use hyper::Client;
-use hyper::header::Connection;
 use ring::{digest, test};
 use regex::Regex;
+use reqwest;
+#[cfg(macos)]
 use tempdir::{self, TempDir};
+#[cfg(macos)]
 use walkdir::WalkDir;
 
 use errors::LoLUpdaterError;
@@ -71,11 +73,7 @@ pub fn unmount(mountpoint: &Path) -> io::Result<()> {
 }
 
 pub fn download(target_path: &Path, url: &str, expected_hash: Option<&str>) -> Result<()> {
-    let client = Client::new();
-
-    let mut res = client.get(url)
-        .header(Connection::close())
-        .send()?;
+    let mut res = reqwest::get(url)?;
 
     let mut target_image_file = File::create(target_path)?;
     match expected_hash {

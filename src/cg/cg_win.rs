@@ -1,3 +1,8 @@
+use std::env;
+use std::path::{Path, PathBuf};
+use std::process::Command;
+
+use tempdir::TempDir;
 
 use util::*;
 
@@ -20,10 +25,10 @@ pub fn install() {
     download(&cg_exe, url, Some(cg_hash)).expect("Downloading Nvidia Cg failed!");
 
     println!("Installing Nvidia Cg…");
-    install(&cg_exe).expect("Failed to mount Cg image");
+    let cg_bin = install_cg_exe(&cg_exe).expect("Failed to install Cg");
 
     println!("Updating Nvidia Cg…");
-    update_cg().expect("Failed to update Cg");
+    update_cg(&cg_bin).expect("Failed to update Cg");
 
 }
 
@@ -42,28 +47,29 @@ fn backup_cg() -> Result<()> {
     if cg_backup.exists() {
         println!("Skipping NVIDIA Cg backup! (Already exists)");
     } else {
-        update_dir(&lol_cl_path, cg_backup)?;
+        update_file(&lol_cl_path, cg_backup)?;
     }
     Ok(())
 }
 
-fn update_cg() -> Result<()> {
-    let cg_dir = env::var("CG_BIN_PATH");
+fn update_cg(cg_dir: &Path) -> Result<()> {
     let lol_cl_path = join_version(&PathBuf::from(LOL_CL_PATH[0]),
                                    &PathBuf::from(LOL_CL_PATH[1]))
         ?
         .join("Cg.framework");
-    update_dir(cg_dir, &lol_cl_path)?;
+    update_file(cg_dir, &lol_cl_path)?;
 
     let lol_sln_path = join_version(&PathBuf::from(LOL_SLN_PATH[0]),
                                     &PathBuf::from(LOL_SLN_PATH[1]))
         ?
         .join("Cg.framework");
-    update_dir(cg_dir, &lol_sln_path)?;
+    update_file(cg_dir, &lol_sln_path)?;
     Ok(())
 }
 
-fn install_cg(cg_exe: &Path) -> Result<TempDir> {
-    Command::new("cg_exe").arg("/verysilent")
+fn install_cg_exe(cg_exe: &Path) -> Result<PathBuf> {
+    Command::new(cg_exe).arg("/verysilent")
         .output()?;
+    let cg_bin = env::var("CG_BIN_PATH")?;
+    Ok(PathBuf::from(cg_bin))
 }

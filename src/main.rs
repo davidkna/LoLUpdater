@@ -1,9 +1,13 @@
+
+#[cfg(macos)]
 extern crate flate2;
-extern crate hyper;
 extern crate regex;
+extern crate reqwest;
 extern crate ring;
+#[cfg(macos)]
 extern crate tar;
 extern crate tempdir;
+#[cfg(macos)]
 extern crate walkdir;
 
 #[macro_use]
@@ -38,7 +42,7 @@ fn main() {
     }
 }
 
-
+#[cfg(macos)]
 fn install() {
     if !Path::new("Backups").exists() {
         fs::create_dir("Backups").expect("Create Backup dir");
@@ -74,9 +78,39 @@ fn install() {
     println!("Done installing!");
 }
 
+#[cfg(not(macos))]
+fn install() {
+    if !Path::new("Backups").exists() {
+        fs::create_dir("Backups").expect("Create Backup dir");
+    }
+
+    let cg_update = thread::Builder::new()
+        .name("cg_thread".to_string())
+        .spawn(|| {
+            cg::install();
+        })
+        .unwrap();
+
+    let cg_result = cg_update.join();
+    if cg_result.is_ok() {
+        println!("Cg was updated!");
+    } else {
+        println!("Failed to update Cg!");
+    }
+    println!("Done installing!");
+}
+
+#[cfg(macos)]
 fn uninstall() {
     air::remove().expect("Failed to uninstall Adobe Air");
 
+    cg::remove().expect("Failed to uninstall Cg");
+
+    println!("Done uninstalling!");
+}
+
+#[cfg(not(macos))]
+fn uninstall() {
     cg::remove().expect("Failed to uninstall Cg");
 
     println!("Done uninstalling!");

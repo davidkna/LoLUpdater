@@ -1,22 +1,37 @@
+#[cfg(not(macos))]
+use std::env;
 use std::io;
 use std::num;
 use std::path;
 
-use hyper;
+use reqwest;
+#[cfg(macos)]
 use walkdir;
 
 #[derive(Debug)]
+#[cfg(macos)]
 pub enum LoLUpdaterError {
-    Hyper(hyper::Error),
     Io(io::Error),
     Parse(num::ParseIntError),
     Prefix(path::StripPrefixError),
+    Reqwest(reqwest::Error),
     WalkDir(walkdir::Error),
 }
 
-impl From<hyper::Error> for LoLUpdaterError {
-    fn from(err: hyper::Error) -> LoLUpdaterError {
-        LoLUpdaterError::Hyper(err)
+#[derive(Debug)]
+#[cfg(not(macos))]
+pub enum LoLUpdaterError {
+    EnvVar(env::VarError),
+    Io(io::Error),
+    Parse(num::ParseIntError),
+    Prefix(path::StripPrefixError),
+    Reqwest(reqwest::Error),
+}
+
+#[cfg(not(macos))]
+impl From<env::VarError> for LoLUpdaterError {
+    fn from(err: env::VarError) -> LoLUpdaterError {
+        LoLUpdaterError::EnvVar(err)
     }
 }
 
@@ -38,6 +53,13 @@ impl From<path::StripPrefixError> for LoLUpdaterError {
     }
 }
 
+impl From<reqwest::Error> for LoLUpdaterError {
+    fn from(err: reqwest::Error) -> LoLUpdaterError {
+        LoLUpdaterError::Reqwest(err)
+    }
+}
+
+#[cfg(macos)]
 impl From<walkdir::Error> for LoLUpdaterError {
     fn from(err: walkdir::Error) -> LoLUpdaterError {
         LoLUpdaterError::WalkDir(err)

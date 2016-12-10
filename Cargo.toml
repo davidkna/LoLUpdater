@@ -6,18 +6,17 @@ authors = ["David Knaack <davidkna@users.noreply.github.com>"]
 [profile.release]
 lto = true
 
-[target.'cfg(macos)'.dependencies]
-flate2 = "0.2"
-hyper = { version = "0.9", default-features = false, features = ["security-framework"] }
-tar = { version = "0.4", default-features = false }
-walkdir = "1"
-
-[target.'not(cfg(macos))'.dependencies]
-hyper = "0.9"
-raw-cpuid = "2.0.1"
-
 [dependencies]
 lazy_static = "0.2"
 regex = "0.1"
+reqwest = "0.1"
 ring = "0.5"
 tempdir = "0.3"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+flate2 = "0.2"
+tar = { version = "0.4", default-features = false }
+walkdir = "1"
+
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+raw-cpuid = "2.0.1"
