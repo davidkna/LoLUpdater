@@ -12,7 +12,7 @@ pub fn install() {
 
     let download_dir = TempDir::new("lolupdater-air-dl")
         .expect("Failed to create temp dir for Adobe Air download");
-    let url: &str = "https://airdownload.adobe.com/air/mac/download/23.0/AdobeAIR.dmg";
+    let url: &str = "https://airdownload.adobe.com/air/mac/download/24.0/AdobeAIR.dmg";
     let image_file = download_dir.path().join("air.dmg");
     println!("Downloading Adobe Air…");
     download(&image_file, url, None).expect("Downloading Adobe Air failed!");

@@ -1,15 +1,15 @@
-#[cfg(not(macos))]
+#[cfg(not(target_os = "macos"))]
 use std::env;
 use std::io;
 use std::num;
 use std::path;
 
 use reqwest;
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 use walkdir;
 
 #[derive(Debug)]
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 pub enum LoLUpdaterError {
     Io(io::Error),
     Parse(num::ParseIntError),
@@ -19,7 +19,7 @@ pub enum LoLUpdaterError {
 }
 
 #[derive(Debug)]
-#[cfg(not(macos))]
+#[cfg(not(target_os = "macos"))]
 pub enum LoLUpdaterError {
     EnvVar(env::VarError),
     Io(io::Error),
@@ -28,7 +28,7 @@ pub enum LoLUpdaterError {
     Reqwest(reqwest::Error),
 }
 
-#[cfg(not(macos))]
+#[cfg(not(target_os = "macos"))]
 impl From<env::VarError> for LoLUpdaterError {
     fn from(err: env::VarError) -> LoLUpdaterError {
         LoLUpdaterError::EnvVar(err)
@@ -59,7 +59,7 @@ impl From<reqwest::Error> for LoLUpdaterError {
     }
 }
 
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 impl From<walkdir::Error> for LoLUpdaterError {
     fn from(err: walkdir::Error) -> LoLUpdaterError {
         LoLUpdaterError::WalkDir(err)

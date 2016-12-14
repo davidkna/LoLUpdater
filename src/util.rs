@@ -4,16 +4,16 @@ use std::fs::File;
 use std::fs;
 use std::mem;
 use std::path::{Path, PathBuf};
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 use std::process::Command;
 use std::result;
 
 use ring::{digest, test};
 use regex::Regex;
 use reqwest;
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 use tempdir::{self, TempDir};
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 use walkdir::WalkDir;
 
 use errors::LoLUpdaterError;
@@ -22,7 +22,7 @@ pub const DEFAULT_BUF_SIZE: usize = 8 * 1024;
 
 pub type Result<T> = result::Result<T, LoLUpdaterError>;
 
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 pub fn update_dir(from: &Path, to: &Path) -> Result<()> {
     let walker = WalkDir::new(from);
     for entry in walker {
@@ -50,7 +50,7 @@ pub fn update_file(from: &Path, to: &Path) -> Result<()> {
     Ok(())
 }
 
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 pub fn mount(image_path: &Path) -> Result<tempdir::TempDir> {
     let mountpoint = TempDir::new("lolupdater-mount")?;
     Command::new("/usr/bin/hdiutil").arg("attach")
@@ -63,7 +63,7 @@ pub fn mount(image_path: &Path) -> Result<tempdir::TempDir> {
     Ok(mountpoint)
 }
 
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 pub fn unmount(mountpoint: &Path) -> io::Result<()> {
     Command::new("/usr/bin/hdiutil").arg("detach")
         .arg("-quiet")

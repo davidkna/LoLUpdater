@@ -1,9 +1,9 @@
 pub use self::imp::*;
 
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 #[path = "cg_mac.rs"]
 mod imp;
 
-#[cfg(not(macos))]
+#[cfg(not(target_os = "macos"))]
 #[path = "cg_win.rs"]
 mod imp;

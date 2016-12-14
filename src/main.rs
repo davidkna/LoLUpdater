@@ -1,13 +1,13 @@
 
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 extern crate flate2;
 extern crate regex;
 extern crate reqwest;
 extern crate ring;
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 extern crate tar;
 extern crate tempdir;
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 extern crate walkdir;
 
 #[macro_use]
@@ -18,7 +18,7 @@ use std::fs;
 use std::path::Path;
 use std::thread;
 
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 mod air;
 mod cg;
 mod errors;
@@ -42,7 +42,7 @@ fn main() {
     }
 }
 
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 fn install() {
     if !Path::new("Backups").exists() {
         fs::create_dir("Backups").expect("Create Backup dir");
@@ -78,7 +78,7 @@ fn install() {
     println!("Done installing!");
 }
 
-#[cfg(not(macos))]
+#[cfg(not(target_os = "macos"))]
 fn install() {
     if !Path::new("Backups").exists() {
         fs::create_dir("Backups").expect("Create Backup dir");
@@ -100,7 +100,7 @@ fn install() {
     println!("Done installing!");
 }
 
-#[cfg(macos)]
+#[cfg(target_os = "macos")]
 fn uninstall() {
     air::remove().expect("Failed to uninstall Adobe Air");
 
@@ -109,7 +109,7 @@ fn uninstall() {
     println!("Done uninstalling!");
 }
 
-#[cfg(not(macos))]
+#[cfg(not(target_os = "macos"))]
 fn uninstall() {
     cg::remove().expect("Failed to uninstall Cg");
 
