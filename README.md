@@ -15,4 +15,4 @@ Runs LoLUpdater with LoL installed at `<path>`.
 Removes LoLupdater for LoL installed at `<path>`.
 
 ## Dependency graph
-![](graph.svg)
+![](graph.png)
