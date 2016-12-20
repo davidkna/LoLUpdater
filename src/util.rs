@@ -53,22 +53,32 @@ pub fn update_file(from: &Path, to: &Path) -> Result<()> {
 #[cfg(target_os = "macos")]
 pub fn mount(image_path: &Path) -> Result<tempdir::TempDir> {
     let mountpoint = TempDir::new("lolupdater-mount")?;
-    Command::new("/usr/bin/hdiutil").arg("attach")
+    let exit_status = Command::new("/usr/bin/hdiutil")
+        .arg("attach")
         .arg("-nobrowse")
         .arg("-quiet")
         .arg("-mountpoint")
         .arg(mountpoint.path().as_os_str())
         .arg(image_path.as_os_str())
-        .output()?;
+        .spawn()?
+        .wait()?;
+    if !exit_status.success() {
+        return Err(LoLUpdaterError::Mount)
+    }
     Ok(mountpoint)
 }
 
 #[cfg(target_os = "macos")]
-pub fn unmount(mountpoint: &Path) -> io::Result<()> {
-    Command::new("/usr/bin/hdiutil").arg("detach")
+pub fn unmount(mountpoint: &Path) -> Result<()> {
+    let exit_status = Command::new("/usr/bin/hdiutil")
+        .arg("detach")
         .arg("-quiet")
         .arg(mountpoint.as_os_str())
-        .output()?;
+        .spawn()?
+        .wait()?;
+    if !exit_status.success() {
+        return Err(LoLUpdaterError::Unmount)
+    }
     Ok(())
 }
 

@@ -12,6 +12,8 @@ use walkdir;
 #[cfg(target_os = "macos")]
 pub enum LoLUpdaterError {
     Io(io::Error),
+    Mount,
+    Unmount,
     Parse(num::ParseIntError),
     Prefix(path::StripPrefixError),
     Reqwest(reqwest::Error),
