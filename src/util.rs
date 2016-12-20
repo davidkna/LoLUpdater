@@ -95,14 +95,14 @@ pub fn download(target_path: &Path, url: &str, expected_hash: Option<&str>) -> R
 lazy_static! {
     static ref VERSION_REGEX: Regex = {
         // 0 to 255
-        let number = r"[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]";
+        let number = r"(?:[1-9]?[0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5])";
 
         // Parses version a.b.c.d
         let regex = format!(r"(?x) # Comments!
             ^({0})            # a
-            (?:\.({0}))       # .b
-            (?:\.({0}))       # .c
-            (?:\.({0}))$      # .d
+            (?:\.)({0})       # .b
+            (?:\.)({0})       # .c
+            (?:\.)({0})$      # .d
             ",
             number);
         Regex::new(&regex).unwrap()
@@ -112,10 +112,10 @@ lazy_static! {
 fn to_version(input: &str) -> u32 {
     let captures = VERSION_REGEX.captures(input).unwrap();
     // Unwrapping should always work here
-    let a: u8 = captures.at(0).unwrap().parse().unwrap();
-    let b: u8 = captures.at(1).unwrap().parse().unwrap();
-    let c: u8 = captures.at(2).unwrap().parse().unwrap();
-    let d: u8 = captures.at(3).unwrap().parse().unwrap();
+    let a: u8 = captures.at(1).unwrap().parse().unwrap();
+    let b: u8 = captures.at(2).unwrap().parse().unwrap();
+    let c: u8 = captures.at(3).unwrap().parse().unwrap();
+    let d: u8 = captures.at(4).unwrap().parse().unwrap();
 
     // Do scary stuff to make it an u32
     unsafe {
