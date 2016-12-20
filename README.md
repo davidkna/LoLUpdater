@@ -13,3 +13,6 @@ Runs LoLUpdater with LoL installed at `<path>`.
 `./lolupdater uninstall <path>`
 
 Removes LoLupdater for LoL installed at `<path>`.
+
+## Dependency graph
+![](graph.svg)
