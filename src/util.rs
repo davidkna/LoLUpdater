@@ -99,10 +99,10 @@ lazy_static! {
 
         // Parses version a.b.c.d
         let regex = format!(r"(?x) # Comments!
-            ^(?P<a>{0})            # a
-            (?:\.(?P<b>{0}))       # b
-            (?:\.(?P<c>{0}))       # c
-            (?:\.(?P<d>{0}))$      # d
+            ^({0})            # a
+            (?:\.({0}))       # .b
+            (?:\.({0}))       # .c
+            (?:\.({0}))$      # .d
             ",
             number);
         Regex::new(&regex).unwrap()
@@ -112,14 +112,18 @@ lazy_static! {
 fn to_version(input: &str) -> u32 {
     let captures = VERSION_REGEX.captures(input).unwrap();
     // Unwrapping should always work here
-    let a: u8 = captures.name("a").unwrap().parse().unwrap();
-    let b: u8 = captures.name("b").unwrap().parse().unwrap();
-    let c: u8 = captures.name("c").unwrap().parse().unwrap();
-    let d: u8 = captures.name("d").unwrap().parse().unwrap();
+    let a: u8 = captures.at(0).unwrap().parse().unwrap();
+    let b: u8 = captures.at(1).unwrap().parse().unwrap();
+    let c: u8 = captures.at(2).unwrap().parse().unwrap();
+    let d: u8 = captures.at(3).unwrap().parse().unwrap();
 
     // Do scary stuff to make it an u32
     unsafe {
-        let num = [a, b, c, d];
+        let num = if cfg!(target_endian = "little") {
+            [a, b, c, d]
+        } else {
+            [d, c, b, a]
+        }
         mem::transmute::<[u8; 4], u32>(num)
     }
 }
