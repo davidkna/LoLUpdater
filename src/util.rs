@@ -123,7 +123,7 @@ fn to_version(input: &str) -> u32 {
             [a, b, c, d]
         } else {
             [d, c, b, a]
-        }
+        };
         mem::transmute::<[u8; 4], u32>(num)
     }
 }
