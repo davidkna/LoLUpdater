@@ -54,6 +54,5 @@ fn update_air(air_dir: &Path) -> Result<()> {
                                     &PathBuf::from(LOL_AIR_PATH[1]))
         ?
         .join("Adobe AIR.framework");
-    update_dir(air_dir, &lol_air_path)?;
-    Ok(())
+    update_dir(air_dir, &lol_air_path)
 }
