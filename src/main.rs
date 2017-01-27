@@ -1,4 +1,5 @@
 
+extern crate app_dirs;
 #[cfg(target_os = "macos")]
 extern crate flate2;
 extern crate regex;
@@ -18,6 +19,9 @@ use std::fs;
 use std::path::Path;
 use std::thread;
 
+use app_dirs::AppDataType;
+use util::*;
+
 #[cfg(target_os = "macos")]
 mod air;
 mod cg;
@@ -35,6 +39,19 @@ fn main() {
     let lol_dir = env::args().nth(2).unwrap_or("/Applications/League of Legends.app".to_string());
     env::set_current_dir(lol_dir).expect("Failed to set CWD to LoL location");
 
+    let backups = {
+        let mut t = app_dirs::app_root(AppDataType::UserData, &APP_INFO).expect("Create data root");
+        t.push("Backups");
+        t
+    };
+
+    if Path::new("Backups").exists() {
+        fs::rename("Backups", backups).expect("Move backups to new location");
+    } else if !backups.exists() {
+        fs::create_dir(backups).expect("Create backup dir");
+    }
+
+
     match mode.as_ref() {
         "install" => install(),
         "uninstall" => uninstall(),
@@ -44,32 +61,34 @@ fn main() {
 
 #[cfg(target_os = "macos")]
 fn install() {
-    if !Path::new("Backups").exists() {
-        fs::create_dir("Backups").expect("Create Backup dir");
-    }
+    let air_handle = {
+        if Path::new("Contents/LoL/RADS/projects/lol_air_client").exists() {
+            let handle = thread::Builder::new()
+                .name("air_thread".to_string())
+                .spawn(|| { air::install(); })
+                .unwrap();
+            Some(handle)
+        } else {
+            println!("Skipping Adobe Air update because missing in new client!");
+            None
+        }
+    };
 
-    let air_update = thread::Builder::new()
-        .name("air_thread".to_string())
-        .spawn(|| {
-            air::install();
-        })
-        .unwrap();
-
-    let cg_update = thread::Builder::new()
+    let cg_handle = thread::Builder::new()
         .name("cg_thread".to_string())
-        .spawn(|| {
-            cg::install();
-        })
+        .spawn(|| { cg::install(); })
         .unwrap();
 
-    let air_result = air_update.join();
-    if air_result.is_ok() {
-        println!("Adobe Air was updated!");
-    } else {
-        println!("Failed to update Adobe Air!");
+    if let Some(handle) = air_handle {
+        let air_result = handle.join();
+        if air_result.is_ok() {
+            println!("Adobe Air was updated!");
+        } else {
+            println!("Failed to update Adobe Air!");
+        }
     }
 
-    let cg_result = cg_update.join();
+    let cg_result = cg_handle.join();
     if cg_result.is_ok() {
         println!("Cg was updated!");
     } else {
@@ -80,15 +99,9 @@ fn install() {
 
 #[cfg(not(target_os = "macos"))]
 fn install() {
-    if !Path::new("Backups").exists() {
-        fs::create_dir("Backups").expect("Create Backup dir");
-    }
-
     let cg_update = thread::Builder::new()
         .name("cg_thread".to_string())
-        .spawn(|| {
-            cg::install();
-        })
+        .spawn(|| { cg::install(); })
         .unwrap();
 
     let cg_result = cg_update.join();

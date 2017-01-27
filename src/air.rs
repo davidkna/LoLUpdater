@@ -1,4 +1,5 @@
 use std::path::{Path, PathBuf};
+use app_dirs::{self, AppDataType};
 use tempdir::TempDir;
 
 use util::*;
@@ -30,8 +31,10 @@ pub fn install() {
 }
 
 pub fn remove() -> Result<()> {
-    let air_backup_path = Path::new("Backups/Adobe AIR.framework");
-    update_air(air_backup_path)
+    let air_backup_path = app_dirs::get_app_dir(AppDataType::UserData,
+                                                &APP_INFO,
+                                                "Backups/Adobe AIR.framework")?;
+    update_air(&air_backup_path)
 }
 
 fn backup_air() -> Result<()> {
@@ -40,11 +43,13 @@ fn backup_air() -> Result<()> {
         ?
         .join("Adobe AIR.framework");
 
-    let air_backup = Path::new("Backups/Adobe AIR.framework");
+    let air_backup = app_dirs::get_app_dir(AppDataType::UserData,
+                                           &APP_INFO,
+                                           "Backups/Adobe AIR.framework")?;
     if air_backup.exists() {
         println!("Skipping Adobe Air backup! (Already exists)");
     } else {
-        update_dir(&lol_air_path, air_backup)?;
+        update_dir(&lol_air_path, &air_backup)?;
     }
     Ok(())
 }

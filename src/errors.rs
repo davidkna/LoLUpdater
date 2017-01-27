@@ -4,6 +4,7 @@ use std::io;
 use std::num;
 use std::path;
 
+use app_dirs;
 use reqwest;
 #[cfg(target_os = "macos")]
 use walkdir;
@@ -11,6 +12,7 @@ use walkdir;
 #[derive(Debug)]
 #[cfg(target_os = "macos")]
 pub enum LoLUpdaterError {
+    AppDirs(app_dirs::AppDirsError),
     Io(io::Error),
     Mount,
     Unmount,
@@ -23,11 +25,18 @@ pub enum LoLUpdaterError {
 #[derive(Debug)]
 #[cfg(not(target_os = "macos"))]
 pub enum LoLUpdaterError {
+    AppDirs(app_dirs::AppDirsError),
     EnvVar(env::VarError),
     Io(io::Error),
     Parse(num::ParseIntError),
     Prefix(path::StripPrefixError),
     Reqwest(reqwest::Error),
+}
+
+impl From<app_dirs::AppDirsError> for LoLUpdaterError {
+    fn from(err: app_dirs::AppDirsError) -> LoLUpdaterError {
+        LoLUpdaterError::AppDirs(err)
+    }
 }
 
 #[cfg(not(target_os = "macos"))]

@@ -2,6 +2,7 @@ use std::fs::File;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+use app_dirs::{self, AppDataType};
 use flate2::read::GzDecoder;
 use tempdir::TempDir;
 use tar::Archive;
@@ -42,8 +43,9 @@ pub fn install() {
 }
 
 pub fn remove() -> Result<()> {
-    let cg_backup_path = Path::new("Backups/Adobe Cg.framework");
-    update_cg(cg_backup_path)
+    let cg_backup_path =
+        app_dirs::get_app_dir(AppDataType::UserData, &APP_INFO, "Backups/Cg.framework")?;
+    update_cg(&cg_backup_path)
 }
 
 fn backup_cg() -> Result<()> {
@@ -52,11 +54,12 @@ fn backup_cg() -> Result<()> {
         ?
         .join("Cg.framework");
 
-    let cg_backup = Path::new("Backups/Cg.framework");
+    let cg_backup =
+        app_dirs::get_app_dir(AppDataType::UserData, &APP_INFO, "Backups/Cg.framework")?;
     if cg_backup.exists() {
         println!("Skipping NVIDIA Cg backup! (Already exists)");
     } else {
-        update_dir(&lol_cl_path, cg_backup)?;
+        update_dir(&lol_cl_path, &cg_backup)?;
     }
     Ok(())
 }

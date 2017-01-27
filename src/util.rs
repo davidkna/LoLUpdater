@@ -8,6 +8,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::result;
 
+use app_dirs::AppInfo;
 use ring::{digest, test};
 use regex::Regex;
 use reqwest;
@@ -17,6 +18,11 @@ use tempdir::{self, TempDir};
 use walkdir::WalkDir;
 
 use errors::LoLUpdaterError;
+
+pub const APP_INFO: AppInfo = AppInfo {
+    name: "LoLUpdater-rs",
+    author: "LoLUpdater",
+};
 
 pub const DEFAULT_BUF_SIZE: usize = 8 * 1024;
 
@@ -112,10 +118,10 @@ lazy_static! {
 fn to_version(input: &str) -> u32 {
     let captures = VERSION_REGEX.captures(input).unwrap();
     // Unwrapping should always work here
-    let a: u8 = captures.at(1).unwrap().parse().unwrap();
-    let b: u8 = captures.at(2).unwrap().parse().unwrap();
-    let c: u8 = captures.at(3).unwrap().parse().unwrap();
-    let d: u8 = captures.at(4).unwrap().parse().unwrap();
+    let a: u8 = captures.get(1).unwrap().as_str().parse().unwrap();
+    let b: u8 = captures.get(2).unwrap().as_str().parse().unwrap();
+    let c: u8 = captures.get(3).unwrap().as_str().parse().unwrap();
+    let d: u8 = captures.get(4).unwrap().as_str().parse().unwrap();
 
     // Do scary stuff to make it an u32
     unsafe {
