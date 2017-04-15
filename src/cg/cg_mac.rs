@@ -28,8 +28,7 @@ pub fn install() -> Result<()> {
     }
 
     println!("Updating Nvidia Cg…");
-    update_cg(&cg_dir)
-        .chain_err(|| "Failed to update Cg")?;
+    update_cg(&cg_dir).chain_err(|| "Failed to update Cg")?;
     println!("");
     Ok(())
 }
@@ -37,7 +36,20 @@ pub fn install() -> Result<()> {
 pub fn remove() -> Result<()> {
     let cg_backup_path =
         app_dirs::get_app_dir(AppDataType::UserData, &APP_INFO, "Backups/Cg.framework")?;
-    update_cg(&cg_backup_path)
+    if !cg_backup_path.exists() {
+        return Err("No Cg backup found!".into());
+    }
+    println!("Restoring Nvidia Cg…");
+    update_cg(&cg_backup_path)?;
+    fs::remove_dir_all(&cg_backup_path)?;
+    println!("Removing Nvidia Cg backup…");
+    let cg_cache_path = app_dirs::get_app_dir(AppDataType::UserCache, &APP_INFO, "Cg.Framework")?;
+
+    if cg_cache_path.exists() {
+        println!("Removing Nvidia Cg download cache…");
+        fs::remove_dir_all(cg_cache_path)?;
+    }
+    Ok(())
 }
 
 fn download_cg(cg_dir: &Path) -> Result<()> {

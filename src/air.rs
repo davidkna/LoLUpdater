@@ -1,5 +1,6 @@
 use std::path::{Path, PathBuf};
 use app_dirs::{self, AppDataType};
+use std::fs;
 use tempdir::TempDir;
 
 use util::*;
@@ -45,10 +46,23 @@ pub fn install() -> Result<()> {
 }
 
 pub fn remove() -> Result<()> {
+    if !Path::new("Contents/LoL/RADS/projects/lol_air_client").exists() {
+        println!("Skipping Adobe Air restore because it's missing in the modern client!");
+        println!("");
+        return Ok(());
+    }
     let air_backup_path = app_dirs::get_app_dir(AppDataType::UserData,
                                                 &APP_INFO,
                                                 "Backups/Adobe AIR.framework")?;
-    update_air(&air_backup_path)
+    if !air_backup_path.exists() {
+        return Err("No Adobe Air backup found!".into());
+    }
+    println!("Restoring Adobe Air…");
+    update_air(&air_backup_path)?;
+
+    println!("Removing Adobe Air backup…");
+    fs::remove_dir_all(air_backup_path)?;
+    Ok(())
 }
 
 fn backup_air() -> Result<()> {
