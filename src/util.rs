@@ -129,12 +129,19 @@ fn to_version(input: &str) -> u32 {
 
     // Do scary stuff to make it an u32
     unsafe {
-        let num = if cfg!(target_endian = "little") {
+        let num = if cfg!(target_endian = "big") {
             [a, b, c, d]
         } else {
             [d, c, b, a]
         };
         mem::transmute::<[u8; 4], u32>(num)
+    }
+}
+#[test]
+fn to_version_works() {
+    for i in 0..255 {
+        let test_version = format!("0.0.0.{}", i);
+        assert_eq!(to_version(&test_version), i);
     }
 }
 
