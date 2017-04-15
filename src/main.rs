@@ -3,7 +3,7 @@ extern crate app_dirs;
 #[macro_use]
 extern crate error_chain;
 #[cfg(target_os = "macos")]
-extern crate libflate;
+extern crate flate2;
 extern crate regex;
 extern crate reqwest;
 extern crate ring;
@@ -71,12 +71,7 @@ fn run() -> Result<()> {
 
 #[cfg(target_os = "macos")]
 fn install() -> Result<()> {
-    if Path::new("Contents/LoL/RADS/projects/lol_air_client").exists() {
-        air::install()?;
-    } else {
-        println!("Skipping Adobe Air update because it's missing in the modern client!");
-    }
-
+    air::install()?;
     cg::install()?;
 
     println!("Done installing!");

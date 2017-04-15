@@ -8,6 +8,12 @@ const LOL_AIR_PATH: [&'static str; 2] = ["Contents/LoL/RADS/projects/lol_air_cli
                                          "deploy/Frameworks"];
 
 pub fn install() -> Result<()> {
+    if !Path::new("Contents/LoL/RADS/projects/lol_air_client").exists() {
+        println!("Skipping Adobe Air update because it's missing in the modern client!");
+        println!("");
+        return Ok(());
+    }
+
     println!("Backing up Adobe Air…");
     backup_air().chain_err(|| "Failed to back up Adobe Air")?;
 
@@ -34,6 +40,7 @@ pub fn install() -> Result<()> {
     println!("Unmounting Adobe Air…");
     unmount(mount_dir.path())
         .chain_err(|| "Failed to unmount Adobe Air")?;
+    println!("");
     Ok(())
 }
 

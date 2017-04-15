@@ -3,7 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use app_dirs::{self, AppDataType};
-use libflate::gzip::Decoder;
+use flate2::read::GzDecoder;
 use tempdir::TempDir;
 use tar::Archive;
 
@@ -20,10 +20,32 @@ pub fn install() -> Result<()> {
     println!("Backing up Nvidia Cg…");
     backup_cg().chain_err(|| "Failed to backup Cg")?;
 
+    let cg_dir = app_dirs::get_app_dir(AppDataType::UserCache, &APP_INFO, "Cg.Framework")?;
+    if !cg_dir.exists() {
+        download_cg(&cg_dir)?;
+    } else {
+        println!("Nvidia Cg is alread cached!")
+    }
+
+    println!("Updating Nvidia Cg…");
+    update_cg(&cg_dir)
+        .chain_err(|| "Failed to update Cg")?;
+    println!("");
+    Ok(())
+}
+
+pub fn remove() -> Result<()> {
+    let cg_backup_path =
+        app_dirs::get_app_dir(AppDataType::UserData, &APP_INFO, "Backups/Cg.framework")?;
+    update_cg(&cg_backup_path)
+}
+
+fn download_cg(cg_dir: &Path) -> Result<()> {
     let download_dir = TempDir::new("lolupdater-cg-dl")
         .chain_err(|| "Failed to create temp dir for Nvidia Cg download")?;
     let url: &str = "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg";
     let image_file = download_dir.path().join("cg.dmg");
+
     println!("Downloading Nvidia Cg…");
     let cg_hash = "56abcc26d2774b1a33adf286c09e83b6f878c270d4dd5bff5952b83c21af8fa69e3d37060f08b6869a9a40a0907be3dacc2ee2ef1c28916069400ed867b83925";
     download(&image_file, url, Some(cg_hash))
@@ -34,23 +56,12 @@ pub fn install() -> Result<()> {
         .chain_err(|| "Failed to mount Cg image")?;
 
     println!("Extracting Nvidia Cg…");
-    let cg_dir = extract_cg(mount_dir.path())
-        .chain_err(|| "Failed to extract Cg!")?;
+    extract_cg(mount_dir.path(), cg_dir)?;
 
     println!("Unmounting Nvidia Cg…");
     unmount(mount_dir.path())
         .chain_err(|| "Failed to unmount Cg")?;
-
-    println!("Updating Nvidia Cg…");
-    update_cg(cg_dir.path())
-        .chain_err(|| "Failed to update Cg")?;
     Ok(())
-}
-
-pub fn remove() -> Result<()> {
-    let cg_backup_path =
-        app_dirs::get_app_dir(AppDataType::UserData, &APP_INFO, "Backups/Cg.framework")?;
-    update_cg(&cg_backup_path)
 }
 
 fn backup_cg() -> Result<()> {
@@ -81,23 +92,22 @@ fn update_cg(cg_dir: &Path) -> Result<()> {
     Ok(())
 }
 
-fn extract_cg(mount_dir: &Path) -> Result<TempDir> {
-    let cg_dir = TempDir::new("lolupdater-cg")?;
+fn extract_cg(mount_dir: &Path, target_dir: &Path) -> Result<()> {
     let a_path = mount_dir.join("Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz");
     let a_file = File::open(a_path)?;
-    let decompressed = Decoder::new(a_file)?;
+    let decompressed = GzDecoder::new(a_file)?;
     let mut archive = Archive::new(decompressed);
 
     for file in archive.entries()? {
         let mut file = file?;
         let p = file.path()?.into_owned();
         if let Ok(path) = p.strip_prefix("Library/Frameworks/Cg.framework") {
-            let target = cg_dir.path().join(path);
+            let target = target_dir.join(path);
             if let Some(parent) = target.parent() {
                 fs::create_dir_all(parent)?;
             }
             file.unpack(target)?;
         }
     }
-    Ok(cg_dir)
+    Ok(())
 }
