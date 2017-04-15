@@ -8,16 +8,16 @@ lto = true
 
 [dependencies]
 lazy_static = "~0.2.2"
-regex = "~0.2.1"
-reqwest = "~0.4"
 ring = "~0.7.1"
+regex = "~0.2.1"
+reqwest = "~0.5"
 tempdir = "~0.3.5"
 app_dirs = "~1.1.1"
 
 [target.'cfg(target_os = "macos")'.dependencies]
-flate2 = "~0.2.17"
+libflate = "~0.1"
 tar = { version = "0.4", default-features = false }
 walkdir = "~1.0.7"
 
 [target.'cfg(not(target_os = "macos"))'.dependencies]
-raw-cpuid = "2.0.1"
+raw-cpuid = "~2.0.2"

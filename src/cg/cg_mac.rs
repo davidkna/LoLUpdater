@@ -3,7 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use app_dirs::{self, AppDataType};
-use flate2::read::GzDecoder;
+use libflate::gzip::Decoder;
 use tempdir::TempDir;
 use tar::Archive;
 
@@ -83,7 +83,7 @@ fn extract_cg(mount_dir: &Path) -> Result<TempDir> {
     let cg_dir = TempDir::new("lolupdater-cg")?;
     let a_path = mount_dir.join("Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz");
     let a_file = File::open(a_path)?;
-    let decompressed = GzDecoder::new(a_file)?;
+    let decompressed = Decoder::new(a_file)?;
     let mut archive = Archive::new(decompressed);
 
     for file in archive.entries()? {

@@ -1,7 +1,7 @@
 
 extern crate app_dirs;
 #[cfg(target_os = "macos")]
-extern crate flate2;
+extern crate libflate;
 extern crate regex;
 extern crate reqwest;
 extern crate ring;
