@@ -1,5 +1,7 @@
 
 extern crate app_dirs;
+#[macro_use]
+extern crate error_chain;
 #[cfg(target_os = "macos")]
 extern crate libflate;
 extern crate regex;
@@ -17,7 +19,6 @@ extern crate lazy_static;
 use std::env;
 use std::fs;
 use std::path::Path;
-use std::thread;
 
 use app_dirs::AppDataType;
 use util::*;
@@ -30,25 +31,33 @@ mod util;
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
-fn main() {
+quick_main!(run);
+
+fn run() -> Result<()> {
     println!("LoLUpdater for macOS {}", VERSION);
     println!("Report errors, feature requests or any issues at \
               https://github.com/LoLUpdater/LoLUpdater-macOS/issues.");
 
     let mode = env::args().nth(1).unwrap_or("install".to_string());
-    let lol_dir = env::args().nth(2).unwrap_or("/Applications/League of Legends.app".to_string());
-    env::set_current_dir(lol_dir).expect("Failed to set CWD to LoL location");
+    let lol_dir = env::args()
+        .nth(2)
+        .unwrap_or("/Applications/League of Legends.app".to_string());
+    env::set_current_dir(lol_dir)
+        .chain_err(|| "Failed to set CWD to LoL location")?;
 
     let backups = {
-        let mut t = app_dirs::app_root(AppDataType::UserData, &APP_INFO).expect("Create data root");
+        let mut t = app_dirs::app_root(AppDataType::UserData, &APP_INFO)
+            .chain_err(|| "Create data root")?;
         t.push("Backups");
         t
     };
 
     if Path::new("Backups").exists() {
-        fs::rename("Backups", backups).expect("Move backups to new location");
+        fs::rename("Backups", backups)
+            .chain_err(|| "Move backups to new location")?;
     } else if !backups.exists() {
-        fs::create_dir(backups).expect("Create backup dir");
+        fs::create_dir(backups)
+            .chain_err(|| "Create backup dir")?;
     }
 
 
@@ -60,71 +69,41 @@ fn main() {
 }
 
 #[cfg(target_os = "macos")]
-fn install() {
-    let air_handle = {
-        if Path::new("Contents/LoL/RADS/projects/lol_air_client").exists() {
-            let handle = thread::Builder::new()
-                .name("air_thread".to_string())
-                .spawn(|| { air::install(); })
-                .unwrap();
-            Some(handle)
-        } else {
-            println!("Skipping Adobe Air update because missing in new client!");
-            None
-        }
-    };
-
-    let cg_handle = thread::Builder::new()
-        .name("cg_thread".to_string())
-        .spawn(|| { cg::install(); })
-        .unwrap();
-
-    if let Some(handle) = air_handle {
-        let air_result = handle.join();
-        if air_result.is_ok() {
-            println!("Adobe Air was updated!");
-        } else {
-            println!("Failed to update Adobe Air!");
-        }
-    }
-
-    let cg_result = cg_handle.join();
-    if cg_result.is_ok() {
-        println!("Cg was updated!");
+fn install() -> Result<()> {
+    if Path::new("Contents/LoL/RADS/projects/lol_air_client").exists() {
+        air::install()?;
     } else {
-        println!("Failed to update Cg!");
+        println!("Skipping Adobe Air update because it's missing in the modern client!");
     }
+
+    cg::install()?;
+
     println!("Done installing!");
+    Ok(())
 }
 
 #[cfg(not(target_os = "macos"))]
-fn install() {
-    let cg_update = thread::Builder::new()
-        .name("cg_thread".to_string())
-        .spawn(|| { cg::install(); })
-        .unwrap();
-
-    let cg_result = cg_update.join();
-    if cg_result.is_ok() {
-        println!("Cg was updated!");
-    } else {
-        println!("Failed to update Cg!");
-    }
+fn install() -> Result<()> {
+    cg::install()?;
     println!("Done installing!");
+    Ok(())
 }
 
 #[cfg(target_os = "macos")]
-fn uninstall() {
-    air::remove().expect("Failed to uninstall Adobe Air");
+fn uninstall() -> Result<()> {
+    air::remove()
+        .chain_err(|| "Failed to uninstall Adobe Air")?;
 
-    cg::remove().expect("Failed to uninstall Cg");
+    cg::remove().chain_err(|| "Failed to uninstall Cg")?;
 
     println!("Done uninstalling!");
+    Ok(())
 }
 
 #[cfg(not(target_os = "macos"))]
-fn uninstall() {
-    cg::remove().expect("Failed to uninstall Cg");
+fn uninstall() -> Result<()> {
+    cg::remove().chain_err(|| "Failed to uninstall Cg")?;
 
     println!("Done uninstalling!");
+    Ok(())
 }

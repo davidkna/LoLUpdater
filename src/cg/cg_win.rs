@@ -16,8 +16,8 @@ pub fn install() {
     println!("Backing up Nvidia Cg…");
     backup_cg().expect("Failed to backup Cg");
 
-    let download_dir = TempDir::new("lolupdater-cg-dl")
-        .expect("Failed to create temp dir for Nvidia Cg download");
+    let download_dir =
+        TempDir::new("lolupdater-cg-dl").expect("Failed to create temp dir for Nvidia Cg download");
     let url: &str = "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012_Setup.exe";
     let cg_exe = download_dir.path().join("cg.exe");
     println!("Downloading Nvidia Cg…");
@@ -39,9 +39,8 @@ pub fn remove() -> Result<()> {
 
 fn backup_cg() -> Result<()> {
     let lol_cl_path = join_version(&PathBuf::from(LOL_CL_PATH[0]),
-                                   &PathBuf::from(LOL_CL_PATH[1]))
-        ?
-        .join("Cg.framework");
+                                   &PathBuf::from(LOL_CL_PATH[1]))?
+            .join("Cg.framework");
 
     let cg_backup = Path::new("Backups/Cg.framework");
     if cg_backup.exists() {
@@ -54,22 +53,19 @@ fn backup_cg() -> Result<()> {
 
 fn update_cg(cg_dir: &Path) -> Result<()> {
     let lol_cl_path = join_version(&PathBuf::from(LOL_CL_PATH[0]),
-                                   &PathBuf::from(LOL_CL_PATH[1]))
-        ?
-        .join("Cg.framework");
+                                   &PathBuf::from(LOL_CL_PATH[1]))?
+            .join("Cg.framework");
     update_file(cg_dir, &lol_cl_path)?;
 
     let lol_sln_path = join_version(&PathBuf::from(LOL_SLN_PATH[0]),
-                                    &PathBuf::from(LOL_SLN_PATH[1]))
-        ?
-        .join("Cg.framework");
+                                    &PathBuf::from(LOL_SLN_PATH[1]))?
+            .join("Cg.framework");
     update_file(cg_dir, &lol_sln_path)?;
     Ok(())
 }
 
 fn install_cg_exe(cg_exe: &Path) -> Result<PathBuf> {
-    Command::new(cg_exe).arg("/verysilent")
-        .output()?;
+    Command::new(cg_exe).arg("/verysilent").output()?;
     let cg_bin = env::var("CG_BIN_PATH")?;
     Ok(PathBuf::from(cg_bin))
 }

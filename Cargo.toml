@@ -7,6 +7,7 @@ authors = ["David Knaack <davidkna@users.noreply.github.com>"]
 lto = true
 
 [dependencies]
+error-chain = "~0.10.0"
 lazy_static = "~0.2.2"
 ring = "~0.7.1"
 regex = "~0.2.1"

@@ -1,12 +1,11 @@
 use std::io::prelude::*;
-use std::io::{self, ErrorKind};
+use std::io;
 use std::fs::File;
 use std::fs;
 use std::mem;
 use std::path::{Path, PathBuf};
 #[cfg(target_os = "macos")]
 use std::process::Command;
-use std::result;
 
 use app_dirs::AppInfo;
 use ring::{digest, test};
@@ -17,7 +16,7 @@ use tempdir::{self, TempDir};
 #[cfg(target_os = "macos")]
 use walkdir::WalkDir;
 
-use errors::LoLUpdaterError;
+pub use errors::*;
 
 pub const APP_INFO: AppInfo = AppInfo {
     name: "LoLUpdater-rs",
@@ -26,7 +25,6 @@ pub const APP_INFO: AppInfo = AppInfo {
 
 pub const DEFAULT_BUF_SIZE: usize = 8 * 1024;
 
-pub type Result<T> = result::Result<T, LoLUpdaterError>;
 
 #[cfg(target_os = "macos")]
 pub fn update_dir(from: &Path, to: &Path) -> Result<()> {
@@ -50,7 +48,11 @@ pub fn update_dir(from: &Path, to: &Path) -> Result<()> {
 
 pub fn update_file(from: &Path, to: &Path) -> Result<()> {
     let mut reader = File::open(from)?;
-    let mut writer = fs::OpenOptions::new().write(true).create(true).truncate(true).open(to)?;
+    let mut writer = fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(to)?;
 
     io::copy(&mut reader, &mut writer)?;
     Ok(())
@@ -59,7 +61,8 @@ pub fn update_file(from: &Path, to: &Path) -> Result<()> {
 #[cfg(target_os = "macos")]
 pub fn mount(image_path: &Path) -> Result<tempdir::TempDir> {
     let mountpoint = TempDir::new("lolupdater-mount")?;
-    let exit_status = Command::new("/usr/bin/hdiutil").arg("attach")
+    let exit_status = Command::new("/usr/bin/hdiutil")
+        .arg("attach")
         .arg("-nobrowse")
         .arg("-quiet")
         .arg("-mountpoint")
@@ -68,20 +71,21 @@ pub fn mount(image_path: &Path) -> Result<tempdir::TempDir> {
         .spawn()?
         .wait()?;
     if !exit_status.success() {
-        return Err(LoLUpdaterError::Mount);
+        return Err("Mounting failed!".into());
     }
     Ok(mountpoint)
 }
 
 #[cfg(target_os = "macos")]
 pub fn unmount(mountpoint: &Path) -> Result<()> {
-    let exit_status = Command::new("/usr/bin/hdiutil").arg("detach")
+    let exit_status = Command::new("/usr/bin/hdiutil")
+        .arg("detach")
         .arg("-quiet")
         .arg(mountpoint.as_os_str())
         .spawn()?
         .wait()?;
     if !exit_status.success() {
-        return Err(LoLUpdaterError::Unmount);
+        return Err("Unmounting failed!".into());
     }
     Ok(())
 }
@@ -92,7 +96,7 @@ pub fn download(target_path: &Path, url: &str, expected_hash: Option<&str>) -> R
     let mut target_image_file = File::create(target_path)?;
     match expected_hash {
         Some(h) => copy_digest(&mut res, &mut target_image_file, h),
-        None => io::copy(&mut res, &mut target_image_file),
+        None => io::copy(&mut res, &mut target_image_file).map_err(|x| ::errors::Error::from(x)),
     }?;
     Ok(())
 }
@@ -136,9 +140,11 @@ fn to_version(input: &str) -> u32 {
 
 pub fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
     let dir_iter = head.read_dir()?;
-    let version = dir_iter.filter_map(|s| {
+    let version = dir_iter
+        .filter_map(|s| {
             let name = s.expect("Failed to unwrap DirEntry!").file_name();
-            let name_str = name.into_string().expect("Failed to filename as Unicode!");
+            let name_str = name.into_string()
+                .expect("Failed to filename as Unicode!");
             if VERSION_REGEX.is_match(&name_str) {
                 return Some(name_str);
             }
@@ -152,7 +158,7 @@ pub fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
 pub fn copy_digest<R: ?Sized, W: ?Sized>(reader: &mut R,
                                          writer: &mut W,
                                          expected_hex: &str)
-                                         -> io::Result<u64>
+                                         -> Result<u64>
     where R: Read,
           W: Write
 {
@@ -163,15 +169,15 @@ pub fn copy_digest<R: ?Sized, W: ?Sized>(reader: &mut R,
         let len = match reader.read(&mut buf) {
             Ok(0) => {
                 let actual = ctx.finish();
-                let expected: Vec<u8> = test::from_hex(expected_hex).unwrap();
+                let expected: Vec<u8> = test::from_hex(expected_hex)?;
                 if &expected != &actual.as_ref() {
-                    return Err(io::Error::new(io::ErrorKind::Other, "Checksum validation Failed!"));
+                    return Err("Checksum validation Failed!".into());
                 }
                 return Ok(written);
             }
             Ok(len) => len,
-            Err(ref e) if e.kind() == ErrorKind::Interrupted => continue,
-            Err(e) => return Err(e),
+            Err(ref e) if e.kind() == io::ErrorKind::Interrupted => continue,
+            Err(e) => return Err(e).map_err(Error::from),
         };
         writer.write_all(&buf[..len])?;
         ctx.update(&buf[..len]);
