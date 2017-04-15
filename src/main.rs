@@ -34,9 +34,10 @@ const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 quick_main!(run);
 
 fn run() -> Result<()> {
-    println!("LoLUpdater for macOS {}", VERSION);
+    println!("LoLUpdater for macOS v{}", VERSION);
     println!("Report errors, feature requests or any issues at \
               https://github.com/LoLUpdater/LoLUpdater-macOS/issues.");
+    println!("");
 
     let mode = env::args().nth(1).unwrap_or("install".to_string());
     let lol_dir = env::args()
