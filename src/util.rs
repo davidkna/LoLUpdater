@@ -155,6 +155,17 @@ pub fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
     Ok(head.join(version).join(tail))
 }
 
+#[test]
+fn regex_works() {
+    for i in 0..255 {
+        let test_version = format!("{0}.{0}.{0}.{0}", i);
+        assert!(VERSION_REGEX.is_match(&test_version));
+    }
+    let i = 256;
+    let test_version = format!("{0}.{0}.{0}.{0}", i);
+    assert!(!VERSION_REGEX.is_match(&test_version));
+}
+
 pub fn copy_digest<R: ?Sized, W: ?Sized>(reader: &mut R,
                                          writer: &mut W,
                                          expected_hex: &str)
