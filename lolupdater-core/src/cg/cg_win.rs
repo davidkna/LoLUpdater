@@ -12,7 +12,7 @@ const LOL_CL_PATH: [&'static str; 2] = ["Contents/LoL/RADS/solutions/lol_game_cl
 const LOL_SLN_PATH: [&'static str; 2] = ["Contents/LoL/RADS/projects/lol_game_client/releases",
                                          "deploy/LeagueOfLegends.app/Contents/Frameworks"];
 
-pub fn install() {
+pub fn install() -> Result<()> {
     println!("Backing up Nvidia Cg…");
     backup_cg().expect("Failed to backup Cg");
 
@@ -29,6 +29,7 @@ pub fn install() {
 
     println!("Updating Nvidia Cg…");
     update_cg(&cg_bin).expect("Failed to update Cg");
+    Ok(())
 
 }
 
