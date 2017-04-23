@@ -17,5 +17,5 @@ flate2 = "~0.2.19"
 tar = { version = "0.4", default-features = false }
 walkdir = "~1.0.7"
 
-#[target.'cfg(not(target_os = "macos"))'.dependencies]
-#raw-cpuid = "~2.0.2"
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+raw-cpuid = "~3.0.0"
