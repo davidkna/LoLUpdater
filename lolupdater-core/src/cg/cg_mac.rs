@@ -64,8 +64,7 @@ fn download_cg(cg_dir: &Path) -> Result<()> {
         .chain_err(|| "Downloading Nvidia Cg failed!")?;
 
     println!("Mounting Nvidia Cg…");
-    let mount_dir = mount(&image_file)
-        .chain_err(|| "Failed to mount Cg image")?;
+    let mount_dir = mount(&image_file).chain_err(|| "Failed to mount Cg image")?;
 
     println!("Extracting Nvidia Cg…");
     extract_cg(mount_dir.path(), cg_dir)?;

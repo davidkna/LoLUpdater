@@ -96,7 +96,7 @@ pub fn download(target_path: &Path, url: &str, expected_hash: Option<&str>) -> R
     let mut target_image_file = File::create(target_path)?;
     match expected_hash {
         Some(h) => copy_digest(&mut res, &mut target_image_file, h),
-        None => io::copy(&mut res, &mut target_image_file).map_err(|x| ::errors::Error::from(x)),
+        None => io::copy(&mut res, &mut target_image_file).map_err(::errors::Error::from),
     }?;
     Ok(())
 }
@@ -149,14 +149,13 @@ pub fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
     let dir_iter = head.read_dir()?;
     let version = dir_iter
         .filter_map(|s| {
-            let name = s.expect("Failed to unwrap DirEntry!").file_name();
-            let name_str = name.into_string()
-                .expect("Failed to filename as Unicode!");
-            if VERSION_REGEX.is_match(&name_str) {
-                return Some(name_str);
-            }
-            None
-        })
+                        let name = s.expect("Failed to unwrap DirEntry!").file_name();
+                        let name_str = name.into_string().expect("Failed to filename as Unicode!");
+                        if VERSION_REGEX.is_match(&name_str) {
+                            return Some(name_str);
+                        }
+                        None
+                    })
         .max_by_key(|k| to_version(k))
         .expect("Failed to get max");
     Ok(head.join(version).join(tail))
@@ -188,7 +187,7 @@ pub fn copy_digest<R: ?Sized, W: ?Sized>(reader: &mut R,
             Ok(0) => {
                 let actual = ctx.finish();
                 let expected: Vec<u8> = test::from_hex(expected_hex)?;
-                if &expected != &actual.as_ref() {
+                if expected != actual.as_ref() {
                     return Err("Checksum validation Failed!".into());
                 }
                 return Ok(written);

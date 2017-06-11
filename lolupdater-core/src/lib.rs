@@ -1,3 +1,6 @@
+#![cfg_attr(feature="clippy", feature(plugin))]
+
+#![cfg_attr(feature="clippy", plugin(clippy))]
 
 extern crate app_dirs;
 #[macro_use]
@@ -37,7 +40,7 @@ pub fn init_backups() -> Result<()> {
 
     let backups = {
         let mut t = app_dirs::app_root(AppDataType::UserData, &APP_INFO)
-            .chain_err(|| "Create data root")?;
+            .chain_err(|| "Create data rootg")?;
         t.push("Backups");
         t
     };

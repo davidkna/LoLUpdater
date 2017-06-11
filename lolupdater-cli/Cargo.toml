@@ -8,5 +8,10 @@ path = "../lolupdater-core"
 version = "~3.3.0"
 
 [dependencies]
-error-chain = "~0.10.0"
 app_dirs = "~1.1.1"
+error-chain = "~0.10.0"
+
+clippy = {version = "*", optional = true}
+
+[features]
+default = []
