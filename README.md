@@ -1,4 +1,4 @@
-# LoLUpdater v3.2.0 for macOS
+# LoLUpdater v3.3.0 for macOS
 [Website](https://LoLUpdater.com)
 ## Usage
 ### With no arguments
