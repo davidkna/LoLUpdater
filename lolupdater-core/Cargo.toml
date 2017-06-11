@@ -1,12 +1,12 @@
 [package]
 name = "lolupdater-core"
-version = "3.2.0"
+version = "3.3.0"
 authors = ["David Knaack <davidkna@users.noreply.github.com>"]
 
 [dependencies]
 error-chain = "~0.10.0"
 lazy_static = "~0.2.2"
-ring = "~0.7.1"
+ring = "~0.10.0"
 regex = "~0.2.1"
 reqwest = "~0.5"
 tempdir = "~0.3.5"
