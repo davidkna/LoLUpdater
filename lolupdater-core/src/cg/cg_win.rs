@@ -6,11 +6,15 @@ use tempdir::TempDir;
 
 use util::*;
 
-const LOL_CL_PATH: [&'static str; 2] = ["Contents/LoL/RADS/solutions/lol_game_client_sln/releases",
-                                        "deploy/LeagueOfLegends.app/Contents/Frameworks"];
+const LOL_CL_PATH: [&'static str; 2] = [
+    "Contents/LoL/RADS/solutions/lol_game_client_sln/releases",
+    "deploy/LeagueOfLegends.app/Contents/Frameworks",
+];
 
-const LOL_SLN_PATH: [&'static str; 2] = ["Contents/LoL/RADS/projects/lol_game_client/releases",
-                                         "deploy/LeagueOfLegends.app/Contents/Frameworks"];
+const LOL_SLN_PATH: [&'static str; 2] = [
+    "Contents/LoL/RADS/projects/lol_game_client/releases",
+    "deploy/LeagueOfLegends.app/Contents/Frameworks",
+];
 
 pub fn install() -> Result<()> {
     println!("Backing up Nvidia Cg…");
@@ -39,9 +43,11 @@ pub fn remove() -> Result<()> {
 }
 
 fn backup_cg() -> Result<()> {
-    let lol_cl_path = join_version(&PathBuf::from(LOL_CL_PATH[0]),
-                                   &PathBuf::from(LOL_CL_PATH[1]))?
-            .join("Cg.framework");
+    let lol_cl_path = join_version(
+        &PathBuf::from(LOL_CL_PATH[0]),
+        &PathBuf::from(LOL_CL_PATH[1]),
+    )?
+        .join("Cg.framework");
 
     let cg_backup = Path::new("Backups/Cg.framework");
     if cg_backup.exists() {
@@ -53,14 +59,18 @@ fn backup_cg() -> Result<()> {
 }
 
 fn update_cg(cg_dir: &Path) -> Result<()> {
-    let lol_cl_path = join_version(&PathBuf::from(LOL_CL_PATH[0]),
-                                   &PathBuf::from(LOL_CL_PATH[1]))?
-            .join("Cg.framework");
+    let lol_cl_path = join_version(
+        &PathBuf::from(LOL_CL_PATH[0]),
+        &PathBuf::from(LOL_CL_PATH[1]),
+    )?
+        .join("Cg.framework");
     update_file(cg_dir, &lol_cl_path)?;
 
-    let lol_sln_path = join_version(&PathBuf::from(LOL_SLN_PATH[0]),
-                                    &PathBuf::from(LOL_SLN_PATH[1]))?
-            .join("Cg.framework");
+    let lol_sln_path = join_version(
+        &PathBuf::from(LOL_SLN_PATH[0]),
+        &PathBuf::from(LOL_SLN_PATH[1]),
+    )?
+        .join("Cg.framework");
     update_file(cg_dir, &lol_sln_path)?;
     Ok(())
 }

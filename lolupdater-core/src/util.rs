@@ -149,13 +149,13 @@ pub fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
     let dir_iter = head.read_dir()?;
     let version = dir_iter
         .filter_map(|s| {
-                        let name = s.expect("Failed to unwrap DirEntry!").file_name();
-                        let name_str = name.into_string().expect("Failed to filename as Unicode!");
-                        if VERSION_REGEX.is_match(&name_str) {
-                            return Some(name_str);
-                        }
-                        None
-                    })
+            let name = s.expect("Failed to unwrap DirEntry!").file_name();
+            let name_str = name.into_string().expect("Failed to filename as Unicode!");
+            if VERSION_REGEX.is_match(&name_str) {
+                return Some(name_str);
+            }
+            None
+        })
         .max_by_key(|k| to_version(k))
         .expect("Failed to get max");
     Ok(head.join(version).join(tail))
@@ -172,12 +172,14 @@ fn regex_works() {
     assert!(!VERSION_REGEX.is_match(&test_version));
 }
 
-pub fn copy_digest<R: ?Sized, W: ?Sized>(reader: &mut R,
-                                         writer: &mut W,
-                                         expected_hex: &str)
-                                         -> Result<u64>
-    where R: Read,
-          W: Write
+pub fn copy_digest<R: ?Sized, W: ?Sized>(
+    reader: &mut R,
+    writer: &mut W,
+    expected_hex: &str,
+) -> Result<u64>
+where
+    R: Read,
+    W: Write,
 {
     let mut buf = [0; DEFAULT_BUF_SIZE];
     let mut ctx = digest::Context::new(&digest::SHA512);

@@ -30,9 +30,11 @@ use std::fs;
 use util::*;
 
 pub fn init_backups() -> Result<()> {
-    let air_backup_path = app_dirs::get_app_dir(AppDataType::UserData,
-                                                &APP_INFO,
-                                                "Backups/Adobe AIR.framework")?;
+    let air_backup_path = app_dirs::get_app_dir(
+        AppDataType::UserData,
+        &APP_INFO,
+        "Backups/Adobe AIR.framework",
+    )?;
     if air_backup_path.exists() {
         println!("Removing obsolete Air backup!");
         fs::remove_dir_all(air_backup_path)?;
@@ -46,11 +48,11 @@ pub fn init_backups() -> Result<()> {
     };
 
     if Path::new("Backups").exists() {
-        fs::rename("Backups", backups)
-            .chain_err(|| "Move backups to new location")?;
+        fs::rename("Backups", backups).chain_err(
+            || "Move backups to new location",
+        )?;
     } else if !backups.exists() {
-        fs::create_dir(backups)
-            .chain_err(|| "Create backup dir")?;
+        fs::create_dir(backups).chain_err(|| "Create backup dir")?;
     }
     Ok(())
 }

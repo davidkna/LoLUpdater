@@ -19,16 +19,19 @@ quick_main!(run);
 
 fn run() -> Result<()> {
     println!("LoLUpdater for macOS v{}", VERSION);
-    println!("Report errors, feature requests or any issues at \
-              https://github.com/LoLUpdater/LoLUpdater-macOS/issues.");
+    println!(
+        "Report errors, feature requests or any issues at \
+              https://github.com/LoLUpdater/LoLUpdater-macOS/issues."
+    );
     println!("");
 
     let mode = env::args().nth(1).unwrap_or_else(|| "install".to_string());
-    let lol_dir = env::args()
-        .nth(2)
-        .unwrap_or_else(|| "/Applications/League of Legends.app".to_string());
-    env::set_current_dir(lol_dir)
-        .chain_err(|| "Failed to set CWD to LoL location")?;
+    let lol_dir = env::args().nth(2).unwrap_or_else(|| {
+        "/Applications/League of Legends.app".to_string()
+    });
+    env::set_current_dir(lol_dir).chain_err(
+        || "Failed to set CWD to LoL location",
+    )?;
 
     init_backups()?;
 
