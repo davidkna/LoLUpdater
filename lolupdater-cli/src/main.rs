@@ -29,29 +29,10 @@ fn run() -> Result<()> {
     let lol_dir = env::args().nth(2).unwrap_or_else(|| {
         "/Applications/League of Legends.app".to_string()
     });
-    env::set_current_dir(lol_dir).chain_err(
-        || "Failed to set CWD to LoL location",
-    )?;
-
-    init_backups()?;
-
 
     match mode.as_ref() {
-        "install" => install(),
-        "uninstall" => uninstall(),
+        "install" => install(&lol_dir),
+        "uninstall" => uninstall(&lol_dir),
         _ => panic!("Unkown mode!"),
     }
-}
-
-fn install() -> Result<()> {
-    cg::install()?;
-    println!("Done installing!");
-    Ok(())
-}
-
-fn uninstall() -> Result<()> {
-    cg::remove().chain_err(|| "Failed to uninstall Cg")?;
-
-    println!("Done uninstalling!");
-    Ok(())
 }

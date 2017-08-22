@@ -24,10 +24,13 @@ pub mod cg;
 pub mod errors;
 pub mod util;
 
+use std::env;
 use std::path::Path;
 use app_dirs::AppDataType;
 use std::fs;
 use util::*;
+
+pub const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 pub fn init_backups() -> Result<()> {
     let air_backup_path = app_dirs::get_app_dir(
@@ -54,5 +57,26 @@ pub fn init_backups() -> Result<()> {
     } else if !backups.exists() {
         fs::create_dir(backups).chain_err(|| "Create backup dir")?;
     }
+    Ok(())
+}
+
+pub fn install(lol_dir: &str) -> Result<()> {
+    env::set_current_dir(lol_dir).chain_err(
+        || "Failed to set CWD to LoL location",
+    )?;
+    init_backups()?;
+    cg::install()?;
+
+    println!("Done installing!");
+    Ok(())
+}
+
+pub fn uninstall(lol_dir: &str) -> Result<()> {
+    env::set_current_dir(lol_dir).chain_err(
+        || "Failed to set CWD to LoL location",
+    )?;
+    cg::remove().chain_err(|| "Failed to uninstall Cg")?;
+
+    println!("Done uninstalling!");
     Ok(())
 }
