@@ -2,8 +2,6 @@
 
 #![cfg_attr(feature="clippy", plugin(clippy))]
 
-#![feature(drop_types_in_const)]
-
 extern crate nfd;
 extern crate ui;
 extern crate lolupdater_core;
