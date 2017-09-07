@@ -3,9 +3,14 @@ extern crate app_dirs;
 extern crate error_chain;
 #[cfg(target_os = "macos")]
 extern crate flate2;
+#[cfg(target_os = "macos")]
+extern crate plist;
 extern crate regex;
 extern crate reqwest;
 extern crate ring;
+#[cfg(target_os = "macos")]
+#[macro_use]
+extern crate serde_derive;
 #[cfg(target_os = "macos")]
 extern crate tar;
 extern crate tempdir;
@@ -25,6 +30,7 @@ pub mod util;
 
 use std::env;
 use app_dirs::AppDataType;
+use plist::serde::deserialize;
 use std::fs;
 use util::*;
 
@@ -61,8 +67,29 @@ pub fn uninstall(lol_dir: &str) -> Result<()> {
     Ok(())
 }
 
+#[cfg(target_os = "macos")]
+#[allow(non_snake_case)]
+#[derive(Deserialize)]
+struct Info {
+    CFBundleIdentifier: String,
+}
+
 fn set_lol_dir(lol_dir: &str) -> Result<()> {
     env::set_current_dir(lol_dir).chain_err(
         || "Failed to set CWD to LoL location. Did you set the correct path for LoL?",
-    )
+    )?;
+    if cfg!(target_os = "macos") {
+        let info_plist = std::fs::File::open("Contents/Info.plist").chain_err(
+            || "Failed to find Info.plist. Is this an app bundle?",
+        )?;
+        let info: Info = deserialize(info_plist).chain_err(
+            || "Could not parse Info.plist",
+        )?;
+        if info.CFBundleIdentifier != "com.riotgames.MacContainer" {
+            return Err(
+                "The chosen app bundle is not LoL. Please check again!".into(),
+            );
+        }
+    }
+    Ok(())
 }
