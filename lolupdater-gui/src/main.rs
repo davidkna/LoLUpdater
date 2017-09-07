@@ -92,7 +92,6 @@ fn ask_for_loldir(_: &Button) {
     });
 
     if let nfd::Response::Okay(file_path) = result {
-        print!("{}", file_path);
         LOLPATH_ENTRY.with(|lpe| { lpe.set_text(&file_path); });
     }
 }
