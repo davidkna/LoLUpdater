@@ -1,5 +1,11 @@
 #!/bin/bash
 
+OLDCFLAGS="${CFLAGS}"
+OLDCXXFLAGS="${CXXFLAGS}"
+
+unset CFLAGS
+unset CXXFLAGS
+
 cargo update
 cargo build --release
 
@@ -12,10 +18,13 @@ TMPDIR="$(mktemp -d)"
 cp ./LICENSE "$TMPDIR"
 cp ./README.MD "$TMPDIR"
 cp ./target/release/lolupdater-cli "$TMPDIR"
-tar -cvf "./dist/lolupdater.tar" --exclude=".DS_Store" -C "$TMPDIR" .
-rm "./dist/lolupdater.tar.gz"
-zopfli -v "./dist/lolupdater.tar"
-rm "./dist/lolupdater.tar"
+tar -cvf "./dist/lolupdater-cli.tar" --exclude=".DS_Store" -C "$TMPDIR" .
+rm "./dist/lolupdater-cli.tar.gz"
+zopfli -v "./dist/lolupdater-cli.tar"
+rm "./dist/lolupdater-cli.tar"
 rm -rf "$TMPDIR"
 
 cargo graph | dot -Tpng > graph.png
+
+export CFLAGS="${OLDCFLAGS}"
+export CXXFLAGS="${OLDCXXFLAGS}"
