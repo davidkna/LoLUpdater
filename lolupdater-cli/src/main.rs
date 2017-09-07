@@ -17,13 +17,20 @@ use errors::*;
 quick_main!(run);
 
 fn run() -> Result<()> {
-    println!("LoLUpdater for macOS v{}", VERSION);
+    println!("LoLUpdater for macOS {}", VERSION);
     println!(
         "Report errors, feature requests or any issues at \
               https://github.com/LoLUpdater/LoLUpdater-macOS/issues.\n"
     );
 
     init_log();
+
+    if update_available()? {
+        println!(
+            "A new update is available.\nPlease download it from https://github.com/LoLUpdater/LoLUpdater-macOS/releases/latest to use LoLUpdater."
+        );
+        ::std::process::exit(1);
+    }
 
     let mode = env::args().nth(1).unwrap_or_else(|| "install".to_string());
     let lol_dir = env::args().nth(2).unwrap_or_else(|| {

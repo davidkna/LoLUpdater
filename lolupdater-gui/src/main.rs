@@ -15,7 +15,7 @@ use errors::*;
 
 
 thread_local! {
-    static MAIN_WINDOW: Window = Window::new(&format!("LoLUpdater for macOS v{}", VERSION), 640, 240, true);
+    static MAIN_WINDOW: Window = Window::new(&format!("LoLUpdater for macOS {}", VERSION), 640, 240, true);
     static LOLPATH_ENTRY: Entry = Entry::new();
     static INSTALLMODE_RADIO: RadioButtons = RadioButtons::new();
     static CHANNEL: (mpsc::Sender<Result<()>>, mpsc::Receiver<Result<()>>) = mpsc::channel();
@@ -23,7 +23,7 @@ thread_local! {
 }
 
 fn run() {
-    let program_name = format!("LoLUpdater for macOS v{}", VERSION);
+    let program_name = format!("LoLUpdater for macOS {}", VERSION);
 
     let mainwin = MAIN_WINDOW.with(|w| w.clone());
     mainwin.set_margined(true);
@@ -74,8 +74,28 @@ fn run() {
     let install_button = Button::new("Patch!");
     install_button.on_clicked(Box::new(install_clicked));
     hbox.append(install_button.clone().into(), false);
+    install_button.disable();
 
     mainwin.show();
+    let has_update = update_available();
+    if let Ok(has_update) = has_update {
+        if has_update {
+            msg_box_error(
+                &mainwin,
+                "Update available",
+                "A new update is available.\nPlease download it from https://github.com/LoLUpdater/LoLUpdater-macOS/releases/latest to use LoLUpdater.",
+            );
+            ui::quit();
+            ::std::process::exit(0);
+        }
+    } else if let Err(ref e) = has_update {
+        show_error_message(e);
+        ui::quit();
+        ::std::process::exit(1);
+    }
+
+    install_button.enable();
+
     ui::main();
 }
 
@@ -98,6 +118,7 @@ fn ask_for_loldir(_: &Button) {
 
 fn install_clicked(install_button: &Button) {
     install_button.disable();
+    install_button.set_text("Working…");
     let mode = INSTALLMODE_RADIO.with(|ir| ir.selected());
     let target = LOLPATH_ENTRY.with(|lpe| lpe.text());
 
@@ -155,16 +176,22 @@ fn install_done(result: Result<()>) {
         msg_box(
             win,
             "Updating successful!",
-            "Updating successful!\nLoLUpdater needs to be rerun after every LoL update.",
+            "LoLUpdater needs to be rerun after every LoL update.",
         );
     } else if let Err(ref e) = result {
-        let mut error_msg = format!("Error: {}\n", e);
-        for e in e.iter().skip(1) {
-            let error_line = format!("Caused by: {}\n", e);
+        show_error_message(e);
+    });
+    ui::quit();
+}
+
+fn show_error_message(error: &Error) {
+    MAIN_WINDOW.with(|win| {
+        let mut error_msg = format!("Error: {}\n", error);
+        for error in error.iter().skip(1) {
+            let error_line = format!("Caused by: {}\n", error);
             error_msg.push_str(&error_line);
         }
         error_msg.push_str("\nPlease report this error on Discord or Github!");
-        msg_box_error(win, "Updating not successful!", &error_msg);
+        msg_box_error(win, "Error!", &error_msg);
     });
-    ui::quit();
 }

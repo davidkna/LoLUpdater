@@ -8,9 +8,9 @@ extern crate plist;
 extern crate regex;
 extern crate reqwest;
 extern crate ring;
-#[cfg(target_os = "macos")]
 #[macro_use]
 extern crate serde_derive;
+extern crate serde_json;
 #[cfg(target_os = "macos")]
 extern crate tar;
 extern crate tempdir;
@@ -34,7 +34,7 @@ use plist::serde::deserialize;
 use std::fs;
 use util::*;
 
-pub const VERSION: &'static str = env!("CARGO_PKG_VERSION");
+pub const VERSION: &str = concat!("v", env!("CARGO_PKG_VERSION"));
 
 pub fn init_backups() -> Result<()> {
     let backups = {
@@ -92,4 +92,21 @@ fn set_lol_dir(lol_dir: &str) -> Result<()> {
         }
     }
     Ok(())
+}
+
+#[derive(Deserialize, Debug)]
+struct GithubRelease {
+    tag_name: String,
+}
+
+
+pub fn update_available() -> Result<bool> {
+    info!("Checking for updates…");
+    let release_dl = reqwest::get(
+        "https://api.github.com/repos/LoLUpdater/LoLUpdater-macOS/releases/latest",
+    )?;
+
+    let git_release: GithubRelease = serde_json::from_reader(release_dl)?;
+
+    Ok(git_release.tag_name != VERSION)
 }

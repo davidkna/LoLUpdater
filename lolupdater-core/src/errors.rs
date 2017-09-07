@@ -6,6 +6,7 @@ use std::path;
 
 use app_dirs;
 use reqwest;
+use serde_json;
 #[cfg(target_os = "macos")]
 use walkdir;
 
@@ -17,6 +18,7 @@ error_chain! {
         Parse(num::ParseIntError);
         Prefix(path::StripPrefixError);
         Reqwest(reqwest::Error);
+        SerdeJSON(serde_json::Error);
         WalkDir(walkdir::Error) #[cfg(target_os = "macos")];
     }
 }

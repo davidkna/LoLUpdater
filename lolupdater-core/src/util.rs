@@ -182,7 +182,7 @@ where
     W: Write,
 {
     let mut buf = [0; DEFAULT_BUF_SIZE];
-    let mut ctx = digest::Context::new(&digest::SHA512);
+    let mut ctx = digest::Context::new(&digest::SHA384);
     let mut written = 0;
     loop {
         let len = match reader.read(&mut buf) {

@@ -10,12 +10,12 @@ use tar::Archive;
 use util::*;
 
 
-const LOL_CL_PATH: [&'static str; 2] = [
+const LOL_CL_PATH: [&str; 2] = [
     "Contents/LoL/RADS/solutions/lol_game_client_sln/releases",
     "deploy/LeagueOfLegends.app/Contents/Frameworks",
 ];
 
-const LOL_SLN_PATH: [&'static str; 2] = [
+const LOL_SLN_PATH: [&str; 2] = [
     "Contents/LoL/RADS/projects/lol_game_client/releases",
     "deploy/LeagueOfLegends.app/Contents/Frameworks",
 ];
@@ -28,7 +28,7 @@ pub fn install() -> Result<()> {
     if !cg_dir.exists() {
         download_cg(&cg_dir)?;
     } else {
-        info!("Nvidia Cg is alread cached!")
+        info!("Nvidia Cg is already cached!")
     }
 
     info!("Updating Nvidia Cg…\n");
@@ -63,7 +63,7 @@ fn download_cg(cg_dir: &Path) -> Result<()> {
     let image_file = download_dir.path().join("cg.dmg");
 
     info!("Downloading Nvidia Cg…");
-    let cg_hash = "56abcc26d2774b1a33adf286c09e83b6f878c270d4dd5bff5952b83c21af8fa69e3d37060f08b6869a9a40a0907be3dacc2ee2ef1c28916069400ed867b83925";
+    let cg_hash = "96c86ab60abcf022554017b722236a0f1673618f3796305ebc8f5d5854552ccc5780aafdbd4473abd65349995e9c573b";
     download(&image_file, url, Some(cg_hash)).chain_err(
         || "Downloading Nvidia Cg failed!",
     )?;
