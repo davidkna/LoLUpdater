@@ -11,6 +11,7 @@ cargo build --release
 
 rm ./dist/LoLUpdater.app/Contents/MacOS/lolupdater-gui
 cp ./target/release/lolupdater-gui ./dist/LoLUpdater.app/Contents/MacOS/
+rm ./dist/LoLUpdater-*.dmg
 create-dmg ./dist/LoLUpdater.app
 mv LoLUpdater-*.dmg ./dist
 
