@@ -1,6 +1,8 @@
 #!/bin/bash
 
+cargo update
 cargo build --release
+
 rm ./dist/LoLUpdater.app/Contents/MacOS/lolupdater-gui
 cp ./target/release/lolupdater-gui ./dist/LoLUpdater.app/Contents/MacOS/
 create-dmg ./dist/LoLUpdater.app
@@ -15,3 +17,5 @@ rm "./dist/lolupdater.tar.gz"
 zopfli -v "./dist/lolupdater.tar"
 rm "./dist/lolupdater.tar"
 rm -rf "$TMPDIR"
+
+cargo graph | dot -Tpng > graph.png
