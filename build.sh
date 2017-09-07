@@ -12,7 +12,7 @@ TMPDIR="$(mktemp -d)"
 cp ./LICENSE "$TMPDIR"
 cp ./README.MD "$TMPDIR"
 cp ./target/release/lolupdater-cli "$TMPDIR"
-tar -cvf "./dist/lolupdater.tar" --exclude=".DS_Store" "$TMPDIR"
+tar -cvf "./dist/lolupdater.tar" --exclude=".DS_Store" -C "$TMPDIR" .
 rm "./dist/lolupdater.tar.gz"
 zopfli -v "./dist/lolupdater.tar"
 rm "./dist/lolupdater.tar"
