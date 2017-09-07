@@ -158,12 +158,12 @@ fn install_done(result: Result<()>) {
             "Updating successful!\nLoLUpdater needs to be rerun after every LoL update.",
         );
     } else if let Err(ref e) = result {
-        let mut error_msg = format!("error: {}\n", e);
+        let mut error_msg = format!("Error: {}\n", e);
         for e in e.iter().skip(1) {
-            let error_line = format!("caused by: {}\n", e);
+            let error_line = format!("Caused by: {}\n", e);
             error_msg.push_str(&error_line);
         }
-        error_msg.push_str("Please report this error on Discord or Github!");
+        error_msg.push_str("\nPlease report this error on Discord or Github!");
         msg_box_error(win, "Updating not successful!", &error_msg);
     });
     ui::quit();
