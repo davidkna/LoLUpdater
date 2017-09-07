@@ -1,7 +1,3 @@
-#![cfg_attr(feature="clippy", feature(plugin))]
-
-#![cfg_attr(feature="clippy", plugin(clippy))]
-
 extern crate app_dirs;
 #[macro_use]
 extern crate error_chain;
@@ -18,6 +14,9 @@ extern crate walkdir;
 
 #[macro_use]
 extern crate lazy_static;
+
+#[macro_use]
+extern crate log;
 
 #[cfg(target_os = "macos")]
 pub mod cg;
@@ -46,22 +45,24 @@ pub fn init_backups() -> Result<()> {
 }
 
 pub fn install(lol_dir: &str) -> Result<()> {
-    env::set_current_dir(lol_dir).chain_err(
-        || "Failed to set CWD to LoL location",
-    )?;
+    set_lol_dir(lol_dir)?;
     init_backups()?;
     cg::install()?;
 
-    println!("Done installing!");
+    info!("Done installing!");
     Ok(())
 }
 
 pub fn uninstall(lol_dir: &str) -> Result<()> {
-    env::set_current_dir(lol_dir).chain_err(
-        || "Failed to set CWD to LoL location",
-    )?;
+    set_lol_dir(lol_dir)?;
     cg::remove().chain_err(|| "Failed to uninstall Cg")?;
 
-    println!("Done uninstalling!");
+    info!("Done uninstalling!");
     Ok(())
+}
+
+fn set_lol_dir(lol_dir: &str) -> Result<()> {
+    env::set_current_dir(lol_dir).chain_err(
+        || "Failed to set CWD to LoL location. Did you set the correct path for LoL?",
+    )
 }

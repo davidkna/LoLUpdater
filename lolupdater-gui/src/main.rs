@@ -1,29 +1,33 @@
-#![cfg_attr(feature="clippy", feature(plugin))]
-
-#![cfg_attr(feature="clippy", plugin(clippy))]
-
 extern crate nfd;
 extern crate ui;
 extern crate lolupdater_core;
 
-use ui::{BoxControl, Button, Entry};
-use ui::{Group, InitOptions, Label, RadioButtons};
-use ui::{Separator, Window};
-
+use std::cell::RefCell;
+use std::sync::mpsc;
+use std::time;
 use std::thread;
+
+use ui::{BoxControl, Button, Entry, Group, InitOptions, Label, RadioButtons, Separator, Window,
+         msg_box, msg_box_error};
+
 use lolupdater_core::*;
 use errors::*;
 
+
 thread_local! {
+    static MAIN_WINDOW: Window = Window::new(&format!("LoLUpdater for macOS v{}", VERSION), 640, 240, true);
     static LOLPATH_ENTRY: Entry = Entry::new();
     static INSTALLMODE_RADIO: RadioButtons = RadioButtons::new();
+    static CHANNEL: (mpsc::Sender<Result<()>>, mpsc::Receiver<Result<()>>) = mpsc::channel();
+    static NOW: RefCell<time::Instant> = RefCell::new(time::Instant::now());
 }
 
 fn run() {
     let program_name = format!("LoLUpdater for macOS v{}", VERSION);
 
-    let mainwin = Window::new(&program_name, 640, 240, true);
+    let mainwin = MAIN_WINDOW.with(|w| w.clone());
     mainwin.set_margined(true);
+    mainwin.center();
     mainwin.on_closing(Box::new(|_| {
         ui::quit();
         false
@@ -98,18 +102,70 @@ fn install_clicked(install_button: &Button) {
     let mode = INSTALLMODE_RADIO.with(|ir| ir.selected());
     let target = LOLPATH_ENTRY.with(|lpe| lpe.text());
 
-    let result = start_install(&*target, mode);
-    // TODO: Error Handling
-    if result.is_ok() {}
+    let lol_dir = std::string::String::from(&*target);
+
+    let tx = CHANNEL.with(|ch| {
+        let (ref tx, _) = *ch;
+        tx.clone()
+    });
+    thread::spawn(move || {
+        let result = {
+            if mode == 0 {
+                install(&lol_dir)
+            } else {
+                uninstall(&lol_dir)
+            }
+        };
+        tx.send(result).unwrap();
+    });
+
+    ui::queue_main(Box::new(is_done_check));
 
 }
 
-fn start_install(target: &str, mode: i32) -> Result<()> {
-    // TODO: Start a new Thread here
-    init_backups()?;
-    if mode == 0 {
-        install(target)
-    } else {
-        uninstall(target)
+fn is_done_check() {
+    let should_check = NOW.with(|now| {
+        let elapsed = now.borrow().elapsed();
+        let max_elapsed = time::Duration::from_secs(1);
+        let should_continue = elapsed > max_elapsed;
+        if should_continue {
+            *now.borrow_mut() = time::Instant::now()
+        }
+
+        should_continue
+    });
+    if !should_check {
+        ui::queue_main(Box::new(is_done_check));
+        return;
     }
+
+    let rx_message = CHANNEL.with(|ch| {
+        let (_, ref rx) = *ch;
+        rx.try_recv()
+    });
+    if let Ok(res) = rx_message {
+        install_done(res);
+    } else {
+        ui::queue_main(Box::new(is_done_check));
+    }
+}
+
+
+fn install_done(result: Result<()>) {
+    MAIN_WINDOW.with(|win| if result.is_ok() {
+        msg_box(
+            win,
+            "Updating successful!",
+            "Updating successful!\nLoLUpdater needs to be rerun after every LoL update.",
+        );
+    } else if let Err(ref e) = result {
+        let mut error_msg = format!("error: {}\n", e);
+        for e in e.iter().skip(1) {
+            let error_line = format!("caused by: {}\n", e);
+            error_msg.push_str(&error_line);
+        }
+        error_msg.push_str("Please report this error on Discord or Github!");
+        msg_box_error(win, "Updating not successful!", &error_msg);
+    });
+    ui::quit();
 }

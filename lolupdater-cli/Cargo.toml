@@ -1,17 +1,12 @@
 [package]
 name = "lolupdater-cli"
-version = "3.3.0"
+version = "4.0.0"
 authors = ["David Knaack <davidkna@users.noreply.github.com>"]
 
 [dependencies.lolupdater-core]
 path = "../lolupdater-core"
-version = "~3.3.0"
 
 [dependencies]
-app_dirs = "~1.1.1"
 error-chain = "~0.10.0"
-
-clippy = {version = "*", optional = true}
-
-[features]
-default = []
+env_logger = "~0.4.3"
+log = "~0.3.8"

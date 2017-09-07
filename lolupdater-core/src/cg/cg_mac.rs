@@ -21,19 +21,18 @@ const LOL_SLN_PATH: [&'static str; 2] = [
 ];
 
 pub fn install() -> Result<()> {
-    println!("Backing up Nvidia Cg…");
+    info!("Backing up Nvidia Cg…");
     backup_cg().chain_err(|| "Failed to backup Cg")?;
 
     let cg_dir = app_dirs::get_app_dir(AppDataType::UserCache, &APP_INFO, "Cg.Framework")?;
     if !cg_dir.exists() {
         download_cg(&cg_dir)?;
     } else {
-        println!("Nvidia Cg is alread cached!")
+        info!("Nvidia Cg is alread cached!")
     }
 
-    println!("Updating Nvidia Cg…");
+    info!("Updating Nvidia Cg…\n");
     update_cg(&cg_dir).chain_err(|| "Failed to update Cg")?;
-    println!("");
     Ok(())
 }
 
@@ -43,14 +42,14 @@ pub fn remove() -> Result<()> {
     if !cg_backup_path.exists() {
         return Err("No Cg backup found!".into());
     }
-    println!("Restoring Nvidia Cg…");
+    info!("Restoring Nvidia Cg…");
     update_cg(&cg_backup_path)?;
     fs::remove_dir_all(&cg_backup_path)?;
-    println!("Removing Nvidia Cg backup…");
+    info!("Removing Nvidia Cg backup…");
     let cg_cache_path = app_dirs::get_app_dir(AppDataType::UserCache, &APP_INFO, "Cg.Framework")?;
 
     if cg_cache_path.exists() {
-        println!("Removing Nvidia Cg download cache…");
+        info!("Removing Nvidia Cg download cache…");
         fs::remove_dir_all(cg_cache_path)?;
     }
     Ok(())
@@ -63,19 +62,19 @@ fn download_cg(cg_dir: &Path) -> Result<()> {
     let url: &str = "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg";
     let image_file = download_dir.path().join("cg.dmg");
 
-    println!("Downloading Nvidia Cg…");
+    info!("Downloading Nvidia Cg…");
     let cg_hash = "56abcc26d2774b1a33adf286c09e83b6f878c270d4dd5bff5952b83c21af8fa69e3d37060f08b6869a9a40a0907be3dacc2ee2ef1c28916069400ed867b83925";
     download(&image_file, url, Some(cg_hash)).chain_err(
         || "Downloading Nvidia Cg failed!",
     )?;
 
-    println!("Mounting Nvidia Cg…");
+    info!("Mounting Nvidia Cg…");
     let mount_dir = mount(&image_file).chain_err(|| "Failed to mount Cg image")?;
 
-    println!("Extracting Nvidia Cg…");
+    info!("Extracting Nvidia Cg…");
     extract_cg(mount_dir.path(), cg_dir)?;
 
-    println!("Unmounting Nvidia Cg…");
+    info!("Unmounting Nvidia Cg…");
     unmount(mount_dir.path()).chain_err(
         || "Failed to unmount Cg",
     )?;
@@ -92,7 +91,7 @@ fn backup_cg() -> Result<()> {
     let cg_backup =
         app_dirs::get_app_dir(AppDataType::UserData, &APP_INFO, "Backups/Cg.framework")?;
     if cg_backup.exists() {
-        println!("Skipping NVIDIA Cg backup! (Already exists)");
+        info!("Skipping NVIDIA Cg backup! (Already exists)");
     } else {
         update_dir(&lol_cl_path, &cg_backup)?;
     }

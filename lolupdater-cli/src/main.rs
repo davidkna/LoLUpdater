@@ -1,19 +1,18 @@
-#![cfg_attr(feature="clippy", feature(plugin))]
-
-#![cfg_attr(feature="clippy", plugin(clippy))]
-
-extern crate app_dirs;
-#[macro_use]
-extern crate error_chain;
+extern crate env_logger;
+extern crate log;
 
 extern crate lolupdater_core;
 
+#[macro_use]
+extern crate error_chain;
+
 use std::env;
+
+use log::{LogRecord, LogLevelFilter};
+use env_logger::LogBuilder;
 
 use lolupdater_core::*;
 use errors::*;
-
-const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 quick_main!(run);
 
@@ -21,9 +20,10 @@ fn run() -> Result<()> {
     println!("LoLUpdater for macOS v{}", VERSION);
     println!(
         "Report errors, feature requests or any issues at \
-              https://github.com/LoLUpdater/LoLUpdater-macOS/issues."
+              https://github.com/LoLUpdater/LoLUpdater-macOS/issues.\n"
     );
-    println!("");
+
+    init_log();
 
     let mode = env::args().nth(1).unwrap_or_else(|| "install".to_string());
     let lol_dir = env::args().nth(2).unwrap_or_else(|| {
@@ -33,6 +33,19 @@ fn run() -> Result<()> {
     match mode.as_ref() {
         "install" => install(&lol_dir),
         "uninstall" => uninstall(&lol_dir),
-        _ => panic!("Unkown mode!"),
+        _ => panic!("Unknown mode!"),
     }
+}
+
+fn init_log() {
+    let format = |record: &LogRecord| format!("[{}] {}", record.level(), record.args());
+
+    let mut builder = LogBuilder::new();
+    builder.format(format).filter(None, LogLevelFilter::Info);
+
+    if env::var("RUST_LOG").is_ok() {
+        builder.parse(&env::var("RUST_LOG").unwrap());
+    }
+
+    builder.init().unwrap();
 }
