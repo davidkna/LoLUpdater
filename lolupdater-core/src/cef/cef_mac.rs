@@ -3,7 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use app_dirs::{self, AppDataType};
-use flate2::read::GzDecoder;
+use xz2::read::XzDecoder;
 use serde_json;
 use tar::Archive;
 
@@ -24,7 +24,7 @@ const LOL_LP_PATH: [&str; 2] = [
     "deploy/LoLPatcherUx.app/Contents/Frameworks",
 ];
 
-const DOWNLOAD_URL: &str = "https://lolupdater.com/downloads/lol4mac/lolupdater-mac-cef.tar.gz";
+const DOWNLOAD_URL: &str = "https://lolupdater.com/downloads/lol4mac/lolupdater-mac-cef.tar.xz";
 const MANIFEST_URL: &str = "https://lolupdater.com/downloads/lol4mac/Manifest.JSON";
 
 pub fn install() -> Result<()> {
@@ -54,7 +54,7 @@ pub fn install() -> Result<()> {
             fs::remove_dir_all(&cef_dir)?;
             download_cef()?;
         } else {
-            info!("CEF is already cached!");
+            info!("CEF cache is up to date!");
         }
 
     }
@@ -100,7 +100,7 @@ pub fn remove() -> Result<()> {
 fn download_cef() -> Result<()> {
     info!("Downloading CEF…");
     let cef_dl = new_request(DOWNLOAD_URL, false)?;
-    let decompressed = GzDecoder::new(cef_dl)?;
+    let decompressed = XzDecoder::new(cef_dl);
     let mut archive = Archive::new(decompressed);
 
     let target_dir = app_dirs::get_app_dir(
