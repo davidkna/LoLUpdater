@@ -90,8 +90,20 @@ pub fn unmount(mountpoint: &Path) -> Result<()> {
     Ok(())
 }
 
+pub fn new_request(url: &str, gzip: bool) -> Result<reqwest::Response> {
+    let r = reqwest::Client::builder()?
+        .gzip(gzip)
+        .build()?
+        .get(url)?
+        .header(reqwest::header::UserAgent::new(
+            "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)",
+        ))
+        .send()?;
+    Ok(r)
+}
+
 pub fn download(target_path: &Path, url: &str, expected_hash: Option<&str>) -> Result<()> {
-    let mut res = reqwest::get(url)?;
+    let mut res = new_request(url, true)?;
 
     let mut target_image_file = File::create(target_path)?;
     match expected_hash {

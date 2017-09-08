@@ -20,6 +20,9 @@ const LOL_SLN_PATH: [&str; 2] = [
     "deploy/LeagueOfLegends.app/Contents/Frameworks",
 ];
 
+const DOWNLOAD_URL: &str = "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg";
+const DOWNLOAD_HASH: &str = "96c86ab60abcf022554017b722236a0f1673618f3796305ebc8f5d5854552ccc5780aafdbd4473abd65349995e9c573b";
+
 pub fn install() -> Result<()> {
     info!("Backing up Nvidia Cg…");
     backup_cg().chain_err(|| "Failed to backup Cg")?;
@@ -59,14 +62,11 @@ fn download_cg(cg_dir: &Path) -> Result<()> {
     let download_dir = TempDir::new("lolupdater-cg-dl").chain_err(
         || "Failed to create temp dir for Nvidia Cg download",
     )?;
-    let url: &str = "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg";
     let image_file = download_dir.path().join("cg.dmg");
 
     info!("Downloading Nvidia Cg…");
-    let cg_hash = "96c86ab60abcf022554017b722236a0f1673618f3796305ebc8f5d5854552ccc5780aafdbd4473abd65349995e9c573b";
-    download(&image_file, url, Some(cg_hash)).chain_err(
-        || "Downloading Nvidia Cg failed!",
-    )?;
+    download(&image_file, DOWNLOAD_URL, Some(DOWNLOAD_HASH))
+        .chain_err(|| "Downloading Nvidia Cg failed!")?;
 
     info!("Mounting Nvidia Cg…");
     let mount_dir = mount(&image_file).chain_err(|| "Failed to mount Cg image")?;

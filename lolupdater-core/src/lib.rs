@@ -23,8 +23,9 @@ extern crate lazy_static;
 #[macro_use]
 extern crate log;
 
-#[cfg(target_os = "macos")]
-pub mod cg;
+mod cef;
+mod cg;
+
 pub mod errors;
 pub mod util;
 
@@ -53,6 +54,7 @@ pub fn init_backups() -> Result<()> {
 pub fn install(lol_dir: &str) -> Result<()> {
     set_lol_dir(lol_dir)?;
     init_backups()?;
+    cef::install()?;
     cg::install()?;
 
     info!("Done installing!");
@@ -61,6 +63,7 @@ pub fn install(lol_dir: &str) -> Result<()> {
 
 pub fn uninstall(lol_dir: &str) -> Result<()> {
     set_lol_dir(lol_dir)?;
+    cef::remove().chain_err(|| "Failed to uninstall CEF")?;
     cg::remove().chain_err(|| "Failed to uninstall Cg")?;
 
     info!("Done uninstalling!");
