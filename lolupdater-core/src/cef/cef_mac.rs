@@ -24,8 +24,8 @@ const LOL_LP_PATH: [&str; 2] = [
     "deploy/LoLPatcherUx.app/Contents/Frameworks",
 ];
 
-const DOWNLOAD_URL: &str = "https://lolupdater.com/downloads/lol4mac/lolupdater-mac-cef.tar.xz";
-const MANIFEST_URL: &str = "https://lolupdater.com/downloads/lol4mac/Manifest.JSON";
+const DOWNLOAD_URL: &str = "https://lolupdater.github.io/LoLUpdater-macOS/lolupdater-mac-cef.tar.xz";
+const MANIFEST_URL: &str = "https://lolupdater.github.io/LoLUpdater-macOS/Manifest.JSON";
 
 pub fn install() -> Result<()> {
     info!("Backing up CEF…");
