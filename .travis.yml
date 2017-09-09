@@ -13,3 +13,7 @@ matrix:
 os:
   - linux
   - osx
+addons:
+    apt:
+        packages:
+            - libgtk-3-0
