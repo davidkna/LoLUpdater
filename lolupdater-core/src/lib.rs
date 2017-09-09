@@ -106,6 +106,9 @@ struct GithubRelease {
 
 pub fn update_available() -> Result<bool> {
     info!("Checking for updates…");
+    if cfg!(debug_assertions) {
+        return Ok(false);
+    }
     let release_dl = reqwest::get(
         "https://api.github.com/repos/LoLUpdater/LoLUpdater-macOS/releases/latest",
     )?;
