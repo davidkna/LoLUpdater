@@ -16,4 +16,4 @@ os:
 addons:
     apt:
         packages:
-            - libgtk-3-0
+            - gnome-devel
