@@ -7,7 +7,7 @@ unset CFLAGS
 unset CXXFLAGS
 
 cargo update
-cargo build --release
+cargo build --all --release
 
 rm ./dist/LoLUpdater.app/Contents/MacOS/lolupdater-gui
 cp ./target/release/lolupdater-gui ./dist/LoLUpdater.app/Contents/MacOS/
