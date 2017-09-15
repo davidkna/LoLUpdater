@@ -1,13 +1,11 @@
 language: rust
 rust:
 - stable
-- nightly
 script:
 - cargo build --verbose --all
 - cargo test --verbose --all
 matrix:
   allow_failures:
-  - rust: nightly
   - os: linux
 os:
 - linux
@@ -19,7 +17,7 @@ addons:
 before-deploy:
   - brew install node
   - npm install --global create-dmg
-  - ./scripts/build.sh
+  - ./scripts/release_build..sh
 deploy:
   skip_cleanup: true
   provider: releases
@@ -32,3 +30,4 @@ deploy:
     repo: LoLUpdater/LoLUpdater-macOS
     rust: stable
     os: osx
+    tags: true
