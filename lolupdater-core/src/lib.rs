@@ -52,19 +52,19 @@ pub fn init_backups() -> Result<()> {
     Ok(())
 }
 
+#[cfg(target_os = "macos")]
 pub fn install(lol_dir: &str) -> Result<()> {
     set_lol_dir(lol_dir)?;
     init_backups()?;
-    cef::install()?;
     cg::install()?;
 
     info!("Done installing!");
     Ok(())
 }
 
+#[cfg(target_os = "macos")]
 pub fn uninstall(lol_dir: &str) -> Result<()> {
     set_lol_dir(lol_dir)?;
-    cef::remove().chain_err(|| "Failed to uninstall CEF")?;
     cg::remove().chain_err(|| "Failed to uninstall Cg")?;
 
     info!("Done uninstalling!");
