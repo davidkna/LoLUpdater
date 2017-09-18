@@ -86,7 +86,10 @@ fn backup_cg() -> Result<()> {
         fs::create_dir(&cg_backup)?;
         update_file(&lol_cl_path.join("Cg.dll"), &cg_backup.join("Cg.dll"))?;
         update_file(&lol_cl_path.join("CgGL.dll"), &cg_backup.join("CgGL.dll"))?;
-        update_file(&lol_cl_path.join("cgD3D9.dll"), &cg_backup.join("CgD3D9.dll"))?;
+        update_file(
+            &lol_cl_path.join("cgD3D9.dll"),
+            &cg_backup.join("CgD3D9.dll"),
+        )?;
     }
     Ok(())
 }

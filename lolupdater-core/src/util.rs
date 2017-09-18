@@ -47,14 +47,18 @@ pub fn update_dir(from: &Path, to: &Path) -> Result<()> {
 }
 
 pub fn update_file(from: &Path, to: &Path) -> Result<()> {
-    let mut reader = File::open(from)?;
-    let mut writer = fs::OpenOptions::new()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open(to)?;
+    if cfg!(target_os = "windows") {
+        fs::copy(from, to)?;
+    } else {
+        let mut reader = File::open(from)?;
+        let mut writer = fs::OpenOptions::new()
+            .write(true)
+            .create(true)
+            .truncate(true)
+            .open(to)?;
 
-    io::copy(&mut reader, &mut writer)?;
+        io::copy(&mut reader, &mut writer)?;
+    }
     Ok(())
 }
 
