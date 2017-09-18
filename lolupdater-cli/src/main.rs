@@ -14,6 +14,7 @@ use env_logger::LogBuilder;
 use lolupdater_core::*;
 use errors::*;
 
+
 quick_main!(run);
 
 fn run() -> Result<()> {
@@ -33,9 +34,7 @@ fn run() -> Result<()> {
     }
 
     let mode = env::args().nth(1).unwrap_or_else(|| "install".to_string());
-    let lol_dir = env::args().nth(2).unwrap_or_else(|| {
-        "/Applications/League of Legends.app".to_string()
-    });
+    let lol_dir = env::args().nth(2).unwrap_or_else(|| DEFAULT_LOL_DIR.into());
 
     match mode.as_ref() {
         "install" => install(&lol_dir),
