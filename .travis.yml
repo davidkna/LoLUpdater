@@ -16,6 +16,7 @@ addons:
     packages:
     - libgtk-3-dev
 before_deploy:
+  - brew update
   - brew bundle
   - npm install --global create-dmg
   - ./scripts/release_build.sh
