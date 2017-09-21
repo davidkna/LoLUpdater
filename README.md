@@ -1,4 +1,4 @@
-# LoLUpdater v3.5.9 for macOS
+# LoLUpdater v3.5.10 for macOS
 [![Build Status](https://travis-ci.org/LoLUpdater/LoLUpdater-macOS.svg?branch=master)](https://travis-ci.org/LoLUpdater/LoLUpdater-macOS)
 [Website](https://LoLUpdater.com)
 ## Usage
