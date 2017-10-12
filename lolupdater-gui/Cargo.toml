@@ -8,4 +8,4 @@ path = "../lolupdater-core"
 
 [dependencies]
 ui = { git = "https://github.com/davidkna/libui-rs" }
-nfd = "^0.0.4"
+nfd = "0.0.4"

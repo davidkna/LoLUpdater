@@ -95,10 +95,10 @@ pub fn unmount(mountpoint: &Path) -> Result<()> {
 }
 
 pub fn new_request(url: &str, gzip: bool) -> Result<reqwest::Response> {
-    let r = reqwest::Client::builder()?
+    let r = reqwest::Client::builder()
         .gzip(gzip)
         .build()?
-        .get(url)?
+        .get(url)
         .header(reqwest::header::UserAgent::new(
             "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)",
         ))
