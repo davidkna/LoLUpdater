@@ -21,14 +21,14 @@ fn run() -> Result<()> {
     println!("LoLUpdater for macOS {}", VERSION);
     println!(
         "Report errors, feature requests or any issues at \
-              https://github.com/LoLUpdater/LoLUpdater-macOS/issues.\n"
+              https://github.com/MOBASuite/LoLUpdater-macOS/issues.\n"
     );
 
     init_log();
 
     if update_available()? {
         println!(
-            "A new update is available.\nPlease download it from https://github.com/LoLUpdater/LoLUpdater-macOS/releases/latest to use LoLUpdater."
+            "A new update is available.\nPlease download it from https://github.com/MOBASuite/LoLUpdater-macOS/releases/latest to use LoLUpdater."
         );
         ::std::process::exit(1);
     }
