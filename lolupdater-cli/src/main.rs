@@ -1,3 +1,4 @@
+extern crate clap;
 extern crate env_logger;
 extern crate log;
 
@@ -13,28 +14,41 @@ use env_logger::LogBuilder;
 
 use lolupdater_core::*;
 use errors::*;
-
+use clap::{Arg, App};
 
 quick_main!(run);
 
 fn run() -> Result<()> {
+    init_log();
+    let matches = App::new("LoLUpdater for macOS")
+        .version(VERSION)
+        .arg(
+            Arg::with_name("MODE")
+                .help("Whether to install or remove LoLUpdater patches")
+                .index(1)
+                .possible_values(&["install", "uninstall"]),
+        )
+        .arg(
+            Arg::with_name("PATH")
+                .help("Target League of Legends patch")
+                .index(2),
+        )
+        .get_matches();
+
     println!("LoLUpdater for macOS {}", VERSION);
     println!(
         "Report errors, feature requests or any issues at \
               https://github.com/MOBASuite/LoLUpdater-macOS/issues.\n"
     );
 
-    init_log();
-
     if update_available()? {
-        println!(
-            "A new update is available.\nPlease download it from https://github.com/MOBASuite/LoLUpdater-macOS/releases/latest to use LoLUpdater."
+        return Err(
+            "A new update is available.\nPlease download it from https://github.com/MOBASuite/LoLUpdater-macOS/releases/latest to use LoLUpdater.".into()
         );
-        ::std::process::exit(1);
     }
 
-    let mode = env::args().nth(1).unwrap_or_else(|| "install".to_string());
-    let lol_dir = env::args().nth(2).unwrap_or_else(|| DEFAULT_LOL_DIR.into());
+    let lol_dir = matches.value_of("INPUT").unwrap_or(DEFAULT_LOL_DIR);
+    let mode = matches.value_of("PATH").unwrap_or("install");
 
     match mode.as_ref() {
         "install" => install(&lol_dir),

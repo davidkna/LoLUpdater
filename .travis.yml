@@ -3,13 +3,10 @@ rust:
 - stable
 cache: cargo
 script:
+- brew install ninja || true
 - cargo build --verbose --all
 - cargo test --verbose --all
-matrix:
-  allow_failures:
-  - os: linux
 os:
-- linux
 - osx
 addons:
   apt:
