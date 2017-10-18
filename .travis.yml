@@ -28,7 +28,7 @@ deploy:
     - ./dist/LoLUpdater.dmg
     - ./dist/lolupdater-cli.tar.gz
   on:
-    repo: LoLUpdater/LoLUpdater-macOS
+    repo: MOBASuite/LoLUpdater-macOS
     rust: stable
     os: osx
     tags: true
