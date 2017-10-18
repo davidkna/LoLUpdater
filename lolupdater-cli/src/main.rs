@@ -23,15 +23,15 @@ fn run() -> Result<()> {
     let matches = App::new("LoLUpdater for macOS")
         .version(VERSION)
         .arg(
-            Arg::with_name("MODE")
-                .help("Whether to install or remove LoLUpdater patches")
-                .index(1)
-                .possible_values(&["install", "uninstall"]),
+            Arg::with_name("uninstall")
+                .help("Uninstall patches instead of installing them")
+                .long("uninstall")
+                .short("u"),
         )
         .arg(
             Arg::with_name("PATH")
                 .help("Target League of Legends patch")
-                .index(2),
+                .index(1),
         )
         .get_matches();
 
@@ -47,13 +47,11 @@ fn run() -> Result<()> {
         );
     }
 
-    let lol_dir = matches.value_of("INPUT").unwrap_or(DEFAULT_LOL_DIR);
-    let mode = matches.value_of("PATH").unwrap_or("install");
+    let lol_dir = matches.value_of("PATH").unwrap_or(DEFAULT_LOL_DIR);
 
-    match mode.as_ref() {
-        "install" => install(&lol_dir),
-        "uninstall" => uninstall(&lol_dir),
-        _ => panic!("Unknown mode!"),
+    match matches.is_present("uninstall") {
+        false => install(&lol_dir),
+        true => uninstall(&lol_dir),
     }
 }
 
