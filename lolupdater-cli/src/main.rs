@@ -30,7 +30,7 @@ fn run() -> Result<()> {
         )
         .arg(
             Arg::with_name("PATH")
-                .help("Target League of Legends patch")
+                .help(&format!("Target League of Legends patch. Default is \"{}\".", DEFAULT_LOL_DIR))
                 .index(1),
         )
         .get_matches();

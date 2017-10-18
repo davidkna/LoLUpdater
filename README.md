@@ -1,19 +1,20 @@
-# LoLUpdater v3.5.12 for macOS
+# LoLUpdater for macOS
 [![Build Status](https://travis-ci.org/MOBASuite/LoLUpdater-macOS.svg?branch=master)](https://travis-ci.org/MOBASuite/LoLUpdater-macOS)
 [Website](https://LoLUpdater.com)
-## Usage
-### With no arguments
-Equivalent to `./lolupdater install "/Applications/League Of Legends.app"`.
-### With one argument
-Equivalent to `./lolupdater <argument> "/Applications/League Of Legends.app"`.
-### With three arguments
-`./lolupdater install <path>`
+## CLI Usage
+```
+LoLUpdater for macOS
 
-Runs LoLUpdater with LoL installed at `<path>`.
+USAGE:
+    lolupdater-cli [FLAGS] [PATH]
 
-`./lolupdater uninstall <path>`
+FLAGS:
+    -h, --help         Prints help information
+    -u, --uninstall    Uninstall patches instead of installing them
+    -V, --version      Prints version information
 
-Removes LoLupdater for LoL installed at `<path>`.
-
+ARGS:
+    <PATH>    Target League of Legends patch. Default is set based on platform.
+```
 ## Dependency graph
 ![](graph.png)
