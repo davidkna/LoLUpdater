@@ -1,3 +1,4 @@
+#![windows_subsystem = "windows"]
 extern crate tinyfiledialogs;
 extern crate ui;
 extern crate lolupdater_core;
