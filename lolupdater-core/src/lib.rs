@@ -17,8 +17,6 @@ extern crate tar;
 extern crate tempdir;
 #[cfg(target_os = "macos")]
 extern crate walkdir;
-#[cfg(target_os = "macos")]
-extern crate xz2;
 
 #[macro_use]
 extern crate lazy_static;
