@@ -1,4 +1,4 @@
-extern crate nfd;
+extern crate tinyfiledialogs;
 extern crate ui;
 extern crate lolupdater_core;
 
@@ -65,7 +65,7 @@ fn run() {
     install_path_box.set_padded(true);
     inner.append(install_path_box.clone().into(), false);
     let install_path_entry = LOLPATH_ENTRY.with(|lpe| lpe.clone());
-    install_path_entry.set_text("/Applications/League of Legends.app");
+    install_path_entry.set_text(DEFAULT_LOL_DIR);
     install_path_box.append(install_path_entry.clone().into(), true);
     let install_path_button = Button::new("Locate");
     install_path_button.on_clicked(Box::new(ask_for_loldir));
@@ -107,11 +107,13 @@ pub fn main() {
 
 
 fn ask_for_loldir(_: &Button) {
-    let result = nfd::open_file_dialog(Some("app"), Some("/Applications")).unwrap_or_else(|e| {
-        panic!(e);
-    });
+    let result = if cfg!(os_name = "macos") {
+        tinyfiledialogs::open_file_dialog("Find LoL", "/Applications", Some((&["*.app"], "Applications")))
+    } else {
+        tinyfiledialogs::select_folder_dialog("Find LoL", "C:/")
+    };
 
-    if let nfd::Response::Okay(file_path) = result {
+    if let Some(file_path) = result {
         LOLPATH_ENTRY.with(|lpe| { lpe.set_text(&file_path); });
     }
 }
