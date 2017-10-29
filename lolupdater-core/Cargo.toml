@@ -20,5 +20,5 @@ flate2 = "0.2.19"
 plist = "0.2.3"
 tar = { version = "0.4.13", default-features = false }
 tempdir = "0.3.5"
-walkdir = "1.0.7"
+walkdir = "2.0.1"
 xz2 = "0.1.3"
