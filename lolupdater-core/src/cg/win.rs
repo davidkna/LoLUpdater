@@ -10,9 +10,9 @@ const LOL_CL_PATH: [&str; 2] = ["RADS/solutions/lol_game_client_sln/releases", "
 const LOL_SLN_PATH: [&str; 2] = ["RADS/projects/lol_game_client/releases", "deploy"];
 
 
-const CG_MN_DLL_DL: &str = "https://lolupdater.com/downloads/DLLs/cg.dll";
-const CG_GL_DLL_DL: &str = "https://lolupdater.com/downloads/DLLs/cgGL.dll";
-const CG_D9_DLL_DL: &str = "https://lolupdater.com/downloads/DLLs/cgD3D9.dll";
+const CG_MN_DLL_DL: &str = "https://mobasuite.com/downloads/dlls/cg.dll";
+const CG_GL_DLL_DL: &str = "https://mobasuite.com/downloads/dlls/cgGL.dll";
+const CG_D9_DLL_DL: &str = "https://mobasuite.com/downloads/dlls/cgD3D9.dll";
 
 const CG_MN_DLL_DL_HASH: &str = "546c4d9220056a181e3914ba14aec0d2bb0c9464918481e5628df32625956bb5d9bc2cb77506cc26d1abb044f6fa2d65";
 const CG_GL_DLL_DL_HASH: &str = "536f96f25f0f6edee7d7c3d85d99d7e796434b320df06428e45b56c860a44ea3a276cba3b8f674ac9fd81a4c46e19036";
@@ -25,6 +25,7 @@ pub fn install() -> Result<()> {
 
     let cg_dir = app_dirs::get_app_dir(AppDataType::UserCache, &APP_INFO, "Cg")?;
     if !cg_dir.exists() {
+        info!("Downloading Nvidia Cg…");
         download_cg(&cg_dir)?;
     } else {
         info!("Nvidia Cg is already cached!")
