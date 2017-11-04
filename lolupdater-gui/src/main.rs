@@ -108,8 +108,8 @@ pub fn main() {
 
 
 fn ask_for_loldir(_: &Button) {
-    let result = if cfg!(os_name = "macos") {
-        tinyfiledialogs::open_file_dialog("Find LoL", "/Applications", Some((&["*.app"], "Applications")))
+    let result = if cfg!(target_os = "macos") {
+        tinyfiledialogs::open_file_dialog("Find LoL", "/Applications/", Some((&["*.app"], "Applications")))
     } else {
         tinyfiledialogs::select_folder_dialog("Find LoL", "C:/")
     };
