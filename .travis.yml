@@ -5,7 +5,6 @@ cache: cargo
 script:
 - brew update
 - brew install cmake || true
-- brew install ninja || true
 - cargo build --verbose --all
 - cargo test --verbose --all
 os:
@@ -16,7 +15,6 @@ addons:
     - libgtk-3-dev
 before_deploy:
   - brew install node || true
-  - brew install zopfli || true
   - npm install --global create-dmg
   - ./scripts/release_build.sh
 deploy:
@@ -26,7 +24,7 @@ deploy:
     secure: dzUBk53mtIp4tB1AK5jMM4pFY2hUZcU5drNhwQL3hIPJkRRLSWhxzUUbbS4fsIhU+5HjDeeSOblit9fIRKEWtuCM0L/PVZaeA/PkpCToDrkJhU3NpOe59COuI/oP+CLc4T8pDFiHMHY3ZPRUaIIAp/eL4ETTwtwGZ0uGkg9yzEI=
   file:
     - ./dist/LoLUpdater.dmg
-    - ./dist/lolupdater-cli.tar.gz
+    - ./dist/lolupdater-cli.tar.bz2
   on:
     repo: MOBASuite/LoLUpdater-macOS
     rust: stable

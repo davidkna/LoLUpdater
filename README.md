@@ -16,5 +16,3 @@ FLAGS:
 ARGS:
     <PATH>    Target League of Legends patch. Default is set based on platform.
 ```
-## Dependency graph
-![](graph.png)

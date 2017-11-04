@@ -21,15 +21,9 @@ TMPDIR="$(mktemp -d)"
 cp ./LICENSE "$TMPDIR"
 cp ./README.MD "$TMPDIR"
 cp ./target/release/lolupdater-cli "$TMPDIR"
-tar -cvf "./dist/lolupdater-cli.tar" --exclude=".DS_Store" -C "$TMPDIR" .
-rm "./dist/lolupdater-cli.tar.gz" || true
-zopfli -v "./dist/lolupdater-cli.tar"
-rm "./dist/lolupdater-cli.tar"
+rm "./dist/lolupdater-cli.tar.bz2" || true
+tar cjvf "./dist/lolupdater-cli.tar.bz2" --exclude=".DS_Store" -C "$TMPDIR" .
 rm -rf "$TMPDIR"
-
-if [ "$CI" != "true" ]; then
-cargo graph | dot -Tpng > graph.png
-fi
 
 export CFLAGS="${OLDCFLAGS}"
 export CXXFLAGS="${OLDCXXFLAGS}"

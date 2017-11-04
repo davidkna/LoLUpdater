@@ -136,5 +136,5 @@ crashlytics-build.properties
 
 lolupdater-gui
 lolupdater-cli
-lolupdater-cli.tar.gz
+lolupdater-cli.tar.bz2
 LoLUpdater.dmg
