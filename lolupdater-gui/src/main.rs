@@ -198,7 +198,7 @@ fn show_error_message(error: &Error) {
             let error_line = format!("Caused by: {}\n", error);
             error_msg.push_str(&error_line);
         }
-        error_msg.push_str("\nPlease report this error on Discord or Github!");
+        error_msg.push_str("\nPlease report this error on Github!");
         msg_box_error(win, "Error!", &error_msg);
     });
 }
