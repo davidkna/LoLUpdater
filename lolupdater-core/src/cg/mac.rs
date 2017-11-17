@@ -78,7 +78,7 @@ fn download_cg(cg_dir: &Path) -> Result<()> {
 
 #[test]
 fn download_cg_works() {
-    let target = TempDir::new("lolupdater-cg-target");
+    let target = TempDir::new("lolupdater-cg-target").unwrap();
     download_cg(&target.path()).unwrap();
 }
 
