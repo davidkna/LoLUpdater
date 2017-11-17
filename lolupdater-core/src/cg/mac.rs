@@ -21,7 +21,11 @@ const LOL_SLN_PATH: [&str; 2] = [
 ];
 
 const DOWNLOAD_URL: &str = "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg";
-const DOWNLOAD_HASH: &str = "96c86ab60abcf022554017b722236a0f1673618f3796305ebc8f5d5854552ccc5780aafdbd4473abd65349995e9c573b";
+const DOWNLOAD_HASH: [u8; 48] = [
+    0x96, 0xc8, 0x6a, 0xb6, 0x0a, 0xbc, 0xf0, 0x22, 0x55, 0x40, 0x17, 0xb7, 0x22, 0x23, 0x6a, 0x0f,
+    0x16, 0x73, 0x61, 0x8f, 0x37, 0x96, 0x30, 0x5e, 0xbc, 0x8f, 0x5d, 0x58, 0x54, 0x55, 0x2c, 0xcc,
+    0x57, 0x80, 0xaa, 0xfd, 0xbd, 0x44, 0x73, 0xab, 0xd6, 0x53, 0x49, 0x99, 0x5e, 0x9c, 0x57, 0x3b,
+];
 
 pub fn install() -> Result<()> {
     info!("Backing up Nvidia Cg…");
@@ -65,7 +69,7 @@ fn download_cg(cg_dir: &Path) -> Result<()> {
     let image_file = download_dir.path().join("cg.dmg");
 
     info!("Downloading Nvidia Cg…");
-    download(&image_file, DOWNLOAD_URL, Some(DOWNLOAD_HASH))
+    download(&image_file, DOWNLOAD_URL, Some(&DOWNLOAD_HASH))
         .chain_err(|| "Downloading Nvidia Cg failed!")?;
 
     info!("Mounting Nvidia Cg…");

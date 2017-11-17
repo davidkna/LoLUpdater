@@ -8,7 +8,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use app_dirs::AppInfo;
-use ring::{digest, test};
+use sha2::{Digest, Sha384};
 use regex::Regex;
 use reqwest;
 #[cfg(target_os = "macos")]
@@ -24,7 +24,6 @@ pub const APP_INFO: AppInfo = AppInfo {
 };
 
 pub const DEFAULT_BUF_SIZE: usize = 8 * 1024;
-
 
 #[cfg(target_os = "macos")]
 pub fn update_dir(from: &Path, to: &Path) -> Result<()> {
@@ -106,7 +105,7 @@ pub fn new_request(url: &str, gzip: bool) -> Result<reqwest::Response> {
     Ok(r)
 }
 
-pub fn download(target_path: &Path, url: &str, expected_hash: Option<&str>) -> Result<()> {
+pub fn download(target_path: &Path, url: &str, expected_hash: Option<&[u8]>) -> Result<()> {
     let mut res = new_request(url, true)?;
 
     let mut target_image_file = File::create(target_path)?;
@@ -191,21 +190,20 @@ fn regex_works() {
 pub fn copy_digest<R: ?Sized, W: ?Sized>(
     reader: &mut R,
     writer: &mut W,
-    expected_hex: &str,
+    expected_hash: &[u8],
 ) -> Result<u64>
 where
     R: Read,
     W: Write,
 {
     let mut buf = [0; DEFAULT_BUF_SIZE];
-    let mut ctx = digest::Context::new(&digest::SHA384);
+    let mut ctx = Sha384::default();
     let mut written = 0;
     loop {
         let len = match reader.read(&mut buf) {
             Ok(0) => {
-                let actual = ctx.finish();
-                let expected: Vec<u8> = test::from_hex(expected_hex)?;
-                if expected != actual.as_ref() {
+                let actual_hash: &[u8] = &ctx.result();
+                if expected_hash != actual_hash {
                     return Err("Checksum validation Failed!".into());
                 }
                 return Ok(written);
@@ -215,7 +213,7 @@ where
             Err(e) => return Err(e).map_err(Error::from),
         };
         writer.write_all(&buf[..len])?;
-        ctx.update(&buf[..len]);
+        ctx.input(&buf[..len]);
         written += len as u64;
     }
 }

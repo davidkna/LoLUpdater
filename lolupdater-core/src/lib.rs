@@ -7,10 +7,10 @@ extern crate flate2;
 extern crate plist;
 extern crate regex;
 extern crate reqwest;
-extern crate ring;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
+extern crate sha2;
 #[cfg(target_os = "macos")]
 extern crate tar;
 #[cfg(target_os = "macos")]
