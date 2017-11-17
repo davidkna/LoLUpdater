@@ -13,7 +13,6 @@ extern crate serde_json;
 extern crate sha2;
 #[cfg(target_os = "macos")]
 extern crate tar;
-#[cfg(target_os = "macos")]
 extern crate tempdir;
 #[cfg(target_os = "macos")]
 extern crate walkdir;

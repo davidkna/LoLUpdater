@@ -85,6 +85,12 @@ fn download_cg(cg_dir: &Path) -> Result<()> {
     Ok(())
 }
 
+#[test]
+fn download_cg_works() {
+    let target = TempDir::new("lolupdater-cg-target");
+    download_cg(&target.path()).unwrap();
+}
+
 fn backup_cg() -> Result<()> {
     let lol_cl_path = join_version(
         &PathBuf::from(LOL_CL_PATH[0]),
