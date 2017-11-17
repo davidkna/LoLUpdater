@@ -9,18 +9,9 @@ use tar::Archive;
 
 use util::*;
 
-
-const LOL_CL_PATH: [&str; 2] = [
-    "Contents/LoL/RADS/solutions/lol_game_client_sln/releases",
-    "deploy/LeagueOfLegends.app/Contents/Frameworks",
-];
-
-const LOL_SLN_PATH: [&str; 2] = [
-    "Contents/LoL/RADS/projects/lol_game_client/releases",
-    "deploy/LeagueOfLegends.app/Contents/Frameworks",
-];
-
 const DOWNLOAD_URL: &str = "http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012.dmg";
+
+#[cfg_attr(rustfmt, rustfmt_skip)]
 const DOWNLOAD_HASH: [u8; 48] = [
     0x96, 0xc8, 0x6a, 0xb6, 0x0a, 0xbc, 0xf0, 0x22, 0x55, 0x40, 0x17, 0xb7, 0x22, 0x23, 0x6a, 0x0f,
     0x16, 0x73, 0x61, 0x8f, 0x37, 0x96, 0x30, 0x5e, 0xbc, 0x8f, 0x5d, 0x58, 0x54, 0x55, 0x2c, 0xcc,
@@ -92,36 +83,19 @@ fn download_cg_works() {
 }
 
 fn backup_cg() -> Result<()> {
-    let lol_cl_path = join_version(
-        &PathBuf::from(LOL_CL_PATH[0]),
-        &PathBuf::from(LOL_CL_PATH[1]),
-    )?
-        .join("Cg.framework");
-
     let cg_backup =
         app_dirs::get_app_dir(AppDataType::UserData, &APP_INFO, "Backups/Cg.framework")?;
     if cg_backup.exists() {
         info!("Skipping NVIDIA Cg backup! (Already exists)");
     } else {
-        update_dir(&lol_cl_path, &cg_backup)?;
+        update_dir(&LOL_CL_PATH.join("Cg.framework"), &cg_backup)?;
     }
     Ok(())
 }
 
 fn update_cg(cg_dir: &Path) -> Result<()> {
-    let lol_cl_path = join_version(
-        &PathBuf::from(LOL_CL_PATH[0]),
-        &PathBuf::from(LOL_CL_PATH[1]),
-    )?
-        .join("Cg.framework");
-    update_dir(cg_dir, &lol_cl_path)?;
-
-    let lol_sln_path = join_version(
-        &PathBuf::from(LOL_SLN_PATH[0]),
-        &PathBuf::from(LOL_SLN_PATH[1]),
-    )?
-        .join("Cg.framework");
-    update_dir(cg_dir, &lol_sln_path)?;
+    update_dir(cg_dir, &LOL_CL_PATH.join("Cg.framework"))?;
+    update_dir(cg_dir, &LOL_SLN_PATH.join("Cg.framework"))?;
     Ok(())
 }
 

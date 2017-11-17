@@ -24,6 +24,12 @@ extern crate lazy_static;
 extern crate log;
 
 mod cg;
+#[cfg(target_os = "windows")]
+mod winutil;
+#[cfg(target_os = "windows")]
+mod dx9dlls;
+#[cfg(target_os = "windows")]
+mod vsdlls;
 
 pub mod errors;
 pub mod util;
@@ -64,6 +70,11 @@ pub fn install(lol_dir: &str) -> Result<()> {
     set_lol_dir(lol_dir)?;
     init_backups()?;
     cg::install().chain_err(|| "Failed to update Cg")?;
+    #[cfg(target_os = "windows")]
+    dx9dlls::install().chain_err(
+        || "Failed to update DirectX DLLs",
+    )?;
+    #[cfg(target_os = "windows")] vsdlls::install().chain_err(|| "Failed to update MS DLLs")?;
 
     info!("Done installing!");
     Ok(())
@@ -73,7 +84,11 @@ pub fn install(lol_dir: &str) -> Result<()> {
 pub fn uninstall(lol_dir: &str) -> Result<()> {
     set_lol_dir(lol_dir)?;
     cg::remove().chain_err(|| "Failed to restore Cg")?;
-
+    #[cfg(target_os = "windows")]
+    dx9dlls::remove().chain_err(
+        || "Failed to update DirectX DLLs",
+    )?;
+    #[cfg(target_os = "windows")] vsdlls::remove().chain_err(|| "Failed to update MS DLLs")?;
     info!("Done uninstalling!");
     Ok(())
 }

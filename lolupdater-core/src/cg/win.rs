@@ -1,28 +1,29 @@
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use app_dirs::{self, AppDataType};
 
 use util::*;
 
-const LOL_CL_PATH: [&str; 2] = ["RADS/solutions/lol_game_client_sln/releases", "deploy"];
-
-const LOL_SLN_PATH: [&str; 2] = ["RADS/projects/lol_game_client/releases", "deploy"];
-
 const CG_MN_DLL_DL: &str = "https://mobasuite.com/downloads/dlls/cg.dll";
 const CG_GL_DLL_DL: &str = "https://mobasuite.com/downloads/dlls/cgGL.dll";
 const CG_D9_DLL_DL: &str = "https://mobasuite.com/downloads/dlls/cgD3D9.dll";
 
+#[cfg_attr(rustfmt, rustfmt_skip)]
 const CG_MN_DLL_DL_HASH: [u8; 48] = [
     0x2d, 0x27, 0x17, 0x03, 0x95, 0x97, 0xde, 0x0b, 0xf4, 0x88, 0x14, 0xad, 0xee, 0x90, 0xa2, 0xb8,
     0xac, 0xfd, 0x9d, 0xab, 0x29, 0xf3, 0x7a, 0x64, 0xbf, 0x94, 0x8f, 0xb5, 0x5f, 0xcf, 0x9c, 0xa7,
     0x8f, 0xb0, 0x5f, 0x92, 0x22, 0x27, 0x31, 0x65, 0xe2, 0x3c, 0x5c, 0xa2, 0xab, 0x87, 0x4d, 0x21,
 ];
+
+#[cfg_attr(rustfmt, rustfmt_skip)]
 const CG_GL_DLL_DL_HASH: [u8; 48] = [
     0xbc, 0x81, 0x45, 0xc4, 0x7d, 0x3c, 0xa6, 0x96, 0x5c, 0xe5, 0x19, 0x2e, 0x2a, 0xd7, 0xe6, 0xe7,
     0x26, 0x26, 0xdd, 0x8c, 0x3b, 0xe9, 0x6a, 0xa9, 0x30, 0x75, 0x69, 0x36, 0x1f, 0x30, 0x34, 0x5b,
     0x7b, 0x11, 0x24, 0xfb, 0x1d, 0x09, 0x2c, 0x0a, 0xdd, 0xb3, 0x82, 0x0b, 0x53, 0xa3, 0x8a, 0x78,
 ];
+
+#[cfg_attr(rustfmt, rustfmt_skip)]
 const CG_D9_DLL_DL_HASH: [u8; 48] = [
     0xeb, 0x58, 0x44, 0x85, 0x9a, 0x39, 0xd6, 0x85, 0x3c, 0x1f, 0x14, 0x9c, 0xe0, 0x51, 0x16, 0x79,
     0x1d, 0x2a, 0x45, 0x7a, 0x7f, 0x98, 0x41, 0xed, 0x07, 0xec, 0xdc, 0x1a, 0xc7, 0xc5, 0xad, 0xcb,
@@ -92,20 +93,15 @@ fn download_cg_works() {
 }
 
 fn backup_cg() -> Result<()> {
-    let lol_cl_path = join_version(
-        &PathBuf::from(LOL_CL_PATH[0]),
-        &PathBuf::from(LOL_CL_PATH[1]),
-    )?;
-
     let cg_backup = app_dirs::get_app_dir(AppDataType::UserData, &APP_INFO, "Backups/Cg")?;
     if cg_backup.exists() {
         info!("Skipping NVIDIA Cg backup! (Already exists)");
     } else {
         fs::create_dir(&cg_backup)?;
-        update_file(&lol_cl_path.join("Cg.dll"), &cg_backup.join("Cg.dll"))?;
-        update_file(&lol_cl_path.join("CgGL.dll"), &cg_backup.join("CgGL.dll"))?;
+        update_file(&LOL_CL_PATH.join("Cg.dll"), &cg_backup.join("Cg.dll"))?;
+        update_file(&LOL_CL_PATH.join("CgGL.dll"), &cg_backup.join("CgGL.dll"))?;
         update_file(
-            &lol_cl_path.join("cgD3D9.dll"),
+            &LOL_CL_PATH.join("cgD3D9.dll"),
             &cg_backup.join("CgD3D9.dll"),
         )?;
     }
@@ -113,20 +109,12 @@ fn backup_cg() -> Result<()> {
 }
 
 fn update_cg(cg_dir: &Path) -> Result<()> {
-    let lol_cl_path = join_version(
-        &PathBuf::from(LOL_CL_PATH[0]),
-        &PathBuf::from(LOL_CL_PATH[1]),
-    )?;
-    update_file(&cg_dir.join("Cg.dll"), &lol_cl_path.join("Cg.dll"))?;
-    update_file(&cg_dir.join("CgGL.dll"), &lol_cl_path.join("CgGL.dll"))?;
-    update_file(&cg_dir.join("cgD3D9.dll"), &lol_cl_path.join("cgD3D9.dll"))?;
+    update_file(&cg_dir.join("Cg.dll"), &LOL_CL_PATH.join("Cg.dll"))?;
+    update_file(&cg_dir.join("CgGL.dll"), &LOL_CL_PATH.join("CgGL.dll"))?;
+    update_file(&cg_dir.join("cgD3D9.dll"), &LOL_CL_PATH.join("cgD3D9.dll"))?;
 
-    let lol_sln_path = join_version(
-        &PathBuf::from(LOL_SLN_PATH[0]),
-        &PathBuf::from(LOL_SLN_PATH[1]),
-    )?;
-    update_file(&cg_dir.join("Cg.dll"), &lol_sln_path.join("Cg.dll"))?;
-    update_file(&cg_dir.join("CgGL.dll"), &lol_sln_path.join("CgGL.dll"))?;
-    update_file(&cg_dir.join("cgD3D9.dll"), &lol_sln_path.join("cgD3D9.dll"))?;
+    update_file(&cg_dir.join("Cg.dll"), &LOL_SLN_PATH.join("Cg.dll"))?;
+    update_file(&cg_dir.join("CgGL.dll"), &LOL_SLN_PATH.join("CgGL.dll"))?;
+    update_file(&cg_dir.join("cgD3D9.dll"), &LOL_SLN_PATH.join("cgD3D9.dll"))?;
     Ok(())
 }

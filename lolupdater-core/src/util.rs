@@ -25,6 +25,36 @@ pub const APP_INFO: AppInfo = AppInfo {
 
 pub const DEFAULT_BUF_SIZE: usize = 8 * 1024;
 
+lazy_static! {
+    pub static ref LOL_CL_PATH: PathBuf = {
+        let head = if cfg!(target_os = "macos") {
+            "Contents/LoL/RADS/projects/lol_game_client/releases"
+        } else {
+            "RADS/projects/lol_game_client/releases"
+        };
+        let tail = if cfg!(target_os = "macos") {
+            "deploy/LeagueOfLegends.app/Contents/Frameworks"
+        } else {
+            "deploy"
+        };
+        join_version(Path::new(head), Path::new(tail)).unwrap()
+    };
+
+    pub static ref LOL_SLN_PATH: PathBuf = {
+        let head = if cfg!(target_os = "macos") {
+            "Contents/LoL/RADS/solutions/lol_game_client_sln/releases"
+        } else {
+            "RADS/solutions/lol_game_client_sln/releases"
+        };
+        let tail = if cfg!(target_os = "macos") {
+            "deploy/LeagueOfLegends.app/Contents/Frameworks"
+        } else {
+            "deploy"
+        };
+        join_version(Path::new(head), Path::new(tail)).unwrap()
+    };
+}
+
 #[cfg(target_os = "macos")]
 pub fn update_dir(from: &Path, to: &Path) -> Result<()> {
     let walker = WalkDir::new(from);
@@ -160,7 +190,7 @@ fn to_version_works() {
     }
 }
 
-pub fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
+fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
     let dir_iter = head.read_dir()?;
     let version = dir_iter
         .filter_map(|s| {
