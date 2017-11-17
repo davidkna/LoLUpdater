@@ -3,8 +3,8 @@ rust:
 - stable
 cache: cargo
 script:
-- brew update
-- brew install cmake || true
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then  brew update; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cmake || true; fi
 - cargo build --verbose --all
 - cargo test --verbose --all
 matrix:
