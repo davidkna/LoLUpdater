@@ -1,6 +1,6 @@
 [package]
 name = "lolupdater-core"
-version = "3.5.16"
+version = "3.6.0"
 authors = ["David Knaack <davidkna@users.noreply.github.com>"]
 
 [dependencies]
