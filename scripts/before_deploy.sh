@@ -36,7 +36,7 @@ main() {
         rm scripts/LoLUpdater.app/Contents/MacOS/lolupdater-gui || true
         cp target/$target/release/lolupdater-gui scripts/LoLUpdater.app/Contents/MacOS/
         rm deploy/LoLUpdater.dmg || true
-        create-dmg ./scripts/LoLUpdater.app
+        create-dmg ./scripts/LoLUpdater.app || true
         mv ./LoLUpdater-*.dmg deploy/LoLUpdater.dmg
     elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         stage=$(mktemp -d)
