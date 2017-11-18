@@ -1,10 +1,10 @@
-use std::fs::{self, remove_file};
+use std::fs;
 use std::path::Path;
 
 use app_dirs::{self, AppDataType};
 
 use util::*;
-use winutil::SYSTEM32;
+use winutil::{SYSTEM32, update_remove};
 
 const VSDLLS: [&str; 4] = [
     "concrt140.dll",
@@ -43,7 +43,7 @@ pub fn remove() -> Result<()> {
     }
     for dll in VSDLLS.into_iter() {
         update_file(&vsdll_backup.join(dll), Path::new(dll))?;
-        update_file(&vsdll_backup.join(dll), &LOL_CL_PATH.join(dll))?;
+        update_file(&vsdll_backup.join(dll), &LOLP_GC_PATH.join(dll))?;
     }
     fs::remove_dir_all(&vsdll_backup)?;
     Ok(())
@@ -64,13 +64,8 @@ fn backup_vsdlls() -> Result<()> {
 
 fn update_vsdlls() -> Result<()> {
     for dll in VSDLLS.into_iter() {
-        if Path::new(dll).exists() {
-            remove_file(&dll)?;
-        }
-        let cl_path = LOL_CL_PATH.join(dll);
-        if cl_path.exists() {
-            remove_file(&cl_path)?;
-        }
+        update_remove(Path::new(dll))?;
+        update_remove(&LOLP_GC_PATH.join(dll))?;
     }
     Ok(())
 }

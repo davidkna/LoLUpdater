@@ -1,9 +1,9 @@
-use std::fs::{self, remove_file};
+use std::fs;
 
 use app_dirs::{self, AppDataType};
 
 use util::*;
-use winutil::SYSTEM32;
+use winutil::{SYSTEM32, update_remove};
 
 pub fn install() -> Result<()> {
     info!("Checking if DX9DLL update supported…");
@@ -29,11 +29,11 @@ pub fn remove() -> Result<()> {
     }
     update_file(
         &dx9dll_backup.join("D3DCompiler_43.dll"),
-        &LOL_CL_PATH.join("D3DCompiler_43.dll"),
+        &LOLP_GC_PATH.join("D3DCompiler_43.dll"),
     )?;
     update_file(
         &dx9dll_backup.join("D3DCompiler_43.dll"),
-        &LOL_SLN_PATH.join("D3DCompiler_43.dll"),
+        &LOLSLN_GC_PATH.join("D3DCompiler_43.dll"),
     )?;
     fs::remove_dir_all(&dx9dll_backup)?;
     Ok(())
@@ -46,7 +46,7 @@ fn backup_dx9dlls() -> Result<()> {
     } else {
         fs::create_dir(&dx9dll_backup)?;
         update_file(
-            &LOL_CL_PATH.join("D3DCompiler_43.dll"),
+            &LOLP_GC_PATH.join("D3DCompiler_43.dll"),
             &dx9dll_backup.join("D3DCompiler_43.dll"),
         )?;
     }
@@ -54,14 +54,8 @@ fn backup_dx9dlls() -> Result<()> {
 }
 
 fn update_dx9dlls() -> Result<()> {
-    let cl_path = LOL_CL_PATH.join("D3DCompiler_43.dll");
-    if cl_path.exists() {
-        remove_file(&cl_path)?;
-    }
-    let sln_path = LOL_SLN_PATH.join("D3DCompiler_43.dll");
-    if sln_path.exists() {
-        remove_file(&sln_path)?;
-    }
+    update_remove(&LOLP_GC_PATH.join("D3DCompiler_43.dll"))?;
+    update_remove(&LOLSLN_GC_PATH.join("D3DCompiler_43.dll"))?;
 
     Ok(())
 }

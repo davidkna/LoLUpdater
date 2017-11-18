@@ -26,7 +26,7 @@ pub const APP_INFO: AppInfo = AppInfo {
 pub const DEFAULT_BUF_SIZE: usize = 8 * 1024;
 
 lazy_static! {
-    pub static ref LOL_CL_PATH: PathBuf = {
+    pub static ref LOLP_GC_PATH: PathBuf = {
         let head = if cfg!(target_os = "macos") {
             "Contents/LoL/RADS/projects/lol_game_client/releases"
         } else {
@@ -40,7 +40,7 @@ lazy_static! {
         join_version(Path::new(head), Path::new(tail)).unwrap()
     };
 
-    pub static ref LOL_SLN_PATH: PathBuf = {
+    pub static ref LOLSLN_GC_PATH: PathBuf = {
         let head = if cfg!(target_os = "macos") {
             "Contents/LoL/RADS/solutions/lol_game_client_sln/releases"
         } else {
