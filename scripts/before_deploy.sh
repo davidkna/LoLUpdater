@@ -3,7 +3,6 @@
 set -ex
 
 main() {
-    mkdir -p $src/deploy
 
     local src=$(pwd) \
           stage= \
@@ -17,6 +16,7 @@ main() {
         stage=$(mktemp -d -t tmp)
     fi
 
+    mkdir -p $src/deploy
     test -f Cargo.lock || cargo generate-lockfile
 
     cargo rustc --target $target --release --bin lolupdater-cli --package lolupdater-cli -- -C lto
