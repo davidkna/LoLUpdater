@@ -4,11 +4,9 @@ extern crate ole32;
 
 use std::ffi::OsString;
 use std::os::windows::ffi::OsStringExt;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::ptr;
 use std::slice;
-use std::fs;
-
 use util::*;
 
 lazy_static! {
@@ -45,11 +43,4 @@ fn get_dir(id: &winapi::shtypes::KNOWNFOLDERID) -> Result<PathBuf> {
         ole32::CoTaskMemFree(result as *mut _);
         Ok(PathBuf::from(os_string))
     }
-}
-
-pub fn update_remove(path: &Path) -> Result<()> {
-    if path.exists() {
-        fs::remove_file(path)?;
-    }
-    Ok(())
 }

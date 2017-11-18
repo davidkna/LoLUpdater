@@ -3,7 +3,7 @@ use std::fs;
 use app_dirs::{self, AppDataType};
 
 use util::*;
-use winutil::{SYSTEMX86, update_remove};
+use winutil::SYSTEMX86;
 
 pub fn install() -> Result<()> {
     info!("Checking if DX9DLL update supported…");
@@ -54,8 +54,8 @@ fn backup_dx9dlls() -> Result<()> {
 }
 
 fn update_dx9dlls() -> Result<()> {
-    update_remove(&LOLP_GC_PATH.join("D3DCompiler_43.dll"))?;
-    update_remove(&LOLSLN_GC_PATH.join("D3DCompiler_43.dll"))?;
+    update_file(&SYSTEMX86.join("D3DCompiler_43.dll"), &LOLP_GC_PATH.join("D3DCompiler_43.dll"))?;
+    update_file(&SYSTEMX86.join("D3DCompiler_43.dll"),&LOLSLN_GC_PATH.join("D3DCompiler_43.dll"))?;
 
     Ok(())
 }

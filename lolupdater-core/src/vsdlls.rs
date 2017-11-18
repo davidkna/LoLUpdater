@@ -4,7 +4,7 @@ use std::path::Path;
 use app_dirs::{self, AppDataType};
 
 use util::*;
-use winutil::{SYSTEMX86, update_remove};
+use winutil::SYSTEMX86;
 
 const VSDLLS: [&str; 4] = [
     "concrt140.dll",
@@ -64,8 +64,8 @@ fn backup_vsdlls() -> Result<()> {
 
 fn update_vsdlls() -> Result<()> {
     for dll in VSDLLS.into_iter() {
-        update_remove(Path::new(dll))?;
-        update_remove(&LOLP_GC_PATH.join(dll))?;
+        update_file(&SYSTEMX86.join(dll), Path::new(dll))?;
+        update_file(&SYSTEMX86.join(dll), &LOLP_GC_PATH.join(dll))?;
     }
     Ok(())
 }
