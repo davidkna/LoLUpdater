@@ -12,7 +12,7 @@ $ZIP_CLI = "$SRC_DIR\lolupdater-cli-$($Env:APPVEYOR_REPO_TAG_NAME)-$($Env:TARGET
 
 # TODO Update this to package the right artifacts
 Copy-Item "$SRC_DIR\target\$($Env:TARGET)\release\lolupdater-cli.exe" '.\'
-Copy-Item "$SRC_DIR\target\$($Env:TARGET)\README.md" '.\'
+Copy-Item "$SRC_DIR\README.md" '.\'
 
 7z a "$ZIP_CLI" *
 
