@@ -19,9 +19,9 @@ addons:
     packages:
       - libgtk-3-dev
 before_deploy:
-  - brew install node || true
-  - npm install --global create-dmg
-  - ./scripts/release_build.sh
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; brew install node || true; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; npm install --global create-dmg; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; ./scripts/release_build.sh; fi
 deploy:
   skip_cleanup: true
   provider: releases
