@@ -12,13 +12,13 @@ use std::fs;
 use util::*;
 
 lazy_static! {
-    pub static ref SYSTEM32: PathBuf = {
-        get_dir(&LOCAL_SYSTEMX86).unwrap()
+    pub static ref SYSTEMX86: PathBuf = {
+        get_dir(&SYSTEMX86_ID).unwrap()
     };
 }
 
 // {D65231B0-B2F1-4857-A4CE-A8E7C6EA7D27}
-static LOCAL_SYSTEMX86: winapi::shtypes::KNOWNFOLDERID = winapi::shtypes::KNOWNFOLDERID {
+static SYSTEMX86_ID: winapi::shtypes::KNOWNFOLDERID = winapi::shtypes::KNOWNFOLDERID {
     Data1: 0xD65231B0,
     Data2: 0xB2F1,
     Data3: 0x4857,

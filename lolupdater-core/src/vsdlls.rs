@@ -4,7 +4,7 @@ use std::path::Path;
 use app_dirs::{self, AppDataType};
 
 use util::*;
-use winutil::{SYSTEM32, update_remove};
+use winutil::{SYSTEMX86, update_remove};
 
 const VSDLLS: [&str; 4] = [
     "concrt140.dll",
@@ -21,7 +21,7 @@ fn test_get_dir() {
 
 pub fn install() -> Result<()> {
     info!("Checking if VSDLL update supported…");
-    let vsdll_supported = VSDLLS.into_iter().all(|dll| SYSTEM32.join(dll).exists());
+    let vsdll_supported = VSDLLS.into_iter().all(|dll| SYSTEMX86.join(dll).exists());
     if !vsdll_supported {
         info!("VSDLL update not supported!");
         return Ok(());

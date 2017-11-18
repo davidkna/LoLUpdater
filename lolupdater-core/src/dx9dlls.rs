@@ -3,11 +3,11 @@ use std::fs;
 use app_dirs::{self, AppDataType};
 
 use util::*;
-use winutil::{SYSTEM32, update_remove};
+use winutil::{SYSTEMX86, update_remove};
 
 pub fn install() -> Result<()> {
     info!("Checking if DX9DLL update supported…");
-    let dx9dll_supported = SYSTEM32.join("D3DCompiler_43.dll").exists();
+    let dx9dll_supported = SYSTEMX86.join("D3DCompiler_43.dll").exists();
     if !dx9dll_supported {
         info!("DX9DLL update not supported!");
         return Ok(());
