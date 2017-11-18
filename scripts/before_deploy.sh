@@ -42,7 +42,7 @@ main() {
     elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         stage=$(mktemp -d)
 
-        cp target/$target/release/lolupdater-cli $stage/
+        cp target/$target/release/lolupdater-gui $stage/
         cp README.md $stage/
 
         cd $stage
