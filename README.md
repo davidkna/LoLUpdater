@@ -1,6 +1,6 @@
 # LoLUpdater for macOS
 [![Build Status](https://travis-ci.org/MOBASuite/LoLUpdater-macOS.svg?branch=master)](https://travis-ci.org/MOBASuite/LoLUpdater-macOS)
-[Website](https://LoLUpdater.com)
+[Website](https://mobasuite.com)
 ## CLI Usage
 ```
 LoLUpdater for macOS
