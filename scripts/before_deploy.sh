@@ -9,10 +9,10 @@ main() {
 
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         target=x86_64-apple-darwin
-        stage=$(mktemp -d)
+        stage=$(mktemp -d -t tmp)
     elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         target=x86_64-unknown-linux-gnu
-        stage=$(mktemp -d -t tmpXXXXXXXXX)
+        stage=$(mktemp -d)
     fi
 
     mkdir -p $src/deploy
