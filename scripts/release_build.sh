@@ -21,8 +21,8 @@ TMPDIR="$(mktemp -d)"
 cp ./LICENSE "$TMPDIR"
 cp ./README.MD "$TMPDIR"
 cp ./target/release/lolupdater-cli "$TMPDIR"
-rm "./dist/lolupdater-cli.tar.bz2" || true
-tar cjvf "./dist/lolupdater-cli.tar.bz2" --exclude=".DS_Store" -C "$TMPDIR" .
+rm "./dist/lolupdater-cli-x86_64-apple-darwin.tar.bz2" || true
+tar cjvf "./dist/lolupdater-cli-x86_64-apple-darwin.tar.bz2" --exclude=".DS_Store" -C "$TMPDIR" .
 rm -rf "$TMPDIR"
 
 export CFLAGS="${OLDCFLAGS}"

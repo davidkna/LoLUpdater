@@ -1,6 +1,7 @@
 language: rust
 rust:
 - stable
+- nightly
 cache: cargo
 script:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then  brew update; fi
@@ -9,7 +10,7 @@ script:
 - cargo test --verbose --all
 matrix:
   allow_failures:
-  - os: linux
+  - rust: nightly
 os:
 - osx
 - linux
@@ -28,7 +29,7 @@ deploy:
     secure: dzUBk53mtIp4tB1AK5jMM4pFY2hUZcU5drNhwQL3hIPJkRRLSWhxzUUbbS4fsIhU+5HjDeeSOblit9fIRKEWtuCM0L/PVZaeA/PkpCToDrkJhU3NpOe59COuI/oP+CLc4T8pDFiHMHY3ZPRUaIIAp/eL4ETTwtwGZ0uGkg9yzEI=
   file:
     - ./dist/LoLUpdater.dmg
-    - ./dist/lolupdater-cli.tar.bz2
+    - ./dist/lolupdater-cli-x86_64-apple-darwin.tar.bz2
   on:
     repo: MOBASuite/LoLUpdater-macOS
     rust: stable
