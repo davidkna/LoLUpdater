@@ -44,3 +44,8 @@ fn get_dir(id: &winapi::shtypes::KNOWNFOLDERID) -> Result<PathBuf> {
         Ok(PathBuf::from(os_string))
     }
 }
+
+#[test]
+fn test_get_dir() {
+    get_dir().unwrap();
+}

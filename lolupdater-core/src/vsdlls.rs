@@ -13,11 +13,6 @@ const VSDLLS: [&str; 4] = [
     "vcruntime140.dll",
 ];
 
-#[test]
-fn test_get_dir() {
-    install().unwrap();
-}
-
 
 pub fn install() -> Result<()> {
     info!("Checking if VSDLL update supported…");
