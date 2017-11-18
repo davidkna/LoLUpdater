@@ -3,17 +3,16 @@
 set -ex
 
 main() {
-
-    local src=$(pwd) \
-          stage= \
-          target=
+    local src=$(pwd)
+    local stage
+    local target
 
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         target=x86_64-apple-darwin
         stage=$(mktemp -d)
     elif [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         target=x86_64-unknown-linux-gnu
-        stage=$(mktemp -d -t tmp)
+        stage=$(mktemp -d -t tmpXXXXXXXXX)
     fi
 
     mkdir -p $src/deploy
