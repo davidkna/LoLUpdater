@@ -47,5 +47,5 @@ fn get_dir(id: &winapi::shtypes::KNOWNFOLDERID) -> Result<PathBuf> {
 
 #[test]
 fn test_get_dir() {
-    get_dir().unwrap();
+    get_dir(&SYSTEMX86_ID).unwrap();
 }

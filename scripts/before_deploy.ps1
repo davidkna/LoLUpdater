@@ -8,7 +8,7 @@ Set-Location $ENV:Temp
 New-Item -Type Directory -Name $STAGE
 Set-Location $STAGE
 
-$ZIP_CLI = "$SRC_DIR\lolupdater-cli-$($Env:APPVEYOR_REPO_TAG_NAME)-$($Env:TARGET).zip"
+$ZIP_CLI = "$SRC_DIR\lolupdater-cli-$($Env:TARGET).zip"
 
 # TODO Update this to package the right artifacts
 Copy-Item "$SRC_DIR\target\$($Env:TARGET)\release\lolupdater-cli.exe" '.\'
@@ -27,7 +27,7 @@ $STAGE = [System.Guid]::NewGuid().ToString()
 New-Item -Type Directory -Name $STAGE
 Set-Location $STAGE
 
-$ZIP_GUI = "$SRC_DIR\lolupdater-gui-$($Env:APPVEYOR_REPO_TAG_NAME)-$($Env:TARGET).zip"
+$ZIP_GUI = "$SRC_DIR\lolupdater-gui-$($Env:TARGET).zip"
 
 $LIBUI_DLL = Get-ChildItem -Path "$SRC_DIR\target\$($Env:TARGET)\release" -Filter libui.dll -Recurse -ErrorAction SilentlyContinue -Force | %{$_.FullName}
 
