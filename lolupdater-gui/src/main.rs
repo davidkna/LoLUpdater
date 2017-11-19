@@ -16,7 +16,7 @@ use errors::*;
 
 
 thread_local! {
-    static MAIN_WINDOW: Window = Window::new(&format!("LoLUpdater for macOS {}", VERSION), 640, 240, true);
+    static MAIN_WINDOW: Window = Window::new(&format!("LoLUpdater {}", VERSION), 640, 240, true);
     static LOLPATH_ENTRY: Entry = Entry::new();
     static INSTALLMODE_RADIO: RadioButtons = RadioButtons::new();
     static CHANNEL: (mpsc::Sender<Result<()>>, mpsc::Receiver<Result<()>>) = mpsc::channel();
@@ -24,7 +24,7 @@ thread_local! {
 }
 
 fn run() {
-    let program_name = format!("LoLUpdater for macOS {}", VERSION);
+    let program_name = "LoLUpdater";
 
     let mainwin = MAIN_WINDOW.with(|w| w.clone());
     mainwin.set_margined(true);

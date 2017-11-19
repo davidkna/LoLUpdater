@@ -20,7 +20,7 @@ quick_main!(run);
 
 fn run() -> Result<()> {
     init_log();
-    let matches = App::new("LoLUpdater for macOS")
+    let matches = App::new("LoLUpdater")
         .version(VERSION)
         .arg(
             Arg::with_name("uninstall")
@@ -38,7 +38,7 @@ fn run() -> Result<()> {
         )
         .get_matches();
 
-    println!("LoLUpdater for macOS {}", VERSION);
+    println!("LoLUpdater {}", VERSION);
     println!(
         "Report errors, feature requests or any issues at \
               https://github.com/MOBASuite/LoLUpdater-macOS/issues.\n"
