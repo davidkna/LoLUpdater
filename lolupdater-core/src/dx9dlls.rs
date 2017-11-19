@@ -7,7 +7,10 @@ use winutil::SYSTEMX86;
 
 pub fn install() -> Result<()> {
     info!("Checking if DX9DLL update supported…");
-    let dx9dll_supported = SYSTEMX86.join("D3DCompiler_43.dll").exists();
+    let dx9dll_supported = SYSTEMX86
+        .with(|k| k.clone())
+        .join("D3DCompiler_43.dll")
+        .exists();
     if !dx9dll_supported {
         info!("DX9DLL update not supported!");
         return Ok(());
@@ -29,11 +32,13 @@ pub fn remove() -> Result<()> {
     }
     update_file(
         &dx9dll_backup.join("D3DCompiler_43.dll"),
-        &LOLP_GC_PATH.join("D3DCompiler_43.dll"),
+        &LOLP_GC_PATH.with(|k| k.clone()).join("D3DCompiler_43.dll"),
     )?;
     update_file(
         &dx9dll_backup.join("D3DCompiler_43.dll"),
-        &LOLSLN_GC_PATH.join("D3DCompiler_43.dll"),
+        &LOLSLN_GC_PATH.with(|k| k.clone()).join(
+            "D3DCompiler_43.dll",
+        ),
     )?;
     fs::remove_dir_all(&dx9dll_backup)?;
     Ok(())
@@ -46,7 +51,7 @@ fn backup_dx9dlls() -> Result<()> {
     } else {
         fs::create_dir(&dx9dll_backup)?;
         update_file(
-            &LOLP_GC_PATH.join("D3DCompiler_43.dll"),
+            &LOLP_GC_PATH.with(|k| k.clone()).join("D3DCompiler_43.dll"),
             &dx9dll_backup.join("D3DCompiler_43.dll"),
         )?;
     }
@@ -54,8 +59,16 @@ fn backup_dx9dlls() -> Result<()> {
 }
 
 fn update_dx9dlls() -> Result<()> {
-    update_file(&SYSTEMX86.join("D3DCompiler_43.dll"), &LOLP_GC_PATH.join("D3DCompiler_43.dll"))?;
-    update_file(&SYSTEMX86.join("D3DCompiler_43.dll"),&LOLSLN_GC_PATH.join("D3DCompiler_43.dll"))?;
+    update_file(
+        &SYSTEMX86.with(|k| k.clone()).join("D3DCompiler_43.dll"),
+        &LOLP_GC_PATH.with(|k| k.clone()).join("D3DCompiler_43.dll"),
+    )?;
+    update_file(
+        &SYSTEMX86.with(|k| k.clone()).join("D3DCompiler_43.dll"),
+        &LOLSLN_GC_PATH.with(|k| k.clone()).join(
+            "D3DCompiler_43.dll",
+        ),
+    )?;
 
     Ok(())
 }

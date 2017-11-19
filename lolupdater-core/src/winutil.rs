@@ -9,8 +9,8 @@ use std::ptr;
 use std::slice;
 use util::*;
 
-lazy_static! {
-    pub static ref SYSTEMX86: PathBuf = {
+thread_local! {
+    pub static SYSTEMX86: PathBuf = {
         get_dir(&SYSTEMX86_ID).unwrap()
     };
 }

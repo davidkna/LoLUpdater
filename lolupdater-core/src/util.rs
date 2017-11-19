@@ -25,33 +25,30 @@ pub const APP_INFO: AppInfo = AppInfo {
 
 pub const DEFAULT_BUF_SIZE: usize = 8 * 1024;
 
-lazy_static! {
-    pub static ref LOLP_GC_PATH: PathBuf = {
-        let head = if cfg!(target_os = "macos") {
-            "Contents/LoL/RADS/projects/lol_game_client/releases"
-        } else {
-            "RADS/projects/lol_game_client/releases"
-        };
-        let tail = if cfg!(target_os = "macos") {
-            "deploy/LeagueOfLegends.app/Contents/Frameworks"
-        } else {
-            "deploy"
-        };
-        join_version(Path::new(head), Path::new(tail)).unwrap()
+#[cfg(target_os = "macos")]
+pub const LOLP_GC_PATH_PARTS: [&str; 2] = [
+    "Contents/LoL/RADS/projects/lol_game_client/releases",
+    "deploy/LeagueOfLegends.app/Contents/Frameworks",
+];
+#[cfg(not(target_os = "macos"))]
+pub const LOLP_GC_PATH_PARTS: [&str; 2] = ["RADS/projects/lol_game_client/releases", "deploy"];
+
+#[cfg(target_os = "macos")]
+pub const LOLSLN_GC_PATH_PARTS: [&str; 2] = [
+    "Contents/LoL/RADS/solutions/lol_game_client_sln/releases",
+    "deploy/LeagueOfLegends.app/Contents/Frameworks",
+];
+#[cfg(not(target_os = "macos"))]
+pub const LOLSLN_GC_PATH_PARTS: [&str; 2] =
+    ["RADS/solutions/lol_game_client_sln/releases", "deploy"];
+
+thread_local! {
+    pub static LOLP_GC_PATH: PathBuf = {
+        join_version(Path::new(LOLP_GC_PATH_PARTS[0]), Path::new(LOLP_GC_PATH_PARTS[1])).unwrap()
     };
 
-    pub static ref LOLSLN_GC_PATH: PathBuf = {
-        let head = if cfg!(target_os = "macos") {
-            "Contents/LoL/RADS/solutions/lol_game_client_sln/releases"
-        } else {
-            "RADS/solutions/lol_game_client_sln/releases"
-        };
-        let tail = if cfg!(target_os = "macos") {
-            "deploy/LeagueOfLegends.app/Contents/Frameworks"
-        } else {
-            "deploy"
-        };
-        join_version(Path::new(head), Path::new(tail)).unwrap()
+    pub static LOLSLN_GC_PATH: PathBuf = {
+        join_version(Path::new(LOLSLN_GC_PATH_PARTS[0]), Path::new(LOLSLN_GC_PATH_PARTS[1])).unwrap()
     };
 }
 
@@ -190,7 +187,7 @@ fn to_version_works() {
     }
 }
 
-fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
+pub fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
     let dir_iter = head.read_dir()?;
     let version = dir_iter
         .filter_map(|s| {

@@ -108,7 +108,7 @@ struct Info {
 }
 
 #[cfg(target_os = "macos")]
-fn lol_dir_ok() -> Result<()> {
+fn lol_dir_ok_platform() -> Result<()> {
     let info_plist = std::fs::File::open("Contents/Info.plist").chain_err(
         || "Failed to find Info.plist. Is this an app bundle?",
     )?;
@@ -123,12 +123,25 @@ fn lol_dir_ok() -> Result<()> {
     Ok(())
 }
 #[cfg(not(target_os = "macos"))]
-fn lol_dir_ok() -> Result<()> {
+fn lol_dir_ok_platform() -> Result<()> {
     if !Path::new("LeagueClient.exe").exists() {
         return Err(
             "The chosen app folder is not LoL. Please check again!".into(),
         );
     }
+    Ok(())
+}
+
+fn lol_dir_ok() -> Result<()> {
+    lol_dir_ok_platform()?;
+    join_version(
+        Path::new(LOLP_GC_PATH_PARTS[0]),
+        Path::new(LOLP_GC_PATH_PARTS[1]),
+    )?;
+    join_version(
+        Path::new(LOLSLN_GC_PATH_PARTS[0]),
+        Path::new(LOLSLN_GC_PATH_PARTS[1]),
+    )?;
     Ok(())
 }
 

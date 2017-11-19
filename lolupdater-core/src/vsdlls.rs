@@ -16,7 +16,9 @@ const VSDLLS: [&str; 4] = [
 
 pub fn install() -> Result<()> {
     info!("Checking if VSDLL update supported…");
-    let vsdll_supported = VSDLLS.into_iter().all(|dll| SYSTEMX86.join(dll).exists());
+    let vsdll_supported = VSDLLS.into_iter().all(|dll| {
+        SYSTEMX86.with(|k| k.clone()).join(dll).exists()
+    });
     if !vsdll_supported {
         info!("VSDLL update not supported!");
         return Ok(());
@@ -38,7 +40,10 @@ pub fn remove() -> Result<()> {
     }
     for dll in VSDLLS.into_iter() {
         update_file(&vsdll_backup.join(dll), Path::new(dll))?;
-        update_file(&vsdll_backup.join(dll), &LOLP_GC_PATH.join(dll))?;
+        update_file(
+            &vsdll_backup.join(dll),
+            &LOLP_GC_PATH.with(|k| k.clone()).join(dll),
+        )?;
     }
     fs::remove_dir_all(&vsdll_backup)?;
     Ok(())
@@ -59,8 +64,11 @@ fn backup_vsdlls() -> Result<()> {
 
 fn update_vsdlls() -> Result<()> {
     for dll in VSDLLS.into_iter() {
-        update_file(&SYSTEMX86.join(dll), Path::new(dll))?;
-        update_file(&SYSTEMX86.join(dll), &LOLP_GC_PATH.join(dll))?;
+        update_file(&SYSTEMX86.with(|k| k.clone()).join(dll), Path::new(dll))?;
+        update_file(
+            &SYSTEMX86.with(|k| k.clone()).join(dll),
+            &LOLP_GC_PATH.with(|k| k.clone()).join(dll),
+        )?;
     }
     Ok(())
 }

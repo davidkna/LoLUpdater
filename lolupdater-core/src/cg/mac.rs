@@ -88,14 +88,23 @@ fn backup_cg() -> Result<()> {
     if cg_backup.exists() {
         info!("Skipping NVIDIA Cg backup! (Already exists)");
     } else {
-        update_dir(&LOLP_GC_PATH.join("Cg.framework"), &cg_backup)?;
+        update_dir(
+            &LOLP_GC_PATH.with(|k| k.clone()).join("Cg.framework"),
+            &cg_backup,
+        )?;
     }
     Ok(())
 }
 
 fn update_cg(cg_dir: &Path) -> Result<()> {
-    update_dir(cg_dir, &LOLP_GC_PATH.join("Cg.framework"))?;
-    update_dir(cg_dir, &LOLSLN_GC_PATH.join("Cg.framework"))?;
+    update_dir(
+        cg_dir,
+        &LOLP_GC_PATH.with(|k| k.clone()).join("Cg.framework"),
+    )?;
+    update_dir(
+        cg_dir,
+        &LOLSLN_GC_PATH.with(|k| k.clone()).join("Cg.framework"),
+    )?;
     Ok(())
 }
 
