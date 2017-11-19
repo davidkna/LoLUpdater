@@ -35,7 +35,6 @@ pub mod errors;
 pub mod util;
 
 use std::env;
-#[cfg(not(target_os = "macos"))]
 use std::path::Path;
 use app_dirs::AppDataType;
 #[cfg(target_os = "macos")]
