@@ -8,6 +8,6 @@ path = "../lolupdater-core"
 
 [dependencies]
 clap = "2.26.2"
-error-chain = "0.11.0"
+error-chain = { git = "https://github.com/alexcrichton/error-chain.git", rev ="f3020b81d7bd2c26895ac0174f91c4cbb47a4dfe" }
 env_logger = "0.4.3"
 log = "0.3.8"

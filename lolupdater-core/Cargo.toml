@@ -5,7 +5,7 @@ authors = ["David Knaack <davidkna@users.noreply.github.com>"]
 
 [dependencies]
 app_dirs = "1.1.1"
-error-chain = "0.11.0"
+error-chain = { git = "https://github.com/alexcrichton/error-chain.git", rev ="f3020b81d7bd2c26895ac0174f91c4cbb47a4dfe" }
 lazy_static = "0.2.8"
 log = "0.3.8"
 regex = "0.2.2"
