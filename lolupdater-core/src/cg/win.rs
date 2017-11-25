@@ -37,7 +37,11 @@ pub fn install() -> Result<()> {
     let cg_dir = app_dirs::get_app_dir(AppDataType::UserCache, &APP_INFO, "Cg")?;
     if !cg_dir.exists() {
         info!("Downloading Nvidia Cg…");
-        download_cg(&cg_dir)?;
+        let result = download_cg(&cg_dir);
+        if result.is_err() {
+            fs::remove_dir_all(&cg_dir)?;
+        }
+        result?;
     } else {
         info!("Nvidia Cg is already cached!")
     }
