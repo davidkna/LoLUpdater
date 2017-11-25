@@ -47,8 +47,11 @@ pub const VERSION: &str = concat!("v", env!("CARGO_PKG_VERSION"));
 #[cfg(target_os = "macos")]
 pub const DEFAULT_LOL_DIR: &str = "/Applications/League of Legends.app";
 
-#[cfg(not(target_os = "macos"))]
+#[cfg(target_os = "windows")]
 pub const DEFAULT_LOL_DIR: &str = "C:/Riot Games/League of Legends";
+
+#[cfg(not(any(target_os = "windows", target_os = "macos")))]
+pub const DEFAULT_LOL_DIR: &str = "/";
 
 pub fn init_backups() -> Result<()> {
     let backups = {
