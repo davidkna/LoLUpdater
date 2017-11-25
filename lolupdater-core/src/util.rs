@@ -187,20 +187,19 @@ fn to_version_works() {
     }
 }
 
-pub fn join_version(head: &Path, tail: &Path) -> Result<PathBuf> {
-    let dir_iter = head.read_dir()?;
+pub fn join_version(head: &Path, tail: &Path) -> Option<PathBuf> {
+    let dir_iter = head.read_dir().ok()?;
     let version = dir_iter
         .filter_map(|s| {
-            let name = s.expect("Failed to unwrap DirEntry!").file_name();
-            let name_str = name.into_string().expect("Failed to filename as Unicode!");
+            let name = s.as_ref().ok()?;
+            let name_str = name.file_name().into_string().ok()?;
             if VERSION_REGEX.is_match(&name_str) {
                 return Some(name_str);
             }
             None
         })
-        .max_by_key(|k| to_version(k))
-        .expect("Failed to get max");
-    Ok(head.join(version).join(tail))
+        .max_by_key(|k| to_version(k))?;
+    Some(head.join(version).join(tail))
 }
 
 #[test]

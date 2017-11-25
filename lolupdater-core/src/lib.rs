@@ -136,14 +136,20 @@ fn lol_dir_ok_platform() -> Result<()> {
 
 fn lol_dir_ok() -> Result<()> {
     lol_dir_ok_platform()?;
-    join_version(
+    if join_version(
         Path::new(LOLP_GC_PATH_PARTS[0]),
         Path::new(LOLP_GC_PATH_PARTS[1]),
-    )?;
-    join_version(
+    ).is_none()
+    {
+        return Err("Directory structure appears to be unsound.".into());
+    };
+    if join_version(
         Path::new(LOLSLN_GC_PATH_PARTS[0]),
         Path::new(LOLSLN_GC_PATH_PARTS[1]),
-    )?;
+    ).is_none()
+    {
+        return Err("Directory structure appears to be unsound.".into());
+    };
     Ok(())
 }
 
