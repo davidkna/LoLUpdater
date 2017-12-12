@@ -18,7 +18,7 @@ sha2 = "0.7.0"
 tempdir = "0.3.5"
 
 [target.'cfg(target_os = "macos")'.dependencies]
-flate2 = "0.2.19"
+flate2 = "1.0.1"
 plist = "0.2.3"
 tar = { version = "0.4.13", default-features = false }
 walkdir = "2.0.1"

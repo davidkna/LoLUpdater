@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use app_dirs::{self, AppDataType};
 use flate2::read::GzDecoder;
@@ -113,7 +113,7 @@ fn extract_cg(mount_dir: &Path, target_dir: &Path) -> Result<()> {
         "Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz",
     );
     let a_file = File::open(a_path)?;
-    let decompressed = GzDecoder::new(a_file)?;
+    let decompressed = GzDecoder::new(a_file);
     let mut archive = Archive::new(decompressed);
 
     for file in archive.entries()? {
