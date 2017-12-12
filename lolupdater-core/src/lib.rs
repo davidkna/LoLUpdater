@@ -1,5 +1,6 @@
 extern crate app_dirs;
 #[macro_use]
+extern crate derive_error_chain;
 extern crate error_chain;
 #[cfg(target_os = "macos")]
 extern crate flate2;
