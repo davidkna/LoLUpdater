@@ -1,19 +1,18 @@
 #![windows_subsystem = "windows"]
+extern crate lolupdater_core;
 extern crate tinyfiledialogs;
 extern crate ui;
-extern crate lolupdater_core;
 
 use std::cell::RefCell;
 use std::sync::mpsc;
 use std::time;
 use std::thread;
 
-use ui::{BoxControl, Button, Entry, Group, InitOptions, Label, RadioButtons, Separator, Window,
-         msg_box, msg_box_error};
+use ui::{msg_box, msg_box_error, BoxControl, Button, Entry, Group, InitOptions, Label,
+         RadioButtons, Separator, Window};
 
 use lolupdater_core::*;
 use errors::*;
-
 
 thread_local! {
     static MAIN_WINDOW: Window = Window::new(&format!("LoLUpdater {}", VERSION), 640, 240, true);
@@ -28,12 +27,12 @@ fn run() {
 
     let mainwin = MAIN_WINDOW.with(|w| w.clone());
     mainwin.set_margined(true);
-    #[cfg(not(target_os = "linux"))] mainwin.center();
+    #[cfg(not(target_os = "linux"))]
+    mainwin.center();
     mainwin.on_closing(Box::new(|_| {
         ui::quit();
         false
     }));
-
 
     let hbox = BoxControl::new_vertical();
     hbox.set_padded(true);
@@ -106,7 +105,6 @@ pub fn main() {
     ui::uninit();
 }
 
-
 fn ask_for_loldir(_: &Button) {
     let result = if cfg!(target_os = "macos") {
         tinyfiledialogs::open_file_dialog(
@@ -119,7 +117,9 @@ fn ask_for_loldir(_: &Button) {
     };
 
     if let Some(file_path) = result {
-        LOLPATH_ENTRY.with(|lpe| { lpe.set_text(&file_path); });
+        LOLPATH_ENTRY.with(|lpe| {
+            lpe.set_text(&file_path);
+        });
     }
 }
 
@@ -147,7 +147,6 @@ fn install_clicked(install_button: &Button) {
     });
 
     ui::queue_main(Box::new(is_done_check));
-
 }
 
 fn is_done_check() {
@@ -177,16 +176,17 @@ fn is_done_check() {
     }
 }
 
-
 fn install_done(result: Result<()>) {
-    MAIN_WINDOW.with(|win| if result.is_ok() {
-        msg_box(
-            win,
-            "Updating successful!",
-            "LoLUpdater needs to be rerun after every LoL update.",
-        );
-    } else if let Err(ref e) = result {
-        show_error_message(e);
+    MAIN_WINDOW.with(|win| {
+        if result.is_ok() {
+            msg_box(
+                win,
+                "Updating successful!",
+                "LoLUpdater needs to be rerun after every LoL update.",
+            );
+        } else if let Err(ref e) = result {
+            show_error_message(e);
+        }
     });
     ui::quit();
 }

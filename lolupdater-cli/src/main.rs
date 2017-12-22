@@ -9,12 +9,12 @@ extern crate error_chain;
 
 use std::env;
 
-use log::{LogRecord, LogLevelFilter};
+use log::{LogLevelFilter, LogRecord};
 use env_logger::LogBuilder;
 
 use lolupdater_core::*;
 use errors::*;
-use clap::{Arg, App};
+use clap::{App, Arg};
 
 quick_main!(run);
 
@@ -41,7 +41,7 @@ fn run() -> Result<()> {
     println!("LoLUpdater {}", VERSION);
     println!(
         "Report errors, feature requests or any issues at \
-              https://github.com/MOBASuite/LoLUpdater-macOS/issues.\n"
+         https://github.com/MOBASuite/LoLUpdater-macOS/issues.\n"
     );
 
     if update_available()? {

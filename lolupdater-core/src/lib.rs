@@ -56,8 +56,8 @@ pub const DEFAULT_LOL_DIR: &str = "/";
 
 pub fn init_backups() -> Result<()> {
     let backups = {
-        let mut t = app_dirs::app_root(AppDataType::UserData, &APP_INFO)
-            .chain_err(|| "Create data root")?;
+        let mut t =
+            app_dirs::app_root(AppDataType::UserData, &APP_INFO).chain_err(|| "Create data root")?;
         t.push("Backups");
         t
     };
@@ -68,38 +68,33 @@ pub fn init_backups() -> Result<()> {
     Ok(())
 }
 
-
 pub fn install(lol_dir: &str) -> Result<()> {
     set_lol_dir(lol_dir)?;
     init_backups()?;
     cg::install().chain_err(|| "Failed to update Cg")?;
     #[cfg(target_os = "windows")]
-    dx9dlls::install().chain_err(
-        || "Failed to update DirectX DLLs",
-    )?;
-    #[cfg(target_os = "windows")] vsdlls::install().chain_err(|| "Failed to update MS DLLs")?;
+    dx9dlls::install().chain_err(|| "Failed to update DirectX DLLs")?;
+    #[cfg(target_os = "windows")]
+    vsdlls::install().chain_err(|| "Failed to update MS DLLs")?;
 
     info!("Done installing!");
     Ok(())
 }
 
-
 pub fn uninstall(lol_dir: &str) -> Result<()> {
     set_lol_dir(lol_dir)?;
     cg::remove().chain_err(|| "Failed to restore Cg")?;
     #[cfg(target_os = "windows")]
-    dx9dlls::remove().chain_err(
-        || "Failed to update DirectX DLLs",
-    )?;
-    #[cfg(target_os = "windows")] vsdlls::remove().chain_err(|| "Failed to update MS DLLs")?;
+    dx9dlls::remove().chain_err(|| "Failed to update DirectX DLLs")?;
+    #[cfg(target_os = "windows")]
+    vsdlls::remove().chain_err(|| "Failed to update MS DLLs")?;
     info!("Done uninstalling!");
     Ok(())
 }
 
 fn set_lol_dir(lol_dir: &str) -> Result<()> {
-    env::set_current_dir(lol_dir).chain_err(
-        || "Failed to set CWD to LoL location. Did you set the correct path for LoL?",
-    )?;
+    env::set_current_dir(lol_dir)
+        .chain_err(|| "Failed to set CWD to LoL location. Did you set the correct path for LoL?")?;
     lol_dir_ok()
 }
 
@@ -112,25 +107,18 @@ struct Info {
 
 #[cfg(target_os = "macos")]
 fn lol_dir_ok_platform() -> Result<()> {
-    let info_plist = std::fs::File::open("Contents/Info.plist").chain_err(
-        || "Failed to find Info.plist. Is this an app bundle?",
-    )?;
-    let info: Info = deserialize(info_plist).chain_err(
-        || "Could not parse Info.plist",
-    )?;
+    let info_plist = std::fs::File::open("Contents/Info.plist")
+        .chain_err(|| "Failed to find Info.plist. Is this an app bundle?")?;
+    let info: Info = deserialize(info_plist).chain_err(|| "Could not parse Info.plist")?;
     if info.CFBundleIdentifier != "com.riotgames.MacContainer" {
-        return Err(
-            "The chosen app bundle is not LoL. Please check again!".into(),
-        );
+        return Err("The chosen app bundle is not LoL. Please check again!".into());
     }
     Ok(())
 }
 #[cfg(not(target_os = "macos"))]
 fn lol_dir_ok_platform() -> Result<()> {
     if !Path::new("LeagueClient.exe").exists() {
-        return Err(
-            "The chosen app folder is not LoL. Please check again!".into(),
-        );
+        return Err("The chosen app folder is not LoL. Please check again!".into());
     }
     Ok(())
 }
@@ -159,15 +147,13 @@ struct GithubRelease {
     tag_name: String,
 }
 
-
 pub fn update_available() -> Result<bool> {
     info!("Checking for updates…");
     if cfg!(debug_assertions) {
         return Ok(false);
     }
-    let release_dl = reqwest::get(
-        "https://api.github.com/repos/MOBASuite/LoLUpdater-macOS/releases/latest",
-    )?;
+    let release_dl =
+        reqwest::get("https://api.github.com/repos/MOBASuite/LoLUpdater-macOS/releases/latest")?;
 
     let git_release: GithubRelease = serde_json::from_reader(release_dl)?;
 

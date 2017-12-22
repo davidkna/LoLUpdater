@@ -36,9 +36,9 @@ pub fn remove() -> Result<()> {
     )?;
     update_file(
         &dx9dll_backup.join("D3DCompiler_43.dll"),
-        &LOLSLN_GC_PATH.with(|k| k.clone()).join(
-            "D3DCompiler_43.dll",
-        ),
+        &LOLSLN_GC_PATH
+            .with(|k| k.clone())
+            .join("D3DCompiler_43.dll"),
     )?;
     fs::remove_dir_all(&dx9dll_backup)?;
     Ok(())
@@ -65,9 +65,9 @@ fn update_dx9dlls() -> Result<()> {
     )?;
     update_file(
         &SYSTEMX86.with(|k| k.clone()).join("D3DCompiler_43.dll"),
-        &LOLSLN_GC_PATH.with(|k| k.clone()).join(
-            "D3DCompiler_43.dll",
-        ),
+        &LOLSLN_GC_PATH
+            .with(|k| k.clone())
+            .join("D3DCompiler_43.dll"),
     )?;
 
     Ok(())

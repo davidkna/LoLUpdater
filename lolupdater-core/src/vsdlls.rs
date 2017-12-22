@@ -13,12 +13,11 @@ const VSDLLS: [&str; 4] = [
     "vcruntime140.dll",
 ];
 
-
 pub fn install() -> Result<()> {
     info!("Checking if VSDLL update supported…");
-    let vsdll_supported = VSDLLS.into_iter().all(|dll| {
-        SYSTEMX86.with(|k| k.clone()).join(dll).exists()
-    });
+    let vsdll_supported = VSDLLS
+        .into_iter()
+        .all(|dll| SYSTEMX86.with(|k| k.clone()).join(dll).exists());
     if !vsdll_supported {
         info!("VSDLL update not supported!");
         return Ok(());

@@ -54,9 +54,8 @@ pub fn remove() -> Result<()> {
 }
 
 fn download_cg(cg_dir: &Path) -> Result<()> {
-    let download_dir = TempDir::new("lolupdater-cg-dl").chain_err(
-        || "Failed to create temp dir for Nvidia Cg download",
-    )?;
+    let download_dir = TempDir::new("lolupdater-cg-dl")
+        .chain_err(|| "Failed to create temp dir for Nvidia Cg download")?;
     let image_file = download_dir.path().join("cg.dmg");
 
     info!("Downloading Nvidia Cg…");
@@ -70,9 +69,7 @@ fn download_cg(cg_dir: &Path) -> Result<()> {
     extract_cg(mount_dir.path(), cg_dir)?;
 
     info!("Unmounting Nvidia Cg…");
-    unmount(mount_dir.path()).chain_err(
-        || "Failed to unmount Cg",
-    )?;
+    unmount(mount_dir.path()).chain_err(|| "Failed to unmount Cg")?;
     Ok(())
 }
 
@@ -109,9 +106,7 @@ fn update_cg(cg_dir: &Path) -> Result<()> {
 }
 
 fn extract_cg(mount_dir: &Path, target_dir: &Path) -> Result<()> {
-    let a_path = mount_dir.join(
-        "Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz",
-    );
+    let a_path = mount_dir.join("Cg-3.1.0013.app/Contents/Resources/Installer Items/NVIDIA_Cg.tgz");
     let a_file = File::open(a_path)?;
     let decompressed = GzDecoder::new(a_file);
     let mut archive = Archive::new(decompressed);

@@ -143,7 +143,6 @@ pub fn download(target_path: &Path, url: &str, expected_hash: Option<&[u8]>) -> 
     Ok(())
 }
 
-
 lazy_static! {
     static ref VERSION_REGEX: Regex = {
         // 0 to 255
