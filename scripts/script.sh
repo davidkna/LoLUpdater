@@ -25,7 +25,7 @@ main() {
 
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     brew update
-    brew install cmake || true
+    brew install cmake || brew upgrade cmake || true
 fi
 
 # we don't run the "test phase" when doing deploys

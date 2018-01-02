@@ -48,8 +48,8 @@ test_script:
 
 before_deploy:
   - cargo clean
-  - cargo rustc --target %TARGET% --release --bin lolupdater-cli --package lolupdater-cli -- -C lto
-  - cargo rustc --target %TARGET% --release --bin lolupdater-gui --package lolupdater-gui -- -C lto
+  - cargo rustc --target %TARGET% --release --bin lolupdater-cli -- -C lto
+  - cargo rustc --target %TARGET% --release --bin lolupdater-gui -- -C lto
   - ps: scripts\before_deploy.ps1
 
 deploy:

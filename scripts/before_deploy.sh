@@ -18,8 +18,8 @@ main() {
     mkdir -p $src/deploy
     test -f Cargo.lock || cargo generate-lockfile
 
-    cargo rustc --target $target --release --bin lolupdater-cli --package lolupdater-cli -- -C lto
-    cargo rustc --target $target --release --bin lolupdater-gui --package lolupdater-gui -- -C lto
+    cargo rustc --target $target --release --bin lolupdater-cli -- -C lto
+    cargo rustc --target $target --release --bin lolupdater-gui -- -C lto
 
     cp target/$target/release/lolupdater-cli $stage/
     cp README.md $stage/

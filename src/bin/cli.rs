@@ -8,9 +8,9 @@ extern crate lolupdater_core;
 extern crate error_chain;
 
 use std::env;
-
-use log::{LogLevelFilter, LogRecord};
-use env_logger::LogBuilder;
+use std::io::Write;
+use log::LevelFilter;
+use env_logger::Builder;
 
 use lolupdater_core::*;
 use errors::*;
@@ -59,14 +59,14 @@ fn run() -> Result<()> {
 }
 
 fn init_log() {
-    let format = |record: &LogRecord| format!("[{}] {}", record.level(), record.args());
+    let mut builder = Builder::new();
+ 
+    builder.format(|buf, record| writeln!(buf, "[{}] {}", record.level(), record.args()))
+           .filter(None, LevelFilter::Info);
 
-    let mut builder = LogBuilder::new();
-    builder.format(format).filter(None, LogLevelFilter::Info);
-
-    if env::var("RUST_LOG").is_ok() {
-        builder.parse(&env::var("RUST_LOG").unwrap());
+    if let Ok(rust_log) = env::var("RUST_LOG") {
+       builder.parse(&rust_log);
     }
 
-    builder.init().unwrap();
+    builder.init();
 }
