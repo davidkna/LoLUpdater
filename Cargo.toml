@@ -1,6 +1,6 @@
 [package]
 name = "lolupdater"
-version = "3.6.6"
+version = "3.7.0"
 authors = ["David Knaack <davidkna@users.noreply.github.com>"]
 
 [lib]
