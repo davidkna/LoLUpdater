@@ -18,6 +18,9 @@ main() {
     mkdir -p $src/deploy
     test -f Cargo.lock || cargo generate-lockfile
 
+    cargo install --git https://github.com/davidkna/cargo-licenses-markdown
+    cargo licenses-markdown
+
     cargo rustc --target $target --release --bin lolupdater-cli -- -C lto
     cargo rustc --target $target --release --bin lolupdater-gui -- -C lto
 

@@ -9,7 +9,7 @@ use std::time;
 use std::thread;
 
 use ui::{msg_box, msg_box_error, BoxControl, Button, Entry, Group, InitOptions, Label,
-         RadioButtons, Separator, Window};
+         MultilineEntry, RadioButtons, Separator, Window};
 
 use lolupdater_core::*;
 use errors::*;
@@ -71,10 +71,16 @@ fn run() {
     install_path_button.on_clicked(Box::new(ask_for_loldir));
     install_path_box.append(install_path_button.clone().into(), false);
 
+    let install_box = BoxControl::new_horizontal();
     let install_button = Button::new("Patch!");
     install_button.on_clicked(Box::new(install_clicked));
-    hbox.append(install_button.clone().into(), false);
+    install_box.append(install_button.clone().into(), true);
     install_button.disable();
+
+    let licenses_button = Button::new("Licenses");
+    licenses_button.on_clicked(Box::new(show_licenses));
+    install_box.append(licenses_button.clone().into(), false);
+    hbox.append(install_box.clone().into(), false);
 
     mainwin.show();
     let has_update = update_available();
@@ -201,4 +207,16 @@ fn show_error_message(error: &Error) {
         error_msg.push_str("\nPlease report this error on Github!");
         msg_box_error(win, "Error!", &error_msg);
     });
+}
+
+fn show_licenses(_button: &Button) {
+    let win = Window::new("License Info", 600, 400, true);
+    win.set_margined(true);
+    let entry = MultilineEntry::new();
+    entry.set_text(&get_license_info());
+    entry.set_read_only(true);
+
+    win.set_child(entry.clone().into());
+    win.on_closing(Box::new(|_| true));
+    win.show();
 }

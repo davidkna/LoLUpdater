@@ -29,6 +29,11 @@ fn run() -> Result<()> {
                 .short("u"),
         )
         .arg(
+            Arg::with_name("license-disclaimer")
+                .long("license-disclaimer")
+                .help("Display dependency license files"),
+        )
+        .arg(
             Arg::with_name("PATH")
                 .help(&format!(
                     "Target League of Legends patch. Default is \"{}\".",
@@ -43,6 +48,11 @@ fn run() -> Result<()> {
         "Report errors, feature requests or any issues at \
          https://github.com/MOBASuite/LoLUpdater-macOS/issues.\n"
     );
+
+    if matches.is_present("license-disclaimer") {
+        println!("{}", get_license_info());
+        return Ok(());
+    }
 
     if update_available()? {
         return Err(
@@ -60,12 +70,13 @@ fn run() -> Result<()> {
 
 fn init_log() {
     let mut builder = Builder::new();
- 
-    builder.format(|buf, record| writeln!(buf, "[{}] {}", record.level(), record.args()))
-           .filter(None, LevelFilter::Info);
+
+    builder
+        .format(|buf, record| writeln!(buf, "[{}] {}", record.level(), record.args()))
+        .filter(None, LevelFilter::Info);
 
     if let Ok(rust_log) = env::var("RUST_LOG") {
-       builder.parse(&rust_log);
+        builder.parse(&rust_log);
     }
 
     builder.init();

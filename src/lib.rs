@@ -2,7 +2,6 @@ extern crate app_dirs;
 #[macro_use]
 extern crate derive_error_chain;
 extern crate error_chain;
-#[cfg(target_os = "macos")]
 extern crate flate2;
 #[cfg(target_os = "macos")]
 extern crate plist;
@@ -38,9 +37,11 @@ pub mod util;
 use std::env;
 use std::path::Path;
 use app_dirs::AppDataType;
+use flate2::read::GzDecoder;
 #[cfg(target_os = "macos")]
 use plist::serde::deserialize;
 use std::fs;
+use std::io::Read;
 use util::*;
 
 pub const VERSION: &str = concat!("v", env!("CARGO_PKG_VERSION"));
@@ -158,4 +159,12 @@ pub fn update_available() -> Result<bool> {
     let git_release: GithubRelease = serde_json::from_reader(release_dl)?;
 
     Ok(git_release.tag_name != VERSION)
+}
+
+pub fn get_license_info() -> String {
+    let info = include_bytes!("../static/hound.md.gz");
+    let mut gz = GzDecoder::new(&info[..]);
+    let mut out = String::new();
+    gz.read_to_string(&mut out).unwrap();
+    out
 }
