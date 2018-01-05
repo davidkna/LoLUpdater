@@ -210,9 +210,9 @@ fn show_error_message(error: &Error) {
 }
 
 fn show_licenses(_button: &Button) {
-    let win = Window::new("License Info", 600, 400, true);
+    let win = Window::new("License Info", 600, 400, false);
     win.set_margined(true);
-    let entry = MultilineEntry::new();
+    let entry = MultilineEntry::new_non_wrapping();
     entry.set_text(&get_license_info());
     entry.set_read_only(true);
 
