@@ -16,7 +16,7 @@ main() {
     fi
 
     mkdir -p $src/deploy
-    test -f Cargo.lock || cargo generate-lockfile
+    cargo update
 
     cargo install --git https://github.com/davidkna/cargo-licenses-markdown
     cargo licenses-markdown

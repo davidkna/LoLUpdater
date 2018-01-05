@@ -48,7 +48,7 @@ test_script:
 
 before_deploy:
   - cargo clean
-  - cargo generate-lockfile
+  - cargo update
   - cargo install --git https://github.com/davidkna/cargo-licenses-markdown
   - cargo licenses-markdown
   - cargo rustc --target %TARGET% --release --bin lolupdater-cli -- -C lto
