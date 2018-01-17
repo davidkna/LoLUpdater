@@ -24,6 +24,11 @@ main() {
     cargo rustc --target $target --release --bin lolupdater-cli -- -C lto
     cargo rustc --target $target --release --bin lolupdater-gui -- -C lto
 
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        strip --strip-all target/$target/release/lolupdater-cli
+        strip --strip-all target/$target/release/lolupdater-gui
+    fi
+
     cp target/$target/release/lolupdater-cli $stage/
     cp README.md $stage/
 
