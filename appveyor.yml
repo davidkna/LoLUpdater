@@ -51,8 +51,8 @@ before_deploy:
   - cargo update
   - cargo install --git https://github.com/davidkna/cargo-licenses-markdown
   - cargo licenses-markdown
-  - cargo rustc --target %TARGET% --release --bin lolupdater-cli -- -C lto
-  - cargo rustc --target %TARGET% --release --bin lolupdater-gui -- -C lto
+  - cargo rustc --target %TARGET% --release --bin lolupdater-cli
+  - cargo rustc --target %TARGET% --release --bin lolupdater-gui
   - ps: scripts\before_deploy.ps1
 
 deploy:

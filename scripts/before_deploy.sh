@@ -21,8 +21,8 @@ main() {
     cargo install --git https://github.com/davidkna/cargo-licenses-markdown
     cargo licenses-markdown
 
-    cargo rustc --target $target --release --bin lolupdater-cli -- -C lto
-    cargo rustc --target $target --release --bin lolupdater-gui -- -C lto
+    cargo rustc --target $target --release --bin lolupdater-cli
+    cargo rustc --target $target --release --bin lolupdater-gui
 
     cp target/$target/release/lolupdater-cli $stage/
     cp README.md $stage/
