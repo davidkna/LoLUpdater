@@ -5,9 +5,9 @@ use app_dirs::{self, AppDataType};
 
 use util::*;
 
-const CG_MN_DLL_DL: &str = "https://mobasuite.com/downloads/dlls/cg.dll";
-const CG_GL_DLL_DL: &str = "https://mobasuite.com/downloads/dlls/cgGL.dll";
-const CG_D9_DLL_DL: &str = "https://mobasuite.com/downloads/dlls/cgD3D9.dll";
+const CG_MN_DLL_DL: &str = "https://mobasuite.com/downloads/macos/cg.dll";
+const CG_GL_DLL_DL: &str = "https://mobasuite.com/downloads/macos/cgGL.dll";
+const CG_D9_DLL_DL: &str = "https://mobasuite.com/downloads/macos/cgD3D9.dll";
 
 #[cfg_attr(rustfmt, rustfmt_skip)]
 const CG_MN_DLL_DL_HASH: [u8; 48] = [
