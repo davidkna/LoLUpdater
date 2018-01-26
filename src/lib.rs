@@ -118,27 +118,29 @@ fn lol_dir_ok_platform() -> Result<()> {
 }
 #[cfg(not(target_os = "macos"))]
 fn lol_dir_ok_platform() -> Result<()> {
-    if !Path::new("LeagueClient.exe").exists() {
-        return Err("The chosen app folder is not LoL. Please check again!".into());
+    if LOL_KIND.with(|k| k == &InstallKind::Unknown) {
+        return Err("Directory structure appears to be unsound.".into());
     }
     Ok(())
 }
 
 fn lol_dir_ok() -> Result<()> {
     lol_dir_ok_platform()?;
-    if join_version(
-        Path::new(LOLP_GC_PATH_PARTS[0]),
-        Path::new(LOLP_GC_PATH_PARTS[1]),
-    ).is_none()
-    {
-        return Err("Directory structure appears to be unsound.".into());
-    };
-    if join_version(
-        Path::new(LOLSLN_GC_PATH_PARTS[0]),
-        Path::new(LOLSLN_GC_PATH_PARTS[1]),
-    ).is_none()
-    {
-        return Err("Directory structure appears to be unsound.".into());
+    if LOL_KIND.with(|k| k == &InstallKind::Riot) {
+        if join_version(
+            Path::new(LOLP_GC_PATH_PARTS[0]),
+            Path::new(LOLP_GC_PATH_PARTS[1]),
+        ).is_none()
+        {
+            return Err("Directory structure appears to be unsound.".into());
+        };
+        if join_version(
+            Path::new(LOLSLN_GC_PATH_PARTS[0]),
+            Path::new(LOLSLN_GC_PATH_PARTS[1]),
+        ).is_none()
+        {
+            return Err("Directory structure appears to be unsound.".into());
+        };
     };
     Ok(())
 }

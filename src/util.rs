@@ -42,13 +42,41 @@ pub const LOLSLN_GC_PATH_PARTS: [&str; 2] = [
 pub const LOLSLN_GC_PATH_PARTS: [&str; 2] =
     ["RADS/solutions/lol_game_client_sln/releases", "deploy"];
 
+#[derive(PartialEq)]
+pub enum InstallKind {
+    Riot,
+    Garena,
+    Unknown,
+}
+
 thread_local! {
     pub static LOLP_GC_PATH: PathBuf = {
+        if LOL_KIND.with(|k| k == &InstallKind::Garena) {
+            return "Game".into()
+        }
         join_version(Path::new(LOLP_GC_PATH_PARTS[0]), Path::new(LOLP_GC_PATH_PARTS[1])).unwrap()
     };
 
     pub static LOLSLN_GC_PATH: PathBuf = {
+        if LOL_KIND.with(|k| k == &InstallKind::Garena) {
+            return "LeagueClient".into()
+        }
         join_version(Path::new(LOLSLN_GC_PATH_PARTS[0]), Path::new(LOLSLN_GC_PATH_PARTS[1])).unwrap()
+    };
+
+    #[cfg(not(target_os = "macos"))]
+    pub static LOL_KIND: InstallKind = {
+        if Path::new("LeagueClient.exe").is_file() {
+            return InstallKind::Riot
+        } else if Path::new("lolex.exe").is_file() {
+            return InstallKind::Garena
+        }
+        InstallKind::Unknown
+    };
+
+    #[cfg(target_os = "macos")]
+    pub static LOL_KIND: InstallKind = {
+        return InstallKind::Riot
     };
 }
 

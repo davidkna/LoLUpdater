@@ -37,8 +37,13 @@ pub fn remove() -> Result<()> {
     if !vsdll_backup.exists() {
         return Err("No VSDLL backup found!".into());
     }
+    let base = if LOL_KIND.with(|k| k == &InstallKind::Garena) {
+        Path::new("LeagueClient")
+    } else {
+        Path::new("")
+    };
     for dll in VSDLLS.into_iter() {
-        update_file(&vsdll_backup.join(dll), Path::new(dll))?;
+        update_file(&vsdll_backup.join(dll), &base.join(dll))?;
         update_file(
             &vsdll_backup.join(dll),
             &LOLP_GC_PATH.with(|k| k.clone()).join(dll),
@@ -62,8 +67,13 @@ fn backup_vsdlls() -> Result<()> {
 }
 
 fn update_vsdlls() -> Result<()> {
+    let base = if LOL_KIND.with(|k| k == &InstallKind::Garena) {
+        Path::new("LeagueClient")
+    } else {
+        Path::new("")
+    };
     for dll in VSDLLS.into_iter() {
-        update_file(&SYSTEMX86.with(|k| k.clone()).join(dll), Path::new(dll))?;
+        update_file(&SYSTEMX86.with(|k| k.clone()).join(dll), &base.join(dll))?;
         update_file(
             &SYSTEMX86.with(|k| k.clone()).join(dll),
             &LOLP_GC_PATH.with(|k| k.clone()).join(dll),
