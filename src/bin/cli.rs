@@ -46,7 +46,7 @@ fn run() -> Result<()> {
     println!("LoLUpdater {}", VERSION);
     println!(
         "Report errors, feature requests or any issues at \
-         https://github.com/MOBASuite/LoLUpdater-macOS/issues.\n"
+         https://github.com/MOBASuite/LoLUpdater/issues.\n"
     );
 
     if matches.is_present("license-disclaimer") {
@@ -56,7 +56,7 @@ fn run() -> Result<()> {
 
     if update_available()? {
         return Err(
-            "A new update is available.\nPlease download it from https://github.com/MOBASuite/LoLUpdater-macOS/releases/latest to use LoLUpdater.".into()
+            "A new update is available.\nPlease download it from https://github.com/MOBASuite/LoLUpdater/releases/latest to use LoLUpdater.".into()
         );
     }
 

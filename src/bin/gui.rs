@@ -89,7 +89,7 @@ fn run() {
             msg_box_error(
                 &mainwin,
                 "Update available",
-                "A new update is available.\nPlease download it from https://github.com/MOBASuite/LoLUpdater-macOS/releases/latest to use LoLUpdater.",
+                "A new update is available.\nPlease download it from https://github.com/MOBASuite/LoLUpdater/releases/latest to use LoLUpdater.",
             );
             ui::quit();
             ::std::process::exit(0);

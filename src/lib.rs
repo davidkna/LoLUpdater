@@ -156,7 +156,7 @@ pub fn update_available() -> Result<bool> {
         return Ok(false);
     }
     let release_dl =
-        reqwest::get("https://api.github.com/repos/MOBASuite/LoLUpdater-macOS/releases/latest")?;
+        reqwest::get("https://api.github.com/repos/MOBASuite/LoLUpdater/releases/latest")?;
 
     let git_release: GithubRelease = serde_json::from_reader(release_dl)?;
 
