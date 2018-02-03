@@ -59,8 +59,13 @@ fn backup_vsdlls() -> Result<()> {
         info!("Skipping VSDLL backup! (Already exists)");
     } else {
         fs::create_dir(&vsdll_backup)?;
+        let base = if LOL_KIND.with(|k| k == &InstallKind::Garena) {
+            Path::new("LeagueClient")
+        } else {
+            Path::new("")
+        };
         for dll in VSDLLS.into_iter() {
-            update_file(Path::new(dll), &vsdll_backup.join(dll))?
+            update_file(&base.join(dll), &vsdll_backup.join(dll))?;
         }
     }
     Ok(())
