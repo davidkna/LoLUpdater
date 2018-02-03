@@ -1,5 +1,5 @@
 # LoLUpdater
-[![Mac and Linux build status](https://travis-ci.org/MOBASuite/LoLUpdater.svg?branch=master)](https://travis-ci.org/MOBASuite/LoLUpdater) [![Windows build status](https://ci.appveyor.com/api/projects/status/wlque053ijn5s19c/branch/master?svg=true)](https://ci.appveyor.com/project/MOBASuite/LoLUpdater/branch/master)
+[![Mac and Linux build status](https://travis-ci.org/MOBASuite/LoLUpdater.svg?branch=master)](https://travis-ci.org/MOBASuite/LoLUpdater) [![Windows build status](https://ci.appveyor.com/api/projects/status/wlque053ijn5s19c/branch/master?svg=true)](https://ci.appveyor.com/project/davidkna/lolupdater-macos/branch/master)
 
 [Website](https://mobasuite.com)
 
