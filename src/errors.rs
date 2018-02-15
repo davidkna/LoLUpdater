@@ -11,6 +11,7 @@ use serde_json;
 use walkdir;
 
 #[derive(Debug, ErrorChain)]
+#[error_chain(backtrace = "false")]
 pub enum ErrorKind {
     Msg(String),
 

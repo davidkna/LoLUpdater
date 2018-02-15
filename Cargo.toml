@@ -17,8 +17,8 @@ path = "src/bin/gui.rs"
 
 [dependencies]
 app_dirs = "1.1.1"
-derive-error-chain = "0.11.0"
-error-chain = "0.11.0"
+derive-error-chain ="0.11.0"
+error-chain = { version = "0.11.0", default-features = false }
 flate2 = "1.0.1"
 lazy_static = "1.0.0"
 log = "0.4.0"
