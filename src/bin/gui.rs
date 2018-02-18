@@ -27,8 +27,6 @@ fn run() {
 
     let mainwin = MAIN_WINDOW.with(|w| w.clone());
     mainwin.set_margined(true);
-    #[cfg(not(target_os = "linux"))]
-    mainwin.center();
     mainwin.on_closing(Box::new(|_| {
         ui::quit();
         false
