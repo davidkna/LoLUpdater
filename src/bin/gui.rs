@@ -65,7 +65,7 @@ fn run() {
     let install_path_entry = LOLPATH_ENTRY.with(|lpe| lpe.clone());
     install_path_entry.set_text(DEFAULT_LOL_DIR);
     install_path_box.append(install_path_entry.clone().into(), true);
-    let install_path_button = Button::new("Locate");
+    let install_path_button = Button::new("Browse");
     install_path_button.on_clicked(Box::new(ask_for_loldir));
     install_path_box.append(install_path_button.clone().into(), false);
 
